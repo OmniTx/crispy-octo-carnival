@@ -314,7 +314,7 @@ INSERT INTO public.products (name, name_bn, price, description, description_bn, 
  '২-৩ চা চামচ হাফ কাপ গরম পানিতে মিশিয়ে দিনে ২ বার আহারের পর সেব্য।',
  '৪২৫ মিলি');
 
-INSERT INTO public.products (name, name_bn, price, description, description_bn, usage_info, pack_size) VALUES
+INSERT INTO public.products (name, name_bn, price, description, description_bn, usage_info, usage_info_bn, pack_size) VALUES
 ('Herbs Mushroom Bar', 'হার্বস মাশরুম বার', 380.00,
  'Nutritious mushroom-enriched soap bar for healthy, glowing skin.',
  'মেছতা, ব্রন সহ মুখ ও ত্বকের অবাঞ্ছিত দাগ দূর করে। ত্বকের লাবণ্যতা বৃদ্ধি, চোখের নিচে কালো দাগ, গর্ভবতীদের পেটের দাগ দূর করে। এলার্জি ও চর্মরোগে বাহ্যিক ব্যবহারে কার্যকরী।',
@@ -322,7 +322,7 @@ INSERT INTO public.products (name, name_bn, price, description, description_bn, 
  'মেছতা, ব্রন সহ মুখের অবাঞ্ছিত দাগে ১০ থেকে ২০ মিনিট লাগিয়ে রেখে ধুয়ে ফেলুন দিনে ১-২ বার। এলার্জি এবং চর্ম রোগে গায়ে সাধারণ সাবানের মত ব্যবহার করতে হবে।',
  '৭৫ গ্রাম');
 
-INSERT INTO public.products (name, name_bn, price, description, description_bn, usage_info, pack_size) VALUES
+INSERT INTO public.products (name, name_bn, price, description, description_bn, usage_info, usage_info_bn, pack_size) VALUES
 ('Herbs Hair Oil', 'হার্বস হেয়ার অয়েল', 450.00,
  'Herbal hair oil enriched with mushroom extracts for hair growth and scalp nourishment.',
  'অতিরিক্ত চুল পড়া রোধ করে, নতুন চুল গজাতে সহায়তা করে। চুল কালো ও লম্বা করে এবং খুসকি নিবারণ করে।',
@@ -330,7 +330,7 @@ INSERT INTO public.products (name, name_bn, price, description, description_bn, 
  'আঙ্গুল দিয়ে চুলের গোড়ায় দিনে ১ বার ব্যবহার করতে হবে।',
  '১০০ মিলি');
 
-INSERT INTO public.products (name, name_bn, price, description, description_bn, usage_info, pack_size) VALUES
+INSERT INTO public.products (name, name_bn, price, description, description_bn, usage_info, usage_info_bn, pack_size) VALUES
 ('Herbs Gano Glow Cream', 'হার্বস গ্যানো গ্লো ক্রিম', 680.00,
  'Ganoderma-infused skin cream that moisturizes, brightens, and protects skin.',
  'হার্বস গ্যানো গ্লো একটি এন্টিএজিং, ময়েশ্চারাইজিং ক্রিম। এটি ত্বকের কালো দাগের জন্য দায়ী ডার্ক মেলানিন উৎপাদন কমিয়ে দেয় এবং মুখমন্ডলকে করে দাগহীন উজ্জ্বল ও ফর্সা।',
@@ -338,7 +338,7 @@ INSERT INTO public.products (name, name_bn, price, description, description_bn, 
  'আলতোভাবে সমস্ত মুখ মন্ডলে হার্বস গ্যানো গ্লো ক্রিম প্রতিদিন সকালে এবং রাতে ব্যবহার করতে হবে।',
  '৩০ গ্রাম');
 
-INSERT INTO public.products (name, name_bn, price, description, description_bn, usage_info, pack_size) VALUES
+INSERT INTO public.products (name, name_bn, price, description, description_bn, usage_info, usage_info_bn, pack_size) VALUES
 ('Herbs Ganode Shampoo', 'হার্বস গ্যানোডি শ্যাম্পু', 780.00,
  'Premium herbal shampoo with ganoderma extract for strong, nourished hair.',
  'প্রাকৃতিক ফর্মুলায় তৈরি, খাঁটি মাশরুম নির্যাস সমৃদ্ধ। অতিরিক্ত চুল পড়া ও খুশকি নিয়ন্ত্রণে উপকারী।',
@@ -346,7 +346,7 @@ INSERT INTO public.products (name, name_bn, price, description, description_bn, 
  'চুল ভালোভাবে ভেজানোর পর হার্বস গ্যানোডি শ্যাম্পু মাথায় অল্প অল্প করে লাগিয়ে আলতো ভাবে ম্যাসেজ করে ফেনা তৈরি করুন এবং পাঁচ-সাত মিনিট পর ধুয়ে ফেলুন।',
  '২০০ মিলি/১১০ মিলি');
 
-INSERT INTO public.products (name, name_bn, price, description, description_bn, usage_info, pack_size) VALUES
+INSERT INTO public.products (name, name_bn, price, description, description_bn, usage_info, usage_info_bn, pack_size) VALUES
 ('Gano G Oil', 'গ্যানো জি অয়েল', 200.00,
  'Multipurpose ganoderma essential oil for muscle soothing and skin health.',
  'নিয়মিত ব্যবহারে পুরুষাঙ্গের ত্বকের পুষ্টি যোগায়, নিস্তেজ বক্রতা, গোড়া চিকন ও রগ ঢিলাভাব দ্রুত দূর করে।',
@@ -354,7 +354,7 @@ INSERT INTO public.products (name, name_bn, price, description, description_bn, 
  '৪-৫ ফোটা করে প্রতিদিন সকালে ও রাতে পুরুষাঙ্গের সামনে থেকে পিছনের দিকে ২/৩ মিনিট মালিশ করুন।',
  '৯ মিলি');
 
-INSERT INTO public.products (name, name_bn, price, description, description_bn, usage_info, pack_size) VALUES
+INSERT INTO public.products (name, name_bn, price, description, description_bn, usage_info, usage_info_bn, pack_size) VALUES
 ('Herbs Mushroom Genital', 'হার্বস মাশরুম জেনিটাল', 500.00,
  'Herbal ointment for intimate care with natural mushroom-based formulation.',
  'পুরুষাঙ্গকে সুদৃঢ় করে। পুরুষাঙ্গের শীথিলতা ও বক্রতা দূর করে। দ্রুত বীর্যপাত রোধ করে।',
@@ -362,7 +362,7 @@ INSERT INTO public.products (name, name_bn, price, description, description_bn, 
  'প্রতিদিন সকালে ও রাতে সামান্য পরিমাণ লিঙ্গ আলতোভাবে পুরুষাঙ্গের সামনে থেকে পেছনের দিক ৪-৫ মিনিট মালিশ করতে হবে।',
  '৩০ গ্রাম');
 
-INSERT INTO public.products (name, name_bn, price, description, description_bn, usage_info, pack_size) VALUES
+INSERT INTO public.products (name, name_bn, price, description, description_bn, usage_info, usage_info_bn, pack_size) VALUES
 ('Herbs Gano Neem Oil', 'হার্বস গ্যানো নিম অয়েল', 300.00,
  'Neem oil enhanced with ganoderma extract for skin issues and antiseptic care.',
  'দাদ, একজিমা, ব্রণ, চুলকানি, খুশকি, মাথার ত্বকের ফাঙ্গাস, ঘা/পচড়া, টনসিল পঁচা ঘা ও ক্ষত নিরাময়সহ সর্ব প্রকার চর্ম রোগে কার্যকরী।',
@@ -370,7 +370,7 @@ INSERT INTO public.products (name, name_bn, price, description, description_bn, 
  'আক্রান্ত স্থানে সামান্য পরিমাণ তেল দিনে ১-২ বার লাগাতে হবে।',
  '৩০ মিলি/১০ মিলি');
 
-INSERT INTO public.products (name, name_bn, price, description, description_bn, usage_info, pack_size) VALUES
+INSERT INTO public.products (name, name_bn, price, description, description_bn, usage_info, usage_info_bn, pack_size) VALUES
 ('Herbs Mushroom Karanja Oil', 'হার্বস মাশরুম করঞ্জা অয়েল', 200.00,
  'Karanja seed oil with mushroom extracts for wound healing and skin conditions.',
  'নিয়মিত কয়েকদিন ব্যবহারে নাকের ভিতরে পলিপ বা মাংশপিন্ড ও মলদ্বারের অর্শ বা বলি চুপসে যাওয়ার সাথে মিশে যায়। এছাড়াও মাথা ব্যথা, সাইনোসাইটিস, কোল্ড এলার্জি ও নাক ডাকা রোগীদের জন্য কার্যকরী।',
@@ -378,7 +378,7 @@ INSERT INTO public.products (name, name_bn, price, description, description_bn, 
  'নাকের পলিপে কটনবার দ্বারা ও অর্শের বলিতে তুলা দ্বারা সামান্য পরিমাণ তেল দিনে ১-২ বার লাগাতে হবে।',
  '৯ মিলি');
 
-INSERT INTO public.products (name, name_bn, price, description, description_bn, usage_info, pack_size) VALUES
+INSERT INTO public.products (name, name_bn, price, description, description_bn, usage_info, usage_info_bn, pack_size) VALUES
 ('Herbs Gano D Care', 'হার্বস গ্যানো ডি কেয়ার', 320.00,
  'Dental and oral care solution with ganoderma for gum health and fresh breath.',
  'খুশকি নিবারণে, মাথার ত্বকের ফাঙ্গাস ও প্রদাহ নিবারণে কার্যকরী। চুলের গোড়া শক্ত করে ও চুল পড়া রোধ করে।',
@@ -386,7 +386,7 @@ INSERT INTO public.products (name, name_bn, price, description, description_bn, 
  '৩-৭ দিন রাতে চুলের গোড়ায় আঙ্গুল দিয়ে ব্যবহার করতে হবে।',
  '৫০ মিলি');
 
-INSERT INTO public.products (name, name_bn, price, description, description_bn, usage_info, pack_size) VALUES
+INSERT INTO public.products (name, name_bn, price, description, description_bn, usage_info, usage_info_bn, pack_size) VALUES
 ('Gano Ear Clean', 'গ্যানো ইয়ার ক্লিন', 100.00,
  'Natural ear cleaning solution with herbal extracts for safe ear hygiene.',
  'কানের ব্যথা, কান দিয়ে পুঁজ পড়া, শরীরের যে কোন স্থানে পোড়া ও প্রদাহ নিবারণে কার্যকরী।',
@@ -394,7 +394,7 @@ INSERT INTO public.products (name, name_bn, price, description, description_bn, 
  '৩/৪ ফোঁটা করে প্রতিদিন এক/দুইবার ব্যবহার করতে হবে।',
  '৯ মিলি');
 
-INSERT INTO public.products (name, name_bn, price, description, description_bn, usage_info, pack_size) VALUES
+INSERT INTO public.products (name, name_bn, price, description, description_bn, usage_info, usage_info_bn, pack_size) VALUES
 ('Herbs Ganogesic', 'হার্বস গ্যানোজেসিক', 460.00,
  'Herbal pain relief balm with ganoderma for muscle aches and joint pain.',
  'বাত-ব্যথা, মাথা ব্যথা, আঘাত জনিত ব্যথা ও ফুল নিবারণে কার্যকরী।',
