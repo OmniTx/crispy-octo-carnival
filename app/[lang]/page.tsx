@@ -82,7 +82,7 @@ export default async function HomePage({ params: { lang } }: { params: { lang: s
                       {isBn ? 'সেবনবিধি' : 'Usage / Dosage'}
                     </p>
                     <p className={`text-sm font-normal theme-text leading-relaxed ${isBn ? 'font-bangla' : ''}`}>
-                      {product.usage_info || '-'}
+                      {isBn ? (product.usage_info_bn || product.usage_info || '-') : (product.usage_info || '-')}
                     </p>
                   </div>
                 </div>

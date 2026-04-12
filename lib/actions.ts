@@ -11,6 +11,7 @@ const productSchema = z.object({
   description: z.string().optional(),
   description_bn: z.string().optional(),
   usage_info: z.string().optional(),
+  usage_info_bn: z.string().optional(),
   pack_size: z.string().optional(),
 })
 
@@ -21,10 +22,11 @@ export async function addProduct(formData: FormData) {
   const description = formData.get('description') as string
   const description_bn = formData.get('description_bn') as string
   const usage_info = formData.get('usage_info') as string
+  const usage_info_bn = formData.get('usage_info_bn') as string
   const pack_size = formData.get('pack_size') as string
   const image = formData.get('image') as File | null
 
-  const parsed = productSchema.safeParse({ name, name_bn, price, description, description_bn, usage_info, pack_size })
+  const parsed = productSchema.safeParse({ name, name_bn, price, description, description_bn, usage_info, usage_info_bn, pack_size })
   if (!parsed.success) {
     throw new Error(parsed.error.errors[0].message)
   }
@@ -56,6 +58,7 @@ export async function addProduct(formData: FormData) {
         description: parsed.data.description,
         description_bn: parsed.data.description_bn,
         usage_info: parsed.data.usage_info,
+        usage_info_bn: parsed.data.usage_info_bn,
         pack_size: parsed.data.pack_size,
         image_url: fileName,
       },

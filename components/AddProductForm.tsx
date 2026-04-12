@@ -98,9 +98,15 @@ export default function AddProductForm({ dict, lang }: { dict: Dictionary; lang:
         </div>
 
         {/* Usage */}
-        <div>
-          <label className="ibm-label font-bangla">সেবন/ব্যবহারবিধি (Usage)</label>
-          <textarea {...register('usage_info')} rows={2} className="ibm-input font-bangla" />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label className="ibm-label">Usage / Dosage (English)</label>
+            <textarea {...register('usage_info')} rows={2} className="ibm-input" />
+          </div>
+          <div>
+            <label className="ibm-label font-bangla">সেবন/ব্যবহারবিধি (বাংলা)</label>
+            <textarea {...register('usage_info_bn')} rows={2} className="ibm-input font-bangla" />
+          </div>
         </div>
 
         {/* Image */}
