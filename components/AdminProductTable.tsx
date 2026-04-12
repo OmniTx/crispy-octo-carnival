@@ -11,10 +11,11 @@ type Product = {
   name: string
   price: number
   description: string
+  pack_size: string
   image_url: string | null
 }
 
-export default function AdminProductTable({ products, dict, lang }: { products: Product[], dict: Dictionary, lang: string }) {
+export default function AdminProductTable({ products, dict, lang, currency }: { products: Product[]; dict: Dictionary; lang: string; currency: string }) {
   const [deletingId, setDeletingId] = useState<string | null>(null)
 
   const handleDelete = async (id: string, imageUrl: string | null) => {
@@ -29,51 +30,51 @@ export default function AdminProductTable({ products, dict, lang }: { products: 
   }
 
   return (
-    <div className="overflow-x-auto border border-ibm-gray800 bg-ibm-black shadow-2xl">
-      <table className="w-full text-left text-sm text-ibm-gray100">
-        <thead className="bg-ibm-gray900 text-xs uppercase border-b border-ibm-gray800">
+    <div className="overflow-x-auto border theme-border theme-bg shadow-2xl">
+      <table className="w-full text-left text-sm theme-text">
+        <thead className="theme-bg-card text-xs uppercase border-b theme-border">
           <tr>
-            <th className="px-6 py-4">{dict.image}</th>
-            <th className="px-6 py-4">{dict.name}</th>
-            <th className="px-6 py-4">{dict.price}</th>
-            <th className="px-6 py-4 w-40 text-right">{dict.actions}</th>
+            <th className="px-4 py-4 w-16">#</th>
+            <th className="px-4 py-4 w-16">{dict.image}</th>
+            <th className="px-4 py-4">{dict.name}</th>
+            <th className="px-4 py-4">{dict.packSize}</th>
+            <th className="px-4 py-4">{dict.price}</th>
+            <th className="px-4 py-4 w-32 text-right">{dict.actions}</th>
           </tr>
         </thead>
         <tbody>
           {products.length === 0 ? (
             <tr>
-              <td colSpan={4} className="px-6 py-8 text-center text-ibm-gray300 border-t border-ibm-gray800">
+              <td colSpan={6} className="px-6 py-8 text-center theme-text-muted border-t theme-border">
                 {dict.noProducts}
               </td>
             </tr>
           ) : (
-            products.map((product) => (
-              <tr key={product.id} className="border-b border-ibm-gray800 hover:bg-ibm-gray900 transition-colors">
-                <td className="px-6 py-4 w-24">
+            products.map((product, index) => (
+              <tr key={product.id} className="border-b theme-border theme-bg-hover transition-colors">
+                <td className="px-4 py-3 theme-text-muted text-xs font-mono">{index + 1}</td>
+                <td className="px-4 py-3">
                   {product.image_url ? (
-                    <div className="relative w-16 h-16 bg-ibm-black border border-ibm-gray800 flex items-center justify-center p-1">
+                    <div className="relative w-10 h-10 theme-bg-card border theme-border flex items-center justify-center">
                       <Image src={product.image_url} alt={product.name} fill className="object-contain" />
                     </div>
                   ) : (
-                    <div className="w-16 h-16 bg-ibm-gray800 flex items-center justify-center text-ibm-gray300">
-                      <ImageIcon size={20} />
+                    <div className="w-10 h-10 theme-bg-card flex items-center justify-center theme-text-muted border theme-border">
+                      <ImageIcon size={14} />
                     </div>
                   )}
                 </td>
-                <td className="px-6 py-4 font-semibold text-ibm-white text-base">
-                  {product.name}
-                </td>
-                <td className="px-6 py-4 font-mono font-bold text-ibm-blue text-base">
-                  ${product.price}
-                </td>
-                <td className="px-6 py-4 text-right">
-                  <button 
+                <td className="px-4 py-3 font-semibold theme-text">{product.name}</td>
+                <td className="px-4 py-3 theme-text-muted text-xs font-mono">{product.pack_size || '-'}</td>
+                <td className="px-4 py-3 font-mono font-bold text-ibm-blue">{currency}{product.price}</td>
+                <td className="px-4 py-3 text-right">
+                  <button
                     onClick={() => handleDelete(product.id, product.image_url)}
                     disabled={deletingId === product.id}
-                    className="ibm-btn-danger text-xs px-3 py-2 inline-flex items-center justify-center gap-2 w-full text-center"
+                    className="ibm-btn-danger text-xs px-3 py-2 inline-flex items-center gap-1"
                   >
-                    <Trash2 size={14} />
-                    {deletingId === product.id ? dict.loading : dict.delete}
+                    <Trash2 size={12} />
+                    {deletingId === product.id ? '...' : dict.delete}
                   </button>
                 </td>
               </tr>

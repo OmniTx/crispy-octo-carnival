@@ -11,13 +11,13 @@ export default function AddPage({ params: { lang } }: { params: { lang: string }
   return (
     <div className="max-w-4xl mx-auto">
       <div className="mb-8">
-        <Link href={`/${lang}`} className="text-ibm-blue hover:text-white flex items-center gap-2 w-fit mb-6 transition-colors">
+        <Link href={`/${lang}/admin`} className="text-ibm-blue hover:theme-text flex items-center gap-2 w-fit mb-6 transition-colors">
           <ArrowLeft size={16} />
-          All {dict.products}
+          {dict.adminPanel}
         </Link>
-        <h1 className="text-3xl font-light">{dict.addProduct}</h1>
+        <h1 className="text-3xl font-light theme-text">{dict.addProduct}</h1>
       </div>
-      
+
       <AddProductForm dict={dict} lang={lang} />
     </div>
   )

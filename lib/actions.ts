@@ -8,23 +8,23 @@ const productSchema = z.object({
   name: z.string().min(1, "Name is required"),
   price: z.preprocess((val) => Number(val), z.number().min(0, "Price must be positive")),
   description: z.string().optional(),
+  pack_size: z.string().optional(),
 })
 
 export async function addProduct(formData: FormData) {
   const name = formData.get('name') as string
   const price = formData.get('price')
   const description = formData.get('description') as string
+  const pack_size = formData.get('pack_size') as string
   const image = formData.get('image') as File | null
 
-  // Validate fields
-  const parsed = productSchema.safeParse({ name, price, description })
+  const parsed = productSchema.safeParse({ name, price, description, pack_size })
   if (!parsed.success) {
     throw new Error(parsed.error.errors[0].message)
   }
 
   let fileName = null
 
-  // Upload image to Supabase Storage only if it exists
   if (image && image.size > 0) {
     const fileExt = image.name.split('.').pop()
     fileName = `${Math.random().toString(36).substring(2, 15)}.${fileExt}`
@@ -40,7 +40,6 @@ export async function addProduct(formData: FormData) {
     }
   }
 
-  // Insert into DB
   const { error: dbError } = await supabase
     .from('products')
     .insert([
@@ -48,6 +47,7 @@ export async function addProduct(formData: FormData) {
         name: parsed.data.name,
         price: parsed.data.price,
         description: parsed.data.description,
+        pack_size: parsed.data.pack_size,
         image_url: fileName,
       },
     ])
@@ -61,7 +61,6 @@ export async function addProduct(formData: FormData) {
 }
 
 export async function deleteProduct(id: string, imageUrl: string) {
-  // Delete from DB first
   const { error: dbError } = await supabase
     .from('products')
     .delete()
@@ -71,11 +70,60 @@ export async function deleteProduct(id: string, imageUrl: string) {
     throw new Error(`Failed to delete product: ${dbError.message}`)
   }
 
-  // Delete from storage
   if (imageUrl) {
     await supabase.storage.from('product-imgs').remove([imageUrl])
   }
 
   revalidatePath('/')
   return { success: true }
+}
+
+export async function updateSiteSettings(formData: FormData) {
+  const site_name_en = formData.get('site_name_en') as string
+  const site_name_bn = formData.get('site_name_bn') as string
+  const theme = formData.get('theme') as string
+  const currency_symbol = formData.get('currency_symbol') as string
+
+  const { error } = await supabase
+    .from('site_settings')
+    .update({
+      site_name_en,
+      site_name_bn,
+      theme,
+      currency_symbol,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', 1)
+
+  if (error) {
+    throw new Error(`Failed to update settings: ${error.message}`)
+  }
+
+  revalidatePath('/')
+  return { success: true }
+}
+
+export async function bulkImportProducts(products: Array<{ name: string; price: number; description: string; pack_size: string }>) {
+  if (!products.length) {
+    throw new Error('No products to import')
+  }
+
+  const rows = products.map((p) => ({
+    name: p.name,
+    price: p.price,
+    description: p.description || '',
+    pack_size: p.pack_size || '',
+    image_url: null,
+  }))
+
+  const { error } = await supabase
+    .from('products')
+    .insert(rows)
+
+  if (error) {
+    throw new Error(`Failed to import products: ${error.message}`)
+  }
+
+  revalidatePath('/')
+  return { success: true, count: rows.length }
 }

@@ -2,34 +2,85 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ===== DARK THEME (default) ===== */
 @layer base {
-  body {
+  .dark body {
     @apply bg-ibm-black text-ibm-white font-sans antialiased min-h-screen flex flex-col;
+  }
+  body {
+    @apply font-sans antialiased min-h-screen flex flex-col;
   }
 }
 
 @layer utilities {
-  .ibm-btn {
+  /* --- Dark theme buttons --- */
+  .dark .ibm-btn {
     @apply bg-ibm-blue text-white px-4 py-3 font-semibold text-sm leading-none
-           hover:brightness-110 active:brightness-90 transition-all 
+           hover:brightness-110 active:brightness-90 transition-all
            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-ibm-black focus:ring-ibm-blue
            disabled:opacity-50 disabled:cursor-not-allowed;
   }
-  .ibm-btn-danger {
+  .dark .ibm-btn-danger {
     @apply bg-red-600 text-white px-4 py-3 font-semibold text-sm leading-none
            hover:bg-red-500 active:bg-red-700 transition-all
            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-ibm-black focus:ring-red-600
            disabled:opacity-50 disabled:cursor-not-allowed;
   }
-  .ibm-input {
+  .dark .ibm-input {
     @apply bg-ibm-gray900 border border-ibm-gray800 text-ibm-white px-4 py-3 text-sm
            focus:outline-none focus:border-ibm-blue focus:ring-1 focus:ring-ibm-blue
            placeholder-ibm-gray300 transition-all w-full;
   }
-  .ibm-label {
+  .dark .ibm-label {
     @apply block text-sm font-semibold mb-2 text-ibm-gray100;
   }
-  .ibm-card {
+  .dark .ibm-card {
     @apply bg-ibm-gray900 border border-ibm-gray800 hover:border-ibm-gray300 transition-all overflow-hidden flex flex-col;
   }
+
+  /* --- Light theme --- */
+  .light body {
+    @apply bg-white text-ibm-black;
+  }
+  .light .ibm-btn {
+    @apply bg-ibm-blue text-white px-4 py-3 font-semibold text-sm leading-none
+           hover:brightness-110 active:brightness-90 transition-all
+           focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-ibm-blue
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .light .ibm-btn-danger {
+    @apply bg-red-600 text-white px-4 py-3 font-semibold text-sm leading-none
+           hover:bg-red-500 active:bg-red-700 transition-all
+           focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-red-600
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .light .ibm-input {
+    @apply bg-ibm-gray100 border border-ibm-gray200 text-ibm-black px-4 py-3 text-sm
+           focus:outline-none focus:border-ibm-blue focus:ring-1 focus:ring-ibm-blue
+           placeholder-ibm-gray300 transition-all w-full;
+  }
+  .light .ibm-label {
+    @apply block text-sm font-semibold mb-2 text-ibm-gray800;
+  }
+  .light .ibm-card {
+    @apply bg-white border border-ibm-gray200 hover:border-ibm-gray300 hover:shadow-lg transition-all overflow-hidden flex flex-col;
+  }
+
+  /* Theme-aware text/bg classes */
+  .light .theme-bg { @apply bg-white; }
+  .dark .theme-bg { @apply bg-ibm-black; }
+  .light .theme-bg-card { @apply bg-ibm-gray100; }
+  .dark .theme-bg-card { @apply bg-ibm-gray900; }
+  .light .theme-text { @apply text-ibm-black; }
+  .dark .theme-text { @apply text-ibm-white; }
+  .light .theme-text-muted { @apply text-ibm-gray800; }
+  .dark .theme-text-muted { @apply text-ibm-gray300; }
+  .light .theme-border { @apply border-ibm-gray200; }
+  .dark .theme-border { @apply border-ibm-gray800; }
+  .light .theme-bg-header { @apply bg-ibm-gray100; }
+  .dark .theme-bg-header { @apply bg-ibm-black; }
+  .light .theme-bg-hover { @apply hover:bg-ibm-gray100; }
+  .dark .theme-bg-hover { @apply hover:bg-ibm-gray900; }
 }
