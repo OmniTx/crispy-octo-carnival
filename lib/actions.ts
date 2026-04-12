@@ -6,19 +6,25 @@ import { z } from 'zod'
 
 const productSchema = z.object({
   name: z.string().min(1, "Name is required"),
+  name_bn: z.string().optional(),
   price: z.preprocess((val) => Number(val), z.number().min(0, "Price must be positive")),
   description: z.string().optional(),
+  description_bn: z.string().optional(),
+  usage_info: z.string().optional(),
   pack_size: z.string().optional(),
 })
 
 export async function addProduct(formData: FormData) {
   const name = formData.get('name') as string
+  const name_bn = formData.get('name_bn') as string
   const price = formData.get('price')
   const description = formData.get('description') as string
+  const description_bn = formData.get('description_bn') as string
+  const usage_info = formData.get('usage_info') as string
   const pack_size = formData.get('pack_size') as string
   const image = formData.get('image') as File | null
 
-  const parsed = productSchema.safeParse({ name, price, description, pack_size })
+  const parsed = productSchema.safeParse({ name, name_bn, price, description, description_bn, usage_info, pack_size })
   if (!parsed.success) {
     throw new Error(parsed.error.errors[0].message)
   }
@@ -45,8 +51,11 @@ export async function addProduct(formData: FormData) {
     .insert([
       {
         name: parsed.data.name,
+        name_bn: parsed.data.name_bn,
         price: parsed.data.price,
         description: parsed.data.description,
+        description_bn: parsed.data.description_bn,
+        usage_info: parsed.data.usage_info,
         pack_size: parsed.data.pack_size,
         image_url: fileName,
       },

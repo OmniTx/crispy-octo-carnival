@@ -11,8 +11,11 @@ import { Plus } from 'lucide-react'
 
 const productSchema = z.object({
   name: z.string().min(1, "Name is required"),
+  name_bn: z.string().optional(),
   price: z.preprocess((val) => Number(val), z.number().min(0, "Price must be positive")),
   description: z.string().optional(),
+  description_bn: z.string().optional(),
+  usage_info: z.string().optional(),
   pack_size: z.string().optional(),
 })
 
@@ -35,8 +38,11 @@ export default function AddProductForm({ dict, lang }: { dict: Dictionary; lang:
     try {
       const formData = new FormData()
       formData.append('name', data.name)
+      formData.append('name_bn', data.name_bn || '')
       formData.append('price', data.price.toString())
       formData.append('description', data.description || '')
+      formData.append('description_bn', data.description_bn || '')
+      formData.append('usage_info', data.usage_info || '')
       formData.append('pack_size', data.pack_size || '')
       if (imageFile) {
         formData.append('image', imageFile)
@@ -51,21 +57,29 @@ export default function AddProductForm({ dict, lang }: { dict: Dictionary; lang:
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="max-w-2xl mx-auto border theme-border theme-bg p-8 shadow-2xl">
+    <form onSubmit={handleSubmit(onSubmit)} className="max-w-3xl mx-auto border theme-border theme-bg p-8 shadow-2xl">
       {errorMsg && <div className="mb-6 p-4 border border-red-600 text-red-500 bg-red-950/50 font-mono text-sm">{errorMsg}</div>}
 
       <div className="space-y-6">
-        <div>
-          <label className="ibm-label">{dict.name}</label>
-          <input type="text" {...register('name')} className="ibm-input" />
-          {errors.name && <p className="text-red-500 text-sm mt-2 font-medium">{errors.name.message as string}</p>}
+        {/* Names */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label className="ibm-label">{dict.name} (English)</label>
+            <input type="text" {...register('name')} className="ibm-input" />
+            {errors.name && <p className="text-red-500 text-sm mt-2">{errors.name.message as string}</p>}
+          </div>
+          <div>
+            <label className="ibm-label font-bangla">{dict.name} (বাংলা)</label>
+            <input type="text" {...register('name_bn')} className="ibm-input font-bangla" />
+          </div>
         </div>
 
+        {/* Price + Pack Size */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="ibm-label">{dict.price}</label>
             <input type="number" step="0.01" {...register('price')} className="ibm-input font-mono" />
-            {errors.price && <p className="text-red-500 text-sm mt-2 font-medium">{errors.price.message as string}</p>}
+            {errors.price && <p className="text-red-500 text-sm mt-2">{errors.price.message as string}</p>}
           </div>
           <div>
             <label className="ibm-label">{dict.packSize}</label>
@@ -73,11 +87,23 @@ export default function AddProductForm({ dict, lang }: { dict: Dictionary; lang:
           </div>
         </div>
 
+        {/* Descriptions */}
         <div>
-          <label className="ibm-label">{dict.description}</label>
-          <textarea {...register('description')} rows={4} className="ibm-input" />
+          <label className="ibm-label">{dict.description} (English)</label>
+          <textarea {...register('description')} rows={3} className="ibm-input" />
+        </div>
+        <div>
+          <label className="ibm-label font-bangla">{dict.description} (বাংলা)</label>
+          <textarea {...register('description_bn')} rows={3} className="ibm-input font-bangla" />
         </div>
 
+        {/* Usage */}
+        <div>
+          <label className="ibm-label font-bangla">সেবন/ব্যবহারবিধি (Usage)</label>
+          <textarea {...register('usage_info')} rows={2} className="ibm-input font-bangla" />
+        </div>
+
+        {/* Image */}
         <div>
           <label className="ibm-label">{dict.image} <span className="theme-text-muted font-normal ml-2">({dict.optional})</span></label>
           <div className="border border-dashed theme-border theme-bg-card p-4 transition-colors hover:border-ibm-blue">

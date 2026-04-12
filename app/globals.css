@@ -2,20 +2,31 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Bengali:wght@300;400;500;600;700&family=Hind+Siliguri:wght@300;400;500;600;700&display=swap');
 
 /* ===== DARK THEME (default) ===== */
 @layer base {
   .dark body {
     @apply bg-ibm-black text-ibm-white font-sans antialiased min-h-screen flex flex-col;
   }
+  .light body {
+    @apply bg-white text-ibm-black font-sans antialiased min-h-screen flex flex-col;
+  }
   body {
     @apply font-sans antialiased min-h-screen flex flex-col;
+  }
+  /* Apply Bangla font to Bangla text */
+  [lang="bn"] body {
+    font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
   }
 }
 
 @layer utilities {
-  /* --- Dark theme buttons --- */
+  .font-bangla {
+    font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+  }
+
+  /* --- Dark theme --- */
   .dark .ibm-btn {
     @apply bg-ibm-blue text-white px-4 py-3 font-semibold text-sm leading-none
            hover:brightness-110 active:brightness-90 transition-all
@@ -41,9 +52,6 @@
   }
 
   /* --- Light theme --- */
-  .light body {
-    @apply bg-white text-ibm-black;
-  }
   .light .ibm-btn {
     @apply bg-ibm-blue text-white px-4 py-3 font-semibold text-sm leading-none
            hover:brightness-110 active:brightness-90 transition-all
@@ -68,7 +76,7 @@
     @apply bg-white border border-ibm-gray200 hover:border-ibm-gray300 hover:shadow-lg transition-all overflow-hidden flex flex-col;
   }
 
-  /* Theme-aware text/bg classes */
+  /* Theme-aware classes */
   .light .theme-bg { @apply bg-white; }
   .dark .theme-bg { @apply bg-ibm-black; }
   .light .theme-bg-card { @apply bg-ibm-gray100; }
@@ -83,4 +91,12 @@
   .dark .theme-bg-header { @apply bg-ibm-black; }
   .light .theme-bg-hover { @apply hover:bg-ibm-gray100; }
   .dark .theme-bg-hover { @apply hover:bg-ibm-gray900; }
+
+  /* Table header styling */
+  .light .theme-table-header { @apply bg-ibm-blue text-white; }
+  .dark .theme-table-header { @apply bg-ibm-blue text-white; }
+  .light .theme-table-row-even { @apply bg-white; }
+  .dark .theme-table-row-even { @apply bg-ibm-black; }
+  .light .theme-table-row-odd { @apply bg-ibm-gray100; }
+  .dark .theme-table-row-odd { @apply bg-ibm-gray900; }
 }
