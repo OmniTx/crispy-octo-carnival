@@ -55,6 +55,17 @@ export default async function RootLayout({
         <main className="flex-1 max-w-7xl mx-auto w-full p-6">
           {children}
         </main>
+        {process.env.VERCEL ? (
+          <footer className="border-t theme-border theme-bg-header px-4 py-2">
+            <p
+              className="text-center text-[10px] font-mono theme-text-muted opacity-70"
+              title="If this SHA does not match your latest GitHub commit, Production may be pinned to an old deploy or you are on a different URL/project."
+            >
+              {process.env.VERCEL_ENV ?? 'vercel'} ·{' '}
+              {process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? '—'}
+            </p>
+          </footer>
+        ) : null}
       </body>
     </html>
   )
