@@ -45,6 +45,8 @@ export const dictionaries = {
     editProduct: "Edit",
     cancel: "Cancel",
     update: "Update",
+    login: "Sign In",
+    loginDescription: "Sign in to manage catalog",
   },
   bn: {
     products: "পণ্যসমূহ",
@@ -92,6 +94,8 @@ export const dictionaries = {
     editProduct: "সম্পাদনা",
     cancel: "বাতিল",
     update: "আপডেট",
+    login: "সাইন ইন",
+    loginDescription: "ক্যাটালগ পরিচালনা করতে সাইন ইন করুন",
   }
 }
 
