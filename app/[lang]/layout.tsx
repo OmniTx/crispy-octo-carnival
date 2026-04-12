@@ -24,7 +24,7 @@ export default function RootLayout({
           <div className="font-semibold text-lg tracking-tight">
             <span className="text-ibm-blue mr-2">█</span>{dict.brandName}
           </div>
-          <LanguageToggle currentLang={lang} />
+          <LanguageToggle currentLang={lang as Locale} />
         </header>
         <main className="flex-1 max-w-7xl mx-auto w-full p-6">
           {children}
