@@ -3,8 +3,9 @@
 import { deleteProduct } from '@/lib/actions'
 import { Dictionary } from '@/i18n/dictionaries'
 import { useState } from 'react'
-import { Trash2, Image as ImageIcon } from 'lucide-react'
+import { Trash2, Image as ImageIcon, Pencil } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
 
 type Product = {
   id: string
@@ -39,7 +40,7 @@ export default function AdminProductTable({ products, dict, lang, currency }: { 
             <th className="px-4 py-4">{dict.name}</th>
             <th className="px-4 py-4">{dict.packSize}</th>
             <th className="px-4 py-4">{dict.price}</th>
-            <th className="px-4 py-4 w-32 text-right">{dict.actions}</th>
+            <th className="px-4 py-4 w-40 text-right">{dict.actions}</th>
           </tr>
         </thead>
         <tbody>
@@ -68,14 +69,24 @@ export default function AdminProductTable({ products, dict, lang, currency }: { 
                 <td className="px-4 py-3 theme-text-muted text-xs font-mono">{product.pack_size || '-'}</td>
                 <td className="px-4 py-3 font-mono font-bold text-ibm-blue">{currency}{product.price}</td>
                 <td className="px-4 py-3 text-right">
-                  <button
-                    onClick={() => handleDelete(product.id, product.image_url)}
-                    disabled={deletingId === product.id}
-                    className="ibm-btn-danger text-xs px-3 py-2 inline-flex items-center gap-1"
-                  >
-                    <Trash2 size={12} />
-                    {deletingId === product.id ? '...' : dict.delete}
-                  </button>
+                  <div className="inline-flex flex-wrap items-center justify-end gap-2">
+                    <Link
+                      href={`/${lang}/admin/edit/${product.id}`}
+                      className="ibm-btn text-xs px-3 py-2 inline-flex items-center gap-1 theme-bg-card border theme-border"
+                    >
+                      <Pencil size={12} />
+                      {dict.editProduct}
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() => handleDelete(product.id, product.image_url)}
+                      disabled={deletingId === product.id}
+                      className="ibm-btn-danger text-xs px-3 py-2 inline-flex items-center gap-1"
+                    >
+                      <Trash2 size={12} />
+                      {deletingId === product.id ? '...' : dict.delete}
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))

@@ -3,6 +3,7 @@
 import { supabase } from './supabase'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
+import { revalidateCatalogAndAdmin } from './revalidatePaths'
 
 const productSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -69,6 +70,84 @@ export async function addProduct(formData: FormData) {
   }
 
   revalidatePath('/')
+  revalidateCatalogAndAdmin()
+  return { success: true }
+}
+
+export async function updateProduct(formData: FormData) {
+  const id = formData.get('id') as string
+  if (!id) {
+    throw new Error('Product id is required')
+  }
+
+  const name = formData.get('name') as string
+  const name_bn = formData.get('name_bn') as string
+  const price = formData.get('price')
+  const description = formData.get('description') as string
+  const description_bn = formData.get('description_bn') as string
+  const usage_info = formData.get('usage_info') as string
+  const usage_info_bn = formData.get('usage_info_bn') as string
+  const pack_size = formData.get('pack_size') as string
+  const image = formData.get('image') as File | null
+
+  const parsed = productSchema.safeParse({ name, name_bn, price, description, description_bn, usage_info, usage_info_bn, pack_size })
+  if (!parsed.success) {
+    throw new Error(parsed.error.errors[0].message)
+  }
+
+  const { data: existing, error: fetchError } = await supabase
+    .from('products')
+    .select('image_url')
+    .eq('id', id)
+    .single()
+
+  if (fetchError || !existing) {
+    throw new Error('Product not found')
+  }
+
+  let image_url: string | null = existing.image_url
+
+  if (image && image.size > 0) {
+    const fileExt = image.name.split('.').pop()
+    const fileName = `${Math.random().toString(36).substring(2, 15)}.${fileExt}`
+    const { error: uploadError } = await supabase.storage
+      .from('product-imgs')
+      .upload(fileName, image, {
+        cacheControl: '3600',
+        upsert: false,
+      })
+
+    if (uploadError) {
+      throw new Error(`Failed to upload image: ${uploadError.message}`)
+    }
+
+    if (existing.image_url) {
+      await supabase.storage.from('product-imgs').remove([existing.image_url])
+    }
+    image_url = fileName
+  }
+
+  const { error: dbError } = await supabase
+    .from('products')
+    .update({
+      name: parsed.data.name,
+      name_bn: parsed.data.name_bn || null,
+      price: parsed.data.price,
+      description: parsed.data.description || null,
+      description_bn: parsed.data.description_bn || null,
+      usage_info: parsed.data.usage_info || null,
+      usage_info_bn: parsed.data.usage_info_bn || null,
+      pack_size: parsed.data.pack_size || null,
+      image_url,
+    })
+    .eq('id', id)
+
+  if (dbError) {
+    throw new Error(`Failed to update product: ${dbError.message}`)
+  }
+
+  revalidatePath('/')
+  revalidateCatalogAndAdmin()
   return { success: true }
 }
 
@@ -87,6 +166,7 @@ export async function deleteProduct(id: string, imageUrl: string) {
   }
 
   revalidatePath('/')
+  revalidateCatalogAndAdmin()
   return { success: true }
 }
 
@@ -112,6 +192,7 @@ export async function updateSiteSettings(formData: FormData) {
   }
 
   revalidatePath('/')
+  revalidateCatalogAndAdmin()
   return { success: true }
 }
 
@@ -152,5 +233,6 @@ export async function bulkImportProducts(
   }
 
   revalidatePath('/')
+  revalidateCatalogAndAdmin()
   return { success: true, count: rows.length }
 }
