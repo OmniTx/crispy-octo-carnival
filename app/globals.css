@@ -16,7 +16,7 @@
     @apply font-sans antialiased min-h-screen flex flex-col;
   }
   /* Apply Bangla font to Bangla text */
-  [lang="bn"] body {
+  html[lang="bn"] body {
     font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
   }
 }

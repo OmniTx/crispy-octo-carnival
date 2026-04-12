@@ -82,11 +82,6 @@ export default async function HomePage({ params: { lang } }: { params: { lang: s
                   {/* Product Name */}
                   <td className="px-4 py-4 border-r theme-border">
                     <div className="flex flex-col gap-1">
-                      {product.image_url && (
-                        <div className="relative w-16 h-16 mb-2 mx-auto">
-                          <Image src={product.image_url} alt={product.name} fill className="object-contain" />
-                        </div>
-                      )}
                       <span className="font-bold theme-text text-base leading-tight">
                         {isBn ? (product.name_bn || product.name) : product.name}
                       </span>
