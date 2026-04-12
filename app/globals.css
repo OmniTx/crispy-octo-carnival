@@ -26,6 +26,12 @@
     font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
   }
 
+  .font-number {
+    font-family: 'Inter', 'monospace';
+    font-weight: 600;
+    font-feature-settings: "tnum"; /* Tabular figures for alignment */
+  }
+
   /* --- Dark theme --- */
   .dark .ibm-btn {
     @apply bg-ibm-blue text-white px-4 py-3 font-semibold text-sm leading-none

@@ -5,10 +5,14 @@ import { supabase } from '@/lib/supabase'
 import LanguageToggle from '@/components/LanguageToggle'
 import Link from 'next/link'
 import { Settings } from 'lucide-react'
+import { cookies } from 'next/headers'
 
 export const metadata: Metadata = {
   title: 'Herbs Showcase',
   description: 'Premium Herbal Products Showcase',
+  icons: {
+    icon: '/favicon.png',
+  },
 }
 
 export const dynamic = 'force-dynamic'
@@ -34,6 +38,10 @@ export default async function RootLayout({
     ? (settings?.site_name_bn || dict.brandName)
     : (settings?.site_name_en || dict.brandName)
 
+  // Check for admin session via cookies (Supabase default)
+  const cookieStore = cookies()
+  const hasSession = cookieStore.get('sb-access-token') || cookieStore.get('sb-refresh-token')
+
   return (
     <html lang={lang} className={theme}>
       <body>
@@ -42,13 +50,15 @@ export default async function RootLayout({
             <span className="text-ibm-blue mr-2">█</span>{siteName}
           </Link>
           <div className="flex items-center gap-4">
-            <Link
-              href={`/${lang}/admin`}
-              className="theme-text-muted hover:text-ibm-blue transition-colors"
-              title={dict.adminPanel}
-            >
-              <Settings size={18} />
-            </Link>
+            {hasSession && (
+              <Link
+                href={`/${lang}/admin`}
+                className="theme-text-muted hover:text-ibm-blue transition-colors"
+                title={dict.adminPanel}
+              >
+                <Settings size={18} />
+              </Link>
+            )}
             <LanguageToggle currentLang={lang as Locale} />
           </div>
         </header>

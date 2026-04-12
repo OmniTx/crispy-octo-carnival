@@ -63,7 +63,7 @@ export default async function HomePage({ params: { lang } }: { params: { lang: s
               <div className="flex flex-col min-h-0 border-b md:border-b-0 md:border-r theme-border">
                 <div className="p-4 border-b theme-border">
                   <p className={`text-sm font-normal theme-text mb-2 ${isBn ? 'font-bangla' : ''}`}>
-                    {String(index + 1).padStart(2, '0')} {isBn ? 'পণ্যের নাম' : 'Product Name'}
+                    <span className="font-number">{String(index + 1).padStart(2, '0')}</span> {isBn ? 'পণ্যের নাম' : 'Product Name'}
                   </p>
                   <h2 className={`text-xl md:text-2xl font-bold theme-text leading-tight ${isBn ? 'font-bangla' : ''}`}>
                     {isBn ? (product.name_bn || product.name) : product.name}
@@ -94,11 +94,11 @@ export default async function HomePage({ params: { lang } }: { params: { lang: s
               <div className={`p-4 flex flex-col justify-start gap-6 shrink-0 text-left ${isBn ? 'font-bangla' : ''}`}>
                 <div>
                   <p className="text-sm font-bold theme-text mb-1">{isBn ? 'প্যাক সাইজ' : 'Pack Size'}</p>
-                  <p className="text-sm font-normal theme-text">{product.pack_size || '-'}</p>
+                  <p className="text-sm font-normal theme-text font-number">{product.pack_size || '-'}</p>
                 </div>
                 <div>
                   <p className="text-sm font-bold theme-text mb-1">{isBn ? 'মূল্য' : 'Price'}</p>
-                  <p className="text-lg font-semibold theme-text font-bangla tracking-tight">
+                  <p className={`text-lg theme-text font-number tracking-tight`}>
                     {currency}
                     {product.price}/-
                   </p>

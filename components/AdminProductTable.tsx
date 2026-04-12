@@ -53,7 +53,7 @@ export default function AdminProductTable({ products, dict, lang, currency }: { 
           ) : (
             products.map((product, index) => (
               <tr key={product.id} className="border-b theme-border theme-bg-hover transition-colors">
-                <td className="px-4 py-3 theme-text-muted text-xs font-mono">{index + 1}</td>
+                <td className="px-4 py-3 theme-text-muted text-xs font-number">{index + 1}</td>
                 <td className="px-4 py-3">
                   {product.image_url ? (
                     <div className="relative w-10 h-10 theme-bg-card border theme-border flex items-center justify-center">
@@ -66,8 +66,8 @@ export default function AdminProductTable({ products, dict, lang, currency }: { 
                   )}
                 </td>
                 <td className="px-4 py-3 font-semibold theme-text">{product.name}</td>
-                <td className="px-4 py-3 theme-text-muted text-xs font-mono">{product.pack_size || '-'}</td>
-                <td className="px-4 py-3 font-mono font-bold text-ibm-blue">{currency}{product.price}</td>
+                <td className="px-4 py-3 theme-text-muted text-xs font-number">{product.pack_size || '-'}</td>
+                <td className="px-4 py-3 font-number text-ibm-blue">{currency}{product.price}</td>
                 <td className="px-4 py-3 text-right">
                   <div className="inline-flex flex-wrap items-center justify-end gap-2">
                     <Link
