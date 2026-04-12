@@ -4,9 +4,7 @@ import type { NextRequest } from 'next/server'
 export function middleware(req: NextRequest) {
   // Simple check for Supabase auth cookies
   // Supabase browser client typically sets cookies starting with 'sb-'
-  const allCookies = req.cookies.getAll()
-  const hasAuthCookie = allCookies.some(c => c.name.startsWith('sb-') && c.name.endsWith('-auth-token')) 
-    || req.cookies.get('sb-access-token')
+  const hasAuthCookie = req.cookies.get('sb-access-token') || req.cookies.get('sb-refresh-token')
 
   const path = req.nextUrl.pathname
   const isProtectedPath = path.includes('/admin') || path.includes('/add')

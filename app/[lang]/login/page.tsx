@@ -19,7 +19,7 @@ export default function LoginPage({ params: { lang } }: { params: { lang: string
     setLoading(true)
     setError(null)
 
-    const { error: loginError } = await supabase.auth.signInWithPassword({
+    const { data, error: loginError } = await supabase.auth.signInWithPassword({
       email,
       password,
     })
@@ -27,7 +27,12 @@ export default function LoginPage({ params: { lang } }: { params: { lang: string
     if (loginError) {
       setError(loginError.message)
       setLoading(false)
-    } else {
+    } else if (data.session) {
+      // Manual cookie sync since we aren't using the Supabase SSR helpers
+      const expires = new Date(Date.now() + data.session.expires_in * 1000).toUTCString()
+      document.cookie = `sb-access-token=${data.session.access_token}; path=/; expires=${expires}; SameSite=Lax;`
+      document.cookie = `sb-refresh-token=${data.session.refresh_token}; path=/; expires=${expires}; SameSite=Lax;`
+      
       router.push(`/${lang}/admin`)
       router.refresh()
     }

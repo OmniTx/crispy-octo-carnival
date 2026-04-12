@@ -39,6 +39,13 @@ export default function SetupPage({ params: { lang } }: { params: { lang: string
       setError('An account with this email may already exist. Try logging in.')
       setLoading(false)
     } else {
+      // Manual cookie sync if a session was created during signup
+      if (data.session) {
+        const expires = new Date(Date.now() + data.session.expires_in * 1000).toUTCString()
+        document.cookie = `sb-access-token=${data.session.access_token}; path=/; expires=${expires}; SameSite=Lax;`
+        document.cookie = `sb-refresh-token=${data.session.refresh_token}; path=/; expires=${expires}; SameSite=Lax;`
+      }
+      
       setSuccess(true)
       setLoading(false)
       // Automatically log them in or redirect to login after a few seconds
