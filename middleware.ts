@@ -7,6 +7,11 @@ export function middleware(req: NextRequest) {
   const hasAuthCookie = req.cookies.get('sb-access-token') || req.cookies.get('sb-refresh-token')
 
   const path = req.nextUrl.pathname
+
+  // Redirect root path to default locale
+  if (path === '/') {
+    return NextResponse.redirect(new URL('/en', req.url))
+  }
   const isProtectedPath = path.includes('/admin') || path.includes('/add')
   const isLoginPage = path.includes('/login') || path.includes('/setup')
 
