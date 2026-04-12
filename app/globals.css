@@ -2,7 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Bengali:wght@300;400;500;600;700&family=Hind+Siliguri:wght@300;400;500;600;700&display=swap');
+/* === Self-hosted Hind Siliguri (Bangla) === */
+@font-face { font-family: 'Hind Siliguri'; font-weight: 300; font-style: normal; font-display: swap; src: url('/fonts/HindSiliguri-300.ttf') format('truetype'); }
+@font-face { font-family: 'Hind Siliguri'; font-weight: 400; font-style: normal; font-display: swap; src: url('/fonts/HindSiliguri-400.ttf') format('truetype'); }
+@font-face { font-family: 'Hind Siliguri'; font-weight: 500; font-style: normal; font-display: swap; src: url('/fonts/HindSiliguri-500.ttf') format('truetype'); }
+@font-face { font-family: 'Hind Siliguri'; font-weight: 600; font-style: normal; font-display: swap; src: url('/fonts/HindSiliguri-600.ttf') format('truetype'); }
+@font-face { font-family: 'Hind Siliguri'; font-weight: 700; font-style: normal; font-display: swap; src: url('/fonts/HindSiliguri-700.ttf') format('truetype'); }
+
+/* === Self-hosted Inter (English) === */
+@font-face { font-family: 'Inter'; font-weight: 300; font-style: normal; font-display: swap; src: url('/fonts/Inter-300.ttf') format('truetype'); }
+@font-face { font-family: 'Inter'; font-weight: 400; font-style: normal; font-display: swap; src: url('/fonts/Inter-400.ttf') format('truetype'); }
+@font-face { font-family: 'Inter'; font-weight: 500; font-style: normal; font-display: swap; src: url('/fonts/Inter-500.ttf') format('truetype'); }
+@font-face { font-family: 'Inter'; font-weight: 600; font-style: normal; font-display: swap; src: url('/fonts/Inter-600.ttf') format('truetype'); }
+@font-face { font-family: 'Inter'; font-weight: 700; font-style: normal; font-display: swap; src: url('/fonts/Inter-700.ttf') format('truetype'); }
 
 /* ===== DARK THEME (default) ===== */
 @layer base {

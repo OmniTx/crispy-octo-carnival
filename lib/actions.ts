@@ -49,6 +49,16 @@ export async function addProduct(formData: FormData) {
     }
   }
 
+  // Get max sort_order to place new product at end
+  const { data: maxRow } = await supabase
+    .from('products')
+    .select('sort_order')
+    .order('sort_order', { ascending: false })
+    .limit(1)
+    .single()
+
+  const nextOrder = (maxRow?.sort_order ?? 0) + 1
+
   const { error: dbError } = await supabase
     .from('products')
     .insert([
@@ -62,6 +72,7 @@ export async function addProduct(formData: FormData) {
         usage_info_bn: parsed.data.usage_info_bn,
         pack_size: parsed.data.pack_size,
         image_url: fileName,
+        sort_order: nextOrder,
       },
     ])
 
@@ -235,4 +246,24 @@ export async function bulkImportProducts(
   revalidatePath('/')
   revalidateCatalogAndAdmin()
   return { success: true, count: rows.length }
+}
+
+export async function reorderProducts(orderedIds: string[]) {
+  // Update sort_order for each product based on array position
+  const updates = orderedIds.map((id, index) =>
+    supabase
+      .from('products')
+      .update({ sort_order: index + 1 })
+      .eq('id', id)
+  )
+
+  const results = await Promise.all(updates)
+  const failed = results.find((r) => r.error)
+  if (failed?.error) {
+    throw new Error(`Failed to reorder: ${failed.error.message}`)
+  }
+
+  revalidatePath('/')
+  revalidateCatalogAndAdmin()
+  return { success: true }
 }

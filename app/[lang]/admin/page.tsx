@@ -14,7 +14,7 @@ export default async function AdminPage({ params: { lang } }: { params: { lang: 
   const { data: products } = await supabase
     .from('products')
     .select('*')
-    .order('created_at', { ascending: true })
+    .order('sort_order', { ascending: true })
 
   const { data: settings } = await supabase
     .from('site_settings')

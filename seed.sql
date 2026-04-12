@@ -19,7 +19,8 @@ CREATE TABLE public.products (
   usage_info_bn text,
   pack_size text,
   image_url text,
-  created_at timestamptz DEFAULT now()
+  created_at timestamptz DEFAULT now(),
+  sort_order integer DEFAULT 0
 );
 
 -- 3. Create site settings table (single row)
