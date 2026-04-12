@@ -1,9 +1,33 @@
-export function productsToCSV(products: any[]): string {
-  const headers = ['name', 'price', 'description', 'pack_size']
+const CSV_HEADERS = [
+  'name',
+  'price',
+  'description',
+  'pack_size',
+  'name_bn',
+  'description_bn',
+  'usage_info',
+] as const
+
+export type CSVProductRow = {
+  name: string
+  price: number
+  description: string
+  pack_size: string
+  name_bn: string | null
+  description_bn: string | null
+  usage_info: string | null
+}
+
+function emptyToNull(s: string | undefined): string | null {
+  const t = s?.trim()
+  return t ? t : null
+}
+
+export function productsToCSV(products: Record<string, unknown>[]): string {
+  const headers = [...CSV_HEADERS]
   const rows = products.map((p) =>
     headers.map((h) => {
       const val = String(p[h] ?? '')
-      // Escape double quotes and wrap in quotes if contains comma/newline
       if (val.includes(',') || val.includes('"') || val.includes('\n')) {
         return `"${val.replace(/"/g, '""')}"`
       }
@@ -13,7 +37,7 @@ export function productsToCSV(products: any[]): string {
   return [headers.join(','), ...rows].join('\n')
 }
 
-export function parseCSV(text: string): Array<{ name: string; price: number; description: string; pack_size: string }> {
+export function parseCSV(text: string): CSVProductRow[] {
   const lines = text.trim().split('\n')
   if (lines.length < 2) return []
 
@@ -22,12 +46,15 @@ export function parseCSV(text: string): Array<{ name: string; price: number; des
   const priceIdx = headers.indexOf('price')
   const descIdx = headers.indexOf('description')
   const packIdx = headers.indexOf('pack_size')
+  const nameBnIdx = headers.indexOf('name_bn')
+  const descBnIdx = headers.indexOf('description_bn')
+  const usageIdx = headers.indexOf('usage_info')
 
   if (nameIdx === -1 || priceIdx === -1) {
     throw new Error('CSV must have "name" and "price" columns')
   }
 
-  const results: Array<{ name: string; price: number; description: string; pack_size: string }> = []
+  const results: CSVProductRow[] = []
 
   for (let i = 1; i < lines.length; i++) {
     const cols = parseCSVLine(lines[i])
@@ -41,6 +68,9 @@ export function parseCSV(text: string): Array<{ name: string; price: number; des
       price,
       description: descIdx >= 0 ? (cols[descIdx]?.trim() || '') : '',
       pack_size: packIdx >= 0 ? (cols[packIdx]?.trim() || '') : '',
+      name_bn: nameBnIdx >= 0 ? emptyToNull(cols[nameBnIdx]) : null,
+      description_bn: descBnIdx >= 0 ? emptyToNull(cols[descBnIdx]) : null,
+      usage_info: usageIdx >= 0 ? emptyToNull(cols[usageIdx]) : null,
     })
   }
 

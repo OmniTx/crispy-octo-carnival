@@ -112,7 +112,17 @@ export async function updateSiteSettings(formData: FormData) {
   return { success: true }
 }
 
-export async function bulkImportProducts(products: Array<{ name: string; price: number; description: string; pack_size: string }>) {
+export async function bulkImportProducts(
+  products: Array<{
+    name: string
+    price: number
+    description: string
+    pack_size: string
+    name_bn?: string | null
+    description_bn?: string | null
+    usage_info?: string | null
+  }>
+) {
   if (!products.length) {
     throw new Error('No products to import')
   }
@@ -122,6 +132,9 @@ export async function bulkImportProducts(products: Array<{ name: string; price: 
     price: p.price,
     description: p.description || '',
     pack_size: p.pack_size || '',
+    name_bn: p.name_bn ?? null,
+    description_bn: p.description_bn ?? null,
+    usage_info: p.usage_info ?? null,
     image_url: null,
   }))
 

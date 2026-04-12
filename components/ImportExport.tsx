@@ -13,6 +13,9 @@ type Product = {
   description: string
   pack_size: string
   image_url: string | null
+  name_bn?: string | null
+  description_bn?: string | null
+  usage_info?: string | null
 }
 
 export default function ImportExport({ products, dict }: { products: Product[]; dict: Dictionary }) {

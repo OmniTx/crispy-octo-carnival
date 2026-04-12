@@ -21,9 +21,8 @@ export default async function HomePage({ params: { lang } }: { params: { lang: s
     .single()
 
   const currency = settings?.currency_symbol || '৳'
-  const siteName = isBn
-    ? (settings?.site_name_bn || dict.brandName)
-    : (settings?.site_name_en || dict.brandName)
+
+  const placeholderClass = `text-sm font-medium theme-text ${isBn ? 'font-bangla' : ''}`
 
   return (
     <div>
@@ -43,24 +42,25 @@ export default async function HomePage({ params: { lang } }: { params: { lang: s
       ) : (
         <div className="space-y-4">
           {products.map((product, index) => (
-            <div key={product.id} className="border theme-border theme-bg flex flex-col md:flex-row bg-transparent">
-              
-              {/* Left Column: Image */}
-              <div className="border-b md:border-b-0 md:border-r theme-border p-4 w-full md:w-[220px] flex items-center justify-center shrink-0">
-                <div className="w-full aspect-square border theme-border flex items-center justify-center bg-transparent relative p-2">
+            <div
+              key={product.id}
+              className="border theme-border theme-bg bg-transparent flex flex-col md:grid md:grid-cols-[minmax(0,0.2fr)_minmax(0,0.65fr)_minmax(0,0.15fr)] md:items-stretch"
+            >
+              {/* Left: image (~20%) */}
+              <div className="border-b md:border-b-0 md:border-r theme-border p-4 flex items-center justify-center min-h-[140px] md:min-h-0">
+                <div className="relative w-full min-h-[120px] md:min-h-[160px] border theme-border flex items-center justify-center bg-transparent p-2">
                   {product.image_url ? (
                     <Image src={product.image_url} alt={product.name} fill className="object-contain p-2" />
                   ) : (
-                    <span className="text-sm font-medium theme-text">Product image</span>
+                    <span className={placeholderClass}>{dict.productImagePlaceholder}</span>
                   )}
                 </div>
               </div>
 
-              {/* Middle Column: Details */}
-              <div className="flex flex-col flex-1 border-b md:border-b-0 md:border-r theme-border">
-                {/* Top Half */}
+              {/* Middle: details (~65%) */}
+              <div className="flex flex-col min-h-0 border-b md:border-b-0 md:border-r theme-border">
                 <div className="p-4 border-b theme-border flex flex-col justify-end min-h-[100px]">
-                  <div className="flex gap-2 items-center text-sm theme-text mb-1">
+                  <div className={`flex gap-2 items-center text-sm theme-text mb-1 ${isBn ? 'font-bangla' : ''}`}>
                     <span className="font-medium">{String(index + 1).padStart(2, '0')}</span>
                     <span>{isBn ? 'পণ্যের নাম' : 'Product Name'}</span>
                   </div>
@@ -68,33 +68,37 @@ export default async function HomePage({ params: { lang } }: { params: { lang: s
                     {isBn ? (product.name_bn || product.name) : product.name}
                   </div>
                 </div>
-                
-                {/* Bottom Half */}
+
                 <div className="p-4 flex-1">
-                  <div className="text-sm theme-text mb-1">{isBn ? 'বিবরণ' : 'Description'}</div>
+                  <div className={`text-sm font-semibold theme-text mb-1 ${isBn ? 'font-bangla' : ''}`}>
+                    {isBn ? 'বিবরণ' : 'Description'}
+                  </div>
                   <div className={`text-sm theme-text leading-relaxed mb-4 ${isBn ? 'font-bangla' : ''}`}>
                     {isBn ? (product.description_bn || product.description) : product.description}
                   </div>
-                  
-                  <div className="text-sm theme-text mb-1">{isBn ? 'সেবনবিধি' : 'Usage / Dosage'}</div>
+
+                  <div className={`text-sm font-semibold theme-text mb-1 ${isBn ? 'font-bangla' : ''}`}>
+                    {isBn ? 'সেবনবিধি' : 'Usage / Dosage'}
+                  </div>
                   <div className={`text-sm theme-text leading-relaxed ${isBn ? 'font-bangla' : ''}`}>
                     {product.usage_info || '-'}
                   </div>
                 </div>
               </div>
 
-              {/* Right Column: Meta */}
-              <div className="p-4 w-full md:w-[160px] flex flex-row md:flex-col justify-start gap-8 shrink-0">
+              {/* Right: pack & price (~15%) */}
+              <div
+                className={`p-4 flex flex-row md:flex-col justify-start gap-8 shrink-0 ${isBn ? 'font-bangla' : ''}`}
+              >
                 <div>
-                  <div className="text-sm theme-text mb-1">{isBn ? 'প্যাক সাইজ' : 'Pack Size'}</div>
+                  <div className="text-sm font-semibold theme-text mb-1">{isBn ? 'প্যাক সাইজ' : 'Pack Size'}</div>
                   <div className="theme-text text-sm">{product.pack_size || '-'}</div>
                 </div>
                 <div>
-                  <div className="text-sm theme-text mb-1">{isBn ? 'মূল্য' : 'Price'}</div>
+                  <div className="text-sm font-semibold theme-text mb-1">{isBn ? 'মূল্য' : 'Price'}</div>
                   <div className="text-lg theme-text font-bangla">{currency}{product.price}/-</div>
                 </div>
               </div>
-
             </div>
           ))}
         </div>
