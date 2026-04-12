@@ -73,3 +73,54 @@ You have a zero-config, edge-ready app here. Deploying to Vercel is extremely si
 ## Note on Architecture
 - **No separate server:** Adds and Deletes are handled entirely via Next.js Edge Server Actions (`lib/actions.ts`).
 - **Images:** Supabase image loader is pre-configured in `next.config.js`. Next.js handles size variations efficiently.
+
+---
+
+## 4. cPanel Deployment (Advanced)
+
+If you chose to host this application on a traditional cPanel server rather than Vercel, follow these customized Next.js deployment steps:
+
+1. **Build Locally:**
+   Next.js applications need to be built into a production bundle before running on cPanel. Since you do not have `npm` installed locally, you can use GitHub Actions to build the project for you, or build it on any machine with `npm` installed.
+   To build it locally:
+   ```bash
+   npm install
+   npm run build
+   ```
+
+2. **Prepare Files for cPanel:**
+   After building, only specific folders are needed for production:
+   - `.next` folder
+   - `public` folder
+   - `package.json`
+   - `next.config.js`
+   
+   Zip these folders up to upload them.
+
+3. **cPanel Node.js Application Setup:**
+   - Log into your cPanel dashboard.
+   - Go to **Setup Node.js App** (available on modern cPanel hosting).
+   - Click **Create Application**.
+   - **Node.js version:** Select `20` (or the highest available version 18+).
+   - **Application mode:** `Production`
+   - **Application root:** Entering a directory name, e.g., `showcase-app`
+   - **Application URL:** Pick your domain/subdomain.
+   - **Startup file:** Leave blank (or use `server.js` if you are using a custom express server).
+
+4. **Upload Files:**
+   - Go to **File Manager** in cPanel.
+   - Navigate to the `Application root` directory you just specified (`showcase-app`).
+   - Upload the zip file containing your production bundle and Extract it.
+
+5. **Install Production Dependencies:**
+   - Go back to the **Setup Node.js App** page.
+   - Select your application and click **Run NPM Install** to install dependencies based on `package.json`. 
+
+6. **Add Environment Variables:**
+   - Still in the Node.js App page, slowly add your environment variables manually under the **Environment variables** section:
+     - `NEXT_PUBLIC_SUPABASE_URL`
+     - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+
+7. **Start Application:**
+   - For a standard Next.js build running on cPanel without a custom server file, you often need to set the Startup file or command to `node_modules/next/dist/bin/next start`. 
+   - Alternatively, edit your `package.json` setup and configure the app to run `npm start`, then restart your Node application.
