@@ -280,7 +280,7 @@ INSERT INTO public.products (name, name_bn, price, description, description_bn, 
  '২ টি করে ক্যাপসুল দিনে ২ বার আহারের পূর্বে সেব্য।',
  '৩০ ক্যাপসুল');
 
-INSERT INTO public.products (name, name_bn, price, description, description_bn, usage_info, pack_size) VALUES
+INSERT INTO public.products (name, name_bn, price, description, description_bn, usage_info, usage_info_bn, pack_size) VALUES
 ('Spiruvil-C', 'স্পিরুভিট-সি', 270.00,
  'Spirulina with vitamin C supplement for immune function and energy.',
  'প্রাকৃতিক ভিটামিন সি। ভিটামিন সি এর অভাবজনিত রোগ ও ক্ষত নিরামণে কার্যকরী। মাড়ি ফোলা, দাঁত, মুখ ও গলার ক্ষত, আলসার, শিশুদের শারীরিক ও মানসিক বৃদ্ধিতে কার্যকরী।',
@@ -288,7 +288,7 @@ INSERT INTO public.products (name, name_bn, price, description, description_bn, 
  'অপ্রাপ্তবয়স্ক- ১ টি করে ক্যাপসুল দিনে ১-২ বার আহারের পর সেব্য। প্রাপ্তবয়স্ক- ১/২ টি ক্যাপসুল দিনে ২ বার আহারের পর সেব্য।',
  '৩০ ক্যাপ');
 
-INSERT INTO public.products (name, name_bn, price, description, description_bn, usage_info, pack_size) VALUES
+INSERT INTO public.products (name, name_bn, price, description, description_bn, usage_info, usage_info_bn, pack_size) VALUES
 ('Spirulina-H', 'স্পিরুলিনা-এইচ', 450.00,
  'Premium spirulina capsules rich in protein, B vitamins, iron, and antioxidants.',
  'প্রোটিন, ভিটামিন ও মিনারেল সমৃদ্ধ পুষ্টির প্রাকৃতিক খনি যা শিশু, বয়স্ক ও গর্ভবতী মহিলাদের শারীরিক দুর্বলতা, ভিটামিন ও মিনারেলের চাহিদা মেটাতে এক মহা সুষম খাদ্য হিসেবে কার্যকরী। ডায়াবেটিস, উচ্চ রক্তচাপ, রক্তের কোলেস্টেরল নিয়ন্ত্রণে, ক্যান্সার ও টিউমার প্রতিরোধে ও মেদ কমাতে কার্যকরী।',
@@ -296,7 +296,7 @@ INSERT INTO public.products (name, name_bn, price, description, description_bn, 
  'অপ্রাপ্তবয়স্ক- ১ টি করে ক্যাপসুল দিনে ১-২ বার আহারের পর সেব্য। প্রাপ্তবয়স্ক- ২ টি করে ক্যাপসুল দিনে ২ বার আহারের পর সেব্য। মেদ কমাতে- ৩ টি করে ক্যাপসুল দিনে ২-৩ বার আহারের পূর্বে সেব্য।',
  '৪২ ক্যাপ');
 
-INSERT INTO public.products (name, name_bn, price, description, description_bn, usage_info, pack_size) VALUES
+INSERT INTO public.products (name, name_bn, price, description, description_bn, usage_info, usage_info_bn, pack_size) VALUES
 ('Herbs Mushroom Extract', 'হার্বস মাশরুম এক্সট্রাক্ট', 480.00,
  'Concentrated liquid mushroom extract delivering full spectrum health benefits.',
  'শ্লেষ্মা নিবারক, মস্তিষ্ক পরিষ্কারক। পুরাতন মাথা ব্যথা, মাইগ্রেন, এ্যাজমা, নিউমোনিয়া, ব্রংকাইটিস, শ্লেষ্মা জনিত মাথাব্যথা, সাইনোসাইটিস, মানসিক দুর্বলতায় এবং শিশুদের শারীরিক ও মানসিক বৃদ্ধিতে কার্যকরী।',
@@ -306,7 +306,7 @@ INSERT INTO public.products (name, name_bn, price, description, description_bn, 
 
 -- ===== Products 33-44 =====
 
-INSERT INTO public.products (name, name_bn, price, description, description_bn, usage_info, pack_size) VALUES
+INSERT INTO public.products (name, name_bn, price, description, description_bn, usage_info, usage_info_bn, pack_size) VALUES
 ('Herbs GL Tonic', 'হার্বস জিএল টনিক', 3500.00,
  'Ganoderma lucidum health tonic for liver support, immunity, and vitality.',
  'লিভার প্রবাহ, ফ্যাটি লিভার, হেপাটাইটিস, লিভার সিরোসিস, লিভার টিউমার ও ক্যান্সার, জন্ডিস ও কৃমিতে কার্যকরী। কিডনী ও ফুসফুস প্রদাহ জনিত শুষ্ক কাশিতে এবং দেহকে টক্সিন মুক্ত করে রোগ প্রতিরোধ ক্ষমতা বৃদ্ধিতে কার্যকরী।',
@@ -402,10 +402,11 @@ INSERT INTO public.products (name, name_bn, price, description, description_bn, 
  'দিন ২-৩ বার আক্রান্ত স্থানে ব্যবহার করতে হবে।',
  '৪০ গ্রাম');
 
-INSERT INTO public.products (name, name_bn, price, description, description_bn, usage_info, pack_size) VALUES
+INSERT INTO public.products (name, name_bn, price, description, description_bn, usage_info, usage_info_bn, pack_size) VALUES
 ('Herbs Honey', 'হার্বস মধু', 240.00, -- Defaulting to the 240 price 175gm, though 500gm is 620
  'Pure natural honey enriched with herbal extracts for immunity and energy.',
  'প্রাকৃতিক মধু শারীরিক, মানসিক শক্তি ও সজীবতা আনয়নে, ক্ষুধা ও স্বরণশক্তি বৃদ্ধিতে এবং দেহের রোগ প্রতিরোধ ক্ষমতা বৃদ্ধিতে কার্যকরী।',
+ '1-2 tsp 2 times daily or mix with 1 glass warm water.',
  '১ থেকে ২ চা চামচ দিনে ২ বার চেটে বা ১ গ্লাস কুসুম গরম পানিতে মিশিয়ে সেব্য।',
  '১৭৫ গ্রাম/৫০০ গ্রাম');
 
