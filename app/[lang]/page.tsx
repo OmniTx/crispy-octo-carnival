@@ -49,12 +49,14 @@ export default async function HomePage({ params: { lang } }: { params: { lang: s
               className="text-left flex flex-col md:grid md:grid-cols-[minmax(0,0.2fr)_minmax(0,0.7fr)_minmax(0,0.1fr)] md:items-stretch border-b theme-border last:border-b-0"
             >
               {/* Left: product image (~20%) */}
-              <div className="border-b md:border-b-0 md:border-r theme-border p-4 md:min-h-[11rem]">
-                <div className="relative h-36 md:h-full md:min-h-[10rem] w-full bg-transparent">
+              <div className="border-b md:border-b-0 md:border-r theme-border p-4 md:min-h-[11rem] theme-bg-card/30">
+                <div className="relative h-64 md:h-full md:min-h-[10rem] w-full bg-transparent">
                   {product.image_url ? (
-                    <Image src={product.image_url} alt={product.name} fill className="object-contain object-left" />
+                    <Image src={product.image_url} alt={product.name} fill className="object-contain object-center md:object-left" />
                   ) : (
-                    <span className={`block pt-1 ${placeholderClass} theme-text-muted`}>{dict.productImagePlaceholder}</span>
+                    <div className="flex items-center justify-center h-full opacity-30">
+                      <span className={`block ${placeholderClass} theme-text-muted`}>{dict.productImagePlaceholder}</span>
+                    </div>
                   )}
                 </div>
               </div>
