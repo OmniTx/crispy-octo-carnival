@@ -14,6 +14,7 @@ const productSchema = z.object({
   usage_info: z.string().optional(),
   usage_info_bn: z.string().optional(),
   pack_size: z.string().optional(),
+  pack_size_bn: z.string().optional(),
 })
 
 export async function addProduct(formData: FormData) {
@@ -25,9 +26,10 @@ export async function addProduct(formData: FormData) {
   const usage_info = formData.get('usage_info') as string
   const usage_info_bn = formData.get('usage_info_bn') as string
   const pack_size = formData.get('pack_size') as string
+  const pack_size_bn = formData.get('pack_size_bn') as string
   const image = formData.get('image') as File | null
 
-  const parsed = productSchema.safeParse({ name, name_bn, price, description, description_bn, usage_info, usage_info_bn, pack_size })
+  const parsed = productSchema.safeParse({ name, name_bn, price, description, description_bn, usage_info, usage_info_bn, pack_size, pack_size_bn })
   if (!parsed.success) {
     throw new Error(parsed.error.errors[0].message)
   }
@@ -71,6 +73,7 @@ export async function addProduct(formData: FormData) {
         usage_info: parsed.data.usage_info,
         usage_info_bn: parsed.data.usage_info_bn,
         pack_size: parsed.data.pack_size,
+        pack_size_bn: parsed.data.pack_size_bn,
         image_url: fileName,
         sort_order: nextOrder,
       },
@@ -99,9 +102,10 @@ export async function updateProduct(formData: FormData) {
   const usage_info = formData.get('usage_info') as string
   const usage_info_bn = formData.get('usage_info_bn') as string
   const pack_size = formData.get('pack_size') as string
+  const pack_size_bn = formData.get('pack_size_bn') as string
   const image = formData.get('image') as File | null
 
-  const parsed = productSchema.safeParse({ name, name_bn, price, description, description_bn, usage_info, usage_info_bn, pack_size })
+  const parsed = productSchema.safeParse({ name, name_bn, price, description, description_bn, usage_info, usage_info_bn, pack_size, pack_size_bn })
   if (!parsed.success) {
     throw new Error(parsed.error.errors[0].message)
   }
@@ -149,6 +153,7 @@ export async function updateProduct(formData: FormData) {
       usage_info: parsed.data.usage_info || null,
       usage_info_bn: parsed.data.usage_info_bn || null,
       pack_size: parsed.data.pack_size || null,
+      pack_size_bn: parsed.data.pack_size_bn || null,
       image_url,
     })
     .eq('id', id)
@@ -213,6 +218,7 @@ export async function bulkImportProducts(
     price: number
     description: string
     pack_size: string
+    pack_size_bn?: string | null
     name_bn?: string | null
     description_bn?: string | null
     usage_info?: string | null
@@ -228,6 +234,7 @@ export async function bulkImportProducts(
     price: p.price,
     description: p.description || '',
     pack_size: p.pack_size || '',
+    pack_size_bn: p.pack_size_bn ?? null,
     name_bn: p.name_bn ?? null,
     description_bn: p.description_bn ?? null,
     usage_info: p.usage_info ?? null,

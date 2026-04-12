@@ -96,7 +96,7 @@ export default async function HomePage({ params: { lang } }: { params: { lang: s
               <div className={`p-4 flex flex-col justify-start gap-6 shrink-0 text-left ${isBn ? 'font-bangla' : ''}`}>
                 <div>
                   <p className="text-sm font-bold theme-text mb-1">{isBn ? 'প্যাক সাইজ' : 'Pack Size'}</p>
-                  <p className="text-sm font-normal theme-text font-number">{product.pack_size || '-'}</p>
+                  <p className="text-sm font-normal theme-text font-number">{isBn ? (product.pack_size_bn || product.pack_size || '-') : (product.pack_size || '-')}</p>
                 </div>
                 <div>
                   <p className="text-sm font-bold theme-text mb-1">{isBn ? 'মূল্য' : 'Price'}</p>

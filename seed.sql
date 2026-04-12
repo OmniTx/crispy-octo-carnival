@@ -18,6 +18,7 @@ CREATE TABLE public.products (
   usage_info text,
   usage_info_bn text,
   pack_size text,
+  pack_size_bn text,
   image_url text,
   created_at timestamptz DEFAULT now(),
   sort_order integer DEFAULT 0

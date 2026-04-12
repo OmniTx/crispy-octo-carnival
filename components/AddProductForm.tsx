@@ -18,6 +18,7 @@ const productSchema = z.object({
   usage_info: z.string().optional(),
   usage_info_bn: z.string().optional(),
   pack_size: z.string().optional(),
+  pack_size_bn: z.string().optional(),
 })
 
 type FormValues = z.infer<typeof productSchema>
@@ -46,6 +47,7 @@ export default function AddProductForm({ dict, lang }: { dict: Dictionary; lang:
       formData.append('usage_info', data.usage_info || '')
       formData.append('usage_info_bn', data.usage_info_bn || '')
       formData.append('pack_size', data.pack_size || '')
+      formData.append('pack_size_bn', data.pack_size_bn || '')
       if (imageFile) {
         formData.append('image', imageFile)
       }
@@ -76,16 +78,24 @@ export default function AddProductForm({ dict, lang }: { dict: Dictionary; lang:
           </div>
         </div>
 
-        {/* Price + Pack Size */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="ibm-label">{dict.price}</label>
             <input type="number" step="0.01" {...register('price')} className="ibm-input font-mono" />
             {errors.price && <p className="text-red-500 text-sm mt-2">{errors.price.message as string}</p>}
           </div>
+          <div></div>
+        </div>
+
+        {/* Pack Size */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="ibm-label">{dict.packSize}</label>
-            <input type="text" {...register('pack_size')} placeholder="e.g. 200gm, 30 caps" className="ibm-input" />
+            <label className="ibm-label">{dict.packSize} (English)</label>
+            <input type="text" {...register('pack_size')} placeholder="e.g. 200gm, 30 caps" className="ibm-input font-number" />
+          </div>
+          <div>
+            <label className="ibm-label font-bangla">{dict.packSize} (বাংলা)</label>
+            <input type="text" {...register('pack_size_bn')} placeholder="যেমন: ৩০০গ্রাম, ৩০ ক্যাপ" className="ibm-input font-bangla font-number" />
           </div>
         </div>
 

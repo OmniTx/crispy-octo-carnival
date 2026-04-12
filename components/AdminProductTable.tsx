@@ -13,6 +13,7 @@ type Product = {
   price: number
   description: string
   pack_size: string
+  pack_size_bn?: string | null
   image_url: string | null
   sort_order?: number
 }
@@ -139,7 +140,7 @@ export default function AdminProductTable({ products: initialProducts, dict, lan
                     )}
                   </td>
                   <td className="px-4 py-3 font-semibold theme-text">{product.name}</td>
-                  <td className="px-4 py-3 theme-text-muted text-xs font-number">{product.pack_size || '-'}</td>
+                  <td className="px-4 py-3 theme-text-muted text-xs font-number">{lang === 'bn' ? (product.pack_size_bn || product.pack_size || '-') : (product.pack_size || '-')}</td>
                   <td className="px-4 py-3 font-number text-ibm-blue">{currency}{product.price}</td>
                   <td className="px-4 py-3 text-right">
                     <div className="inline-flex flex-wrap items-center justify-end gap-2">
