@@ -41,79 +41,67 @@ export default async function HomePage({ params: { lang } }: { params: { lang: s
           {dict.noProducts}
         </div>
       ) : (
-        <div className="overflow-x-auto border theme-border shadow-xl">
-          <table className="w-full text-left text-sm">
-            {/* Table Header */}
-            <thead>
-              <tr className="theme-table-header text-xs font-bold uppercase">
-                <th className="px-3 py-4 text-center w-12 border-r border-blue-500/30">
-                  {isBn ? 'ক্রমিক নং' : '#'}
-                </th>
-                <th className="px-4 py-4 border-r border-blue-500/30 min-w-[160px]">
-                  {isBn ? 'পণ্যের নাম' : 'Product Name'}
-                </th>
-                <th className="px-4 py-4 border-r border-blue-500/30 min-w-[280px]">
-                  {isBn ? 'সংক্ষিপ্ত কার্যকারিতা' : 'Description'}
-                </th>
-                <th className="px-4 py-4 border-r border-blue-500/30 min-w-[200px]">
-                  {isBn ? 'সেবন/ব্যবহারবিধি' : 'Usage / Dosage'}
-                </th>
-                <th className="px-3 py-4 text-center border-r border-blue-500/30 w-24">
-                  {isBn ? 'প্যাক সাইজ' : 'Pack Size'}
-                </th>
-                <th className="px-3 py-4 text-center w-20">
-                  {isBn ? 'খুচরা মূল্য' : 'Price'}
-                </th>
-              </tr>
-            </thead>
-            <tbody className="font-bangla">
-              {products.map((product, index) => (
-                <tr
-                  key={product.id}
-                  className={`border-b theme-border transition-colors theme-bg-hover ${
-                    index % 2 === 0 ? 'theme-table-row-even' : 'theme-table-row-odd'
-                  }`}
-                >
-                  {/* Serial Number */}
-                  <td className="px-3 py-4 text-center font-mono font-bold theme-text-muted border-r theme-border">
-                    {String(index + 1).padStart(2, '0')}
-                  </td>
+        <div className="space-y-6">
+          {products.map((product, index) => (
+            <div key={product.id} className="border theme-border theme-bg flex flex-col md:flex-row shadow-sm hover:shadow-md transition-shadow">
+              
+              {/* Left Column: Image */}
+              <div className="border-b md:border-b-0 md:border-r theme-border p-4 w-full md:w-[200px] flex items-center justify-center shrink-0 theme-bg-card">
+                {product.image_url ? (
+                  <div className="relative w-32 h-32">
+                    <Image src={product.image_url} alt={product.name} fill className="object-contain" />
+                  </div>
+                ) : (
+                  <div className="w-32 h-32 border theme-border flex items-center justify-center bg-transparent">
+                    <span className="text-xs theme-text-muted">Product image</span>
+                  </div>
+                )}
+              </div>
 
-                  {/* Product Name */}
-                  <td className="px-4 py-4 border-r theme-border">
-                    <div className="flex flex-col gap-1">
-                      <span className="font-bold theme-text text-base leading-tight">
-                        {isBn ? (product.name_bn || product.name) : product.name}
-                      </span>
-                      <span className="text-xs theme-text-muted italic">
-                        {isBn ? product.name : (product.name_bn || '')}
-                      </span>
-                    </div>
-                  </td>
-
-                  {/* Description */}
-                  <td className="px-4 py-4 border-r theme-border theme-text text-sm leading-relaxed">
+              {/* Middle Column: Details */}
+              <div className="flex flex-col flex-1 border-b md:border-b-0 md:border-r theme-border">
+                {/* Top Half */}
+                <div className="p-4 border-b theme-border">
+                  <div className="flex gap-2 items-center text-sm theme-text-muted mb-1">
+                    <span className="font-mono">{String(index + 1).padStart(2, '0')}</span>
+                    <span>{isBn ? 'পণ্যের নাম / Product Name' : 'Product Name'}</span>
+                  </div>
+                  <div className="text-xl md:text-2xl font-bold theme-text font-bangla">
+                    {isBn ? (product.name_bn || product.name) : product.name}
+                  </div>
+                  {isBn && product.name_bn && (
+                    <div className="text-xs theme-text-muted italic mt-1">{product.name}</div>
+                  )}
+                </div>
+                
+                {/* Bottom Half */}
+                <div className="p-4 flex-1">
+                  <div className="text-sm font-semibold mb-1 theme-text">{isBn ? 'বিবরণ / Description' : 'Description'}</div>
+                  <div className="text-sm theme-text-muted font-bangla leading-relaxed mb-4">
                     {isBn ? (product.description_bn || product.description) : product.description}
-                  </td>
-
-                  {/* Usage */}
-                  <td className="px-4 py-4 border-r theme-border theme-text-muted text-sm leading-relaxed">
+                  </div>
+                  
+                  <div className="text-sm font-semibold mb-1 theme-text">{isBn ? 'সেবনবিধি / Usage' : 'Usage / Dosage'}</div>
+                  <div className="text-sm theme-text-muted font-bangla leading-relaxed">
                     {product.usage_info || '-'}
-                  </td>
+                  </div>
+                </div>
+              </div>
 
-                  {/* Pack Size */}
-                  <td className="px-3 py-4 text-center font-mono text-xs font-semibold theme-text border-r theme-border">
-                    {product.pack_size || '-'}
-                  </td>
+              {/* Right Column: Meta */}
+              <div className="p-4 w-full md:w-[200px] flex flex-row md:flex-col justify-around md:justify-center gap-6 shrink-0 bg-transparent">
+                <div>
+                  <div className="text-sm theme-text mb-1">{isBn ? 'প্যাক সাইজ / Pack Size' : 'Pack Size'}</div>
+                  <div className="theme-text-muted text-sm font-mono">{product.pack_size || '-'}</div>
+                </div>
+                <div>
+                  <div className="text-sm theme-text mb-1">{isBn ? 'মূল্য / Price' : 'Price'}</div>
+                  <div className="text-lg font-bold text-ibm-blue font-mono">{currency}{product.price}/-</div>
+                </div>
+              </div>
 
-                  {/* Price */}
-                  <td className="px-3 py-4 text-center font-mono font-bold text-ibm-blue text-base">
-                    {currency}{product.price}/-
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+            </div>
+          ))}
         </div>
       )}
     </div>
