@@ -4,6 +4,8 @@ import { PackageX } from 'lucide-react'
 import Image from 'next/image'
 
 export const runtime = 'edge'
+/** Avoid stale HTML at the edge after deploys or data changes (Vercel / Next cache). */
+export const dynamic = 'force-dynamic'
 
 export default async function HomePage({ params: { lang } }: { params: { lang: string } }) {
   const dict = dictionaries[lang as Locale] || dictionaries.en

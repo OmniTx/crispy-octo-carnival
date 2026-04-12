@@ -11,6 +11,8 @@ export const metadata: Metadata = {
   description: 'Premium Herbal Products Showcase',
 }
 
+export const dynamic = 'force-dynamic'
+
 export default async function RootLayout({
   children,
   params: { lang },
