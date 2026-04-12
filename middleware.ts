@@ -16,7 +16,7 @@ export function middleware(req: NextRequest) {
   const segments = path.split('/')
   const lang = segments[1] || 'en'
 
-  if (isProtectedPath && !hasAuthCookie) {
+  if (isProtectedPath && !isLoginPage && !hasAuthCookie) {
     return NextResponse.redirect(new URL(`/${lang}/login`, req.url))
   }
 
