@@ -35,7 +35,7 @@ export const dictionaries = {
     exportCSV: "Export as CSV",
     importCSV: "Import from CSV",
     importHelp:
-      "Upload a CSV with required columns: name, price. Optional: description, pack_size, name_bn, description_bn, usage_info. Re-import preserves Bangla fields when those columns are present.",
+      "Upload a CSV with required columns: name, price. Optional: description, pack_size, name_bn, description_bn, usage_info, usage_info_bn. Re-import preserves Bangla fields when those columns are present.",
     importing: "Importing...",
     imported: "products imported!",
     confirmDelete: "Delete?",
@@ -82,7 +82,7 @@ export const dictionaries = {
     exportCSV: "CSV হিসেবে এক্সপোর্ট",
     importCSV: "CSV থেকে ইমপোর্ট",
     importHelp:
-      "CSV তে আবশ্যক: name, price। ঐচ্ছিক: description, pack_size, name_bn, description_bn, usage_info। কলাম থাকলে বাংলা ক্ষেত্র ইমপোর্টে সংরক্ষিত হয়।",
+      "CSV তে আবশ্যক: name, price। ঐচ্ছিক: description, pack_size, name_bn, description_bn, usage_info, usage_info_bn। কলাম থাকলে বাংলা ক্ষেত্র ইমপোর্টে সংরক্ষিত হয়।",
     importing: "ইমপোর্ট হচ্ছে...",
     imported: "টি পণ্য ইমপোর্ট হয়েছে!",
     confirmDelete: "মুছে ফেলবেন?",

@@ -6,6 +6,7 @@ const CSV_HEADERS = [
   'name_bn',
   'description_bn',
   'usage_info',
+  'usage_info_bn',
 ] as const
 
 export type CSVProductRow = {
@@ -16,6 +17,7 @@ export type CSVProductRow = {
   name_bn: string | null
   description_bn: string | null
   usage_info: string | null
+  usage_info_bn: string | null
 }
 
 function emptyToNull(s: string | undefined): string | null {
@@ -49,6 +51,7 @@ export function parseCSV(text: string): CSVProductRow[] {
   const nameBnIdx = headers.indexOf('name_bn')
   const descBnIdx = headers.indexOf('description_bn')
   const usageIdx = headers.indexOf('usage_info')
+  const usageBnIdx = headers.indexOf('usage_info_bn')
 
   if (nameIdx === -1 || priceIdx === -1) {
     throw new Error('CSV must have "name" and "price" columns')
@@ -71,6 +74,7 @@ export function parseCSV(text: string): CSVProductRow[] {
       name_bn: nameBnIdx >= 0 ? emptyToNull(cols[nameBnIdx]) : null,
       description_bn: descBnIdx >= 0 ? emptyToNull(cols[descBnIdx]) : null,
       usage_info: usageIdx >= 0 ? emptyToNull(cols[usageIdx]) : null,
+      usage_info_bn: usageBnIdx >= 0 ? emptyToNull(cols[usageBnIdx]) : null,
     })
   }
 

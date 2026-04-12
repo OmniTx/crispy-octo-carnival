@@ -16,6 +16,7 @@ type Product = {
   name_bn?: string | null
   description_bn?: string | null
   usage_info?: string | null
+  usage_info_bn?: string | null
 }
 
 export default function ImportExport({ products, dict }: { products: Product[]; dict: Dictionary }) {

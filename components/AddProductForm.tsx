@@ -16,6 +16,7 @@ const productSchema = z.object({
   description: z.string().optional(),
   description_bn: z.string().optional(),
   usage_info: z.string().optional(),
+  usage_info_bn: z.string().optional(),
   pack_size: z.string().optional(),
 })
 
@@ -43,6 +44,7 @@ export default function AddProductForm({ dict, lang }: { dict: Dictionary; lang:
       formData.append('description', data.description || '')
       formData.append('description_bn', data.description_bn || '')
       formData.append('usage_info', data.usage_info || '')
+      formData.append('usage_info_bn', data.usage_info_bn || '')
       formData.append('pack_size', data.pack_size || '')
       if (imageFile) {
         formData.append('image', imageFile)

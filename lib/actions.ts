@@ -124,6 +124,7 @@ export async function bulkImportProducts(
     name_bn?: string | null
     description_bn?: string | null
     usage_info?: string | null
+    usage_info_bn?: string | null
   }>
 ) {
   if (!products.length) {
@@ -138,6 +139,7 @@ export async function bulkImportProducts(
     name_bn: p.name_bn ?? null,
     description_bn: p.description_bn ?? null,
     usage_info: p.usage_info ?? null,
+    usage_info_bn: p.usage_info_bn ?? null,
     image_url: null,
   }))
 
