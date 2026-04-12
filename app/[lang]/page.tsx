@@ -44,7 +44,7 @@ export default async function HomePage({ params: { lang } }: { params: { lang: s
           {products.map((product, index) => (
             <div
               key={product.id}
-              className="text-left flex flex-col md:grid md:grid-cols-[minmax(0,0.2fr)_minmax(0,0.65fr)_minmax(0,0.15fr)] md:items-stretch border-b theme-border last:border-b-0"
+              className="text-left flex flex-col md:grid md:grid-cols-[minmax(0,0.2fr)_minmax(0,0.7fr)_minmax(0,0.1fr)] md:items-stretch border-b theme-border last:border-b-0"
             >
               {/* Left: product image (~20%) */}
               <div className="border-b md:border-b-0 md:border-r theme-border p-4 md:min-h-[11rem]">
@@ -57,7 +57,7 @@ export default async function HomePage({ params: { lang } }: { params: { lang: s
                 </div>
               </div>
 
-              {/* Middle: name + description + usage (~65%) */}
+              {/* Middle: name + description + usage (~70%) */}
               <div className="flex flex-col min-h-0 border-b md:border-b-0 md:border-r theme-border">
                 <div className="p-4 border-b theme-border">
                   <p className={`text-sm font-normal theme-text mb-2 ${isBn ? 'font-bangla' : ''}`}>
@@ -88,7 +88,7 @@ export default async function HomePage({ params: { lang } }: { params: { lang: s
                 </div>
               </div>
 
-              {/* Right: pack size + price (~15%), stacked */}
+              {/* Right: pack size + price (~10%), stacked */}
               <div className={`p-4 flex flex-col justify-start gap-6 shrink-0 text-left ${isBn ? 'font-bangla' : ''}`}>
                 <div>
                   <p className="text-sm font-bold theme-text mb-1">{isBn ? 'প্যাক সাইজ' : 'Pack Size'}</p>
