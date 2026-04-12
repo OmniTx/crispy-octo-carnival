@@ -1,6 +1,6 @@
-# IBM Showcase Full-Stack App
+# Herbs Showcase
 
-A minimal, dual-language (English/Bangla) Next.js 14 Web Application styled with an IBM/Oracle aesthetic using Tailwind CSS. Uses Supabase for Database and Storage, built purely on Edge functions and Next.js App Router Server Actions.
+A minimal, dual-language (English/Bangla) Next.js 14 Web Application styled with a custom aesthetic using Tailwind CSS. Uses Supabase for Database and Storage, built purely on Edge functions and Next.js App Router Server Actions.
 
 ## Requirements
 - Node.js installed
