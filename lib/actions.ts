@@ -4,8 +4,6 @@ import { supabase } from './supabase'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 
-export const runtime = 'edge'
-
 const productSchema = z.object({
   name: z.string().min(1, "Name is required"),
   price: z.preprocess((val) => Number(val), z.number().min(0, "Price must be positive")),
