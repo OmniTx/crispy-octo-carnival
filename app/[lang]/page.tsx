@@ -66,29 +66,29 @@ export default async function HomePage({ params: { lang } }: { params: { lang: s
 
               {/* Middle: name + description + usage (~70%) */}
               <div className="flex flex-col min-h-0 border-b md:border-b-0 md:border-r theme-border">
-                <div className="p-4 border-b theme-border">
-                  <p className={`text-sm font-normal theme-text mb-2 ${isBn ? 'font-bangla' : ''}`}>
+                <div className="p-5 border-b theme-border">
+                  <p className={`text-base font-normal theme-text mb-2 ${isBn ? 'font-bangla' : ''}`}>
                     <span className="font-number">{String(index + 1).padStart(2, '0')}</span> {isBn ? 'পণ্যের নাম' : 'Product Name'}
                   </p>
-                  <h2 className={`text-xl md:text-2xl font-bold theme-text leading-tight ${isBn ? 'font-bangla' : ''}`}>
+                  <h2 className={`text-2xl md:text-3xl font-bold theme-text leading-tight ${isBn ? 'font-bangla' : ''}`}>
                     {isBn ? (product.name_bn || product.name) : product.name}
                   </h2>
                 </div>
 
-                <div className="p-4 flex-1 space-y-5">
+                <div className="p-5 flex-1 space-y-5">
                   <div>
-                    <p className={`text-sm font-bold theme-text mb-2 ${isBn ? 'font-bangla' : ''}`}>
+                    <p className={`text-base font-bold theme-text mb-2 ${isBn ? 'font-bangla' : ''}`}>
                       {isBn ? 'বিবরণ' : 'Description'}
                     </p>
-                    <p className={`text-sm font-normal theme-text leading-relaxed ${isBn ? 'font-bangla' : ''}`}>
+                    <p className={`text-base font-normal theme-text leading-relaxed ${isBn ? 'font-bangla' : ''}`}>
                       {isBn ? (product.description_bn || product.description) : product.description}
                     </p>
                   </div>
                   <div>
-                    <p className={`text-sm font-bold theme-text mb-2 ${isBn ? 'font-bangla' : ''}`}>
+                    <p className={`text-base font-bold theme-text mb-2 ${isBn ? 'font-bangla' : ''}`}>
                       {isBn ? 'সেবনবিধি' : 'Usage / Dosage'}
                     </p>
-                    <p className={`text-sm font-normal theme-text leading-relaxed ${isBn ? 'font-bangla' : ''}`}>
+                    <p className={`text-base font-normal theme-text leading-relaxed ${isBn ? 'font-bangla' : ''}`}>
                       {isBn ? (product.usage_info_bn || product.usage_info || '-') : (product.usage_info || '-')}
                     </p>
                   </div>
@@ -96,14 +96,14 @@ export default async function HomePage({ params: { lang } }: { params: { lang: s
               </div>
 
               {/* Right: pack size + price (~10%), stacked */}
-              <div className={`p-4 flex flex-col justify-start gap-6 shrink-0 text-left ${isBn ? 'font-bangla' : ''}`}>
+              <div className={`p-5 flex flex-col justify-start gap-6 shrink-0 text-left ${isBn ? 'font-bangla' : ''}`}>
                 <div>
-                  <p className="text-sm font-bold theme-text mb-1">{isBn ? 'প্যাক সাইজ' : 'Pack Size'}</p>
-                  <p className="text-sm font-normal theme-text font-number">{isBn ? (product.pack_size_bn || product.pack_size || '-') : (product.pack_size || '-')}</p>
+                  <p className="text-base font-bold theme-text mb-1">{isBn ? 'প্যাক সাইজ' : 'Pack Size'}</p>
+                  <p className="text-base font-normal theme-text font-number">{isBn ? (product.pack_size_bn || product.pack_size || '-') : (product.pack_size || '-')}</p>
                 </div>
                 <div>
-                  <p className="text-sm font-bold theme-text mb-1">{isBn ? 'মূল্য' : 'Price'}</p>
-                  <p className={`text-lg theme-text font-number tracking-tight`}>
+                  <p className="text-base font-bold theme-text mb-1">{isBn ? 'মূল্য' : 'Price'}</p>
+                  <p className={`text-xl theme-text font-number tracking-tight`}>
                     {currency}
                     {product.price}/-
                   </p>
