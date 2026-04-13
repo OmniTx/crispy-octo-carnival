@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   },
 }
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 60
 
 export default async function RootLayout({
   children,
@@ -27,7 +27,8 @@ export default async function RootLayout({
   const dict = dictionaries[lang as Locale] || dictionaries.en
 
   // Fetch site settings
-  const { data: settings } = await supabase
+  const db = supabase()
+  const { data: settings } = await db
     .from('site_settings')
     .select('*')
     .eq('id', 1)

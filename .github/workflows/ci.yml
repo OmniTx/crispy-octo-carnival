@@ -1,17 +1,15 @@
-name: CI
+name: Lint Check
 
 on:
-  push:
-    branches: [main]
   pull_request:
     branches: [main]
 
 concurrency:
-  group: ci-${{ github.workflow }}-${{ github.ref }}
+  group: lint-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  build:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -23,13 +21,7 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Lint
         run: npm run lint
-
-      - name: Build
-        run: npm run build
-
-      - name: Git SHA (compare to Vercel footer)
-        run: echo "This workflow ran on commit ${{ github.sha }}"

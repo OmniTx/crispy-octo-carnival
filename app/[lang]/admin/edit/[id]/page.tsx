@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation'
 import EditProductForm from '@/components/EditProductForm'
 
 export const runtime = 'edge'
+export const revalidate = 60
 
 export default async function EditProductPage({
   params: { lang, id },
@@ -14,7 +15,8 @@ export default async function EditProductPage({
 }) {
   const dict = dictionaries[lang as Locale] || dictionaries.en
 
-  const { data: product, error } = await supabase.from('products').select('*').eq('id', id).single()
+  const db = supabase()
+  const { data: product, error } = await db.from('products').select('*').eq('id', id).single()
 
   if (error || !product) {
     notFound()

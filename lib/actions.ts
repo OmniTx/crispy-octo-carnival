@@ -39,7 +39,8 @@ export async function addProduct(formData: FormData) {
   if (image && image.size > 0) {
     const fileExt = image.name.split('.').pop()
     fileName = `${Math.random().toString(36).substring(2, 15)}.${fileExt}`
-    const { error: uploadError } = await supabase.storage
+    const db = supabase()
+    const { error: uploadError } = await db.storage
       .from('product-imgs')
       .upload(fileName, image, {
         cacheControl: '3600',
@@ -52,7 +53,8 @@ export async function addProduct(formData: FormData) {
   }
 
   // Get max sort_order to place new product at end
-  const { data: maxRow } = await supabase
+  const db = supabase()
+  const { data: maxRow } = await db
     .from('products')
     .select('sort_order')
     .order('sort_order', { ascending: false })
@@ -61,7 +63,7 @@ export async function addProduct(formData: FormData) {
 
   const nextOrder = (maxRow?.sort_order ?? 0) + 1
 
-  const { error: dbError } = await supabase
+  const { error: dbError } = await db
     .from('products')
     .insert([
       {
@@ -110,7 +112,8 @@ export async function updateProduct(formData: FormData) {
     throw new Error(parsed.error.errors[0].message)
   }
 
-  const { data: existing, error: fetchError } = await supabase
+  const db = supabase()
+  const { data: existing, error: fetchError } = await db
     .from('products')
     .select('image_url')
     .eq('id', id)
@@ -125,7 +128,7 @@ export async function updateProduct(formData: FormData) {
   if (image && image.size > 0) {
     const fileExt = image.name.split('.').pop()
     const fileName = `${Math.random().toString(36).substring(2, 15)}.${fileExt}`
-    const { error: uploadError } = await supabase.storage
+    const { error: uploadError } = await db.storage
       .from('product-imgs')
       .upload(fileName, image, {
         cacheControl: '3600',
@@ -137,12 +140,12 @@ export async function updateProduct(formData: FormData) {
     }
 
     if (existing.image_url) {
-      await supabase.storage.from('product-imgs').remove([existing.image_url])
+      await db.storage.from('product-imgs').remove([existing.image_url])
     }
     image_url = fileName
   }
 
-  const { error: dbError } = await supabase
+  const { error: dbError } = await db
     .from('products')
     .update({
       name: parsed.data.name,
@@ -168,7 +171,8 @@ export async function updateProduct(formData: FormData) {
 }
 
 export async function deleteProduct(id: string, imageUrl: string) {
-  const { error: dbError } = await supabase
+  const db = supabase()
+  const { error: dbError } = await db
     .from('products')
     .delete()
     .eq('id', id)
@@ -178,7 +182,7 @@ export async function deleteProduct(id: string, imageUrl: string) {
   }
 
   if (imageUrl) {
-    await supabase.storage.from('product-imgs').remove([imageUrl])
+    await db.storage.from('product-imgs').remove([imageUrl])
   }
 
   revalidatePath('/')
@@ -192,7 +196,8 @@ export async function updateSiteSettings(formData: FormData) {
   const theme = formData.get('theme') as string
   const currency_symbol = formData.get('currency_symbol') as string
 
-  const { error } = await supabase
+  const db = supabase()
+  const { error } = await db
     .from('site_settings')
     .update({
       site_name_en,
@@ -242,7 +247,8 @@ export async function bulkImportProducts(
     image_url: null,
   }))
 
-  const { error } = await supabase
+  const db = supabase()
+  const { error } = await db
     .from('products')
     .insert(rows)
 
@@ -257,8 +263,9 @@ export async function bulkImportProducts(
 
 export async function reorderProducts(orderedIds: string[]) {
   // Update sort_order for each product based on array position
+  const db = supabase()
   const updates = orderedIds.map((id, index) =>
-    supabase
+    db
       .from('products')
       .update({ sort_order: index + 1 })
       .eq('id', id)

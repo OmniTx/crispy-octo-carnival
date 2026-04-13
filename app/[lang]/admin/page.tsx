@@ -7,21 +7,26 @@ import AdminSettings from '@/components/AdminSettings'
 import ImportExport from '@/components/ImportExport'
 
 export const runtime = 'edge'
+export const revalidate = 60
+
+async function fetchAdminData() {
+  const db = supabase()
+  
+  const [productsResult, settingsResult] = await Promise.all([
+    db.from('products').select('*').order('sort_order', { ascending: true }),
+    db.from('site_settings').select('*').eq('id', 1).single(),
+  ])
+
+  return {
+    products: productsResult.data,
+    settings: settingsResult.data,
+  }
+}
 
 export default async function AdminPage({ params: { lang } }: { params: { lang: string } }) {
   const dict = dictionaries[lang as Locale] || dictionaries.en
 
-  const { data: products } = await supabase
-    .from('products')
-    .select('*')
-    .order('sort_order', { ascending: true })
-
-  const { data: settings } = await supabase
-    .from('site_settings')
-    .select('*')
-    .eq('id', 1)
-    .single()
-
+  const { products, settings } = await fetchAdminData()
   const currency = settings?.currency_symbol || '৳'
 
   return (

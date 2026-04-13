@@ -4,24 +4,27 @@ import { PackageX } from 'lucide-react'
 import Image from 'next/image'
 
 export const runtime = 'edge'
-/** Avoid stale HTML at the edge after deploys or data changes (Vercel / Next cache). */
-export const dynamic = 'force-dynamic'
+export const revalidate = 60
+
+async function fetchProductsAndSettings() {
+  const db = supabase()
+  
+  const [productsResult, settingsResult] = await Promise.all([
+    db.from('products').select('*').order('sort_order', { ascending: true }),
+    db.from('site_settings').select('*').eq('id', 1).single(),
+  ])
+
+  return {
+    products: productsResult.data,
+    settings: settingsResult.data,
+  }
+}
 
 export default async function HomePage({ params: { lang } }: { params: { lang: string } }) {
   const dict = dictionaries[lang as Locale] || dictionaries.en
   const isBn = lang === 'bn'
 
-  const { data: products } = await supabase
-    .from('products')
-    .select('*')
-    .order('sort_order', { ascending: true })
-
-  const { data: settings } = await supabase
-    .from('site_settings')
-    .select('*')
-    .eq('id', 1)
-    .single()
-
+  const { products, settings } = await fetchProductsAndSettings()
   const currency = settings?.currency_symbol || '৳'
 
   const placeholderClass = `text-sm font-medium theme-text ${isBn ? 'font-bangla' : ''}`
