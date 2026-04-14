@@ -47,14 +47,14 @@ export default async function RootLayout({
     <html lang={lang} className={theme}>
       <body>
         <header className="border-b theme-border theme-bg-header p-4 flex justify-between items-center">
-          <Link href={`/${lang}`} className={`font-semibold text-lg tracking-tight theme-text hover:text-ibm-blue transition-colors ${lang === 'bn' ? 'font-bangla' : ''}`}>
-            <span className="text-ibm-blue mr-2">█</span>{siteName}
+          <Link href={`/${lang}`} className={`font-semibold text-lg tracking-tight theme-text hover:text-brand-blue transition-colors ${lang === 'bn' ? 'font-bangla' : ''}`}>
+            <span className="text-brand-blue mr-2">█</span>{siteName}
           </Link>
           <div className="flex items-center gap-4">
             {hasSession && (
               <Link
                 href={`/${lang}/admin`}
-                className="theme-text-muted hover:text-ibm-blue transition-colors"
+                className="theme-text-muted hover:text-brand-blue transition-colors"
                 title={dict.adminPanel}
               >
                 <Settings size={18} />

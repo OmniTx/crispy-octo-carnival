@@ -63,7 +63,7 @@ export default function ImageManager() {
           type="button"
           onClick={fetchImages}
           disabled={loading}
-          className="ibm-btn text-xs px-3 py-2 inline-flex items-center gap-1 bg-ibm-blue text-white"
+          className="app-btn text-xs px-3 py-2 inline-flex items-center gap-1 bg-brand-blue text-white"
         >
           <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
           Refresh
@@ -92,7 +92,7 @@ export default function ImageManager() {
           {images.map((image) => (
             <div
               key={image.name}
-              className="relative group border theme-border theme-bg-card hover:border-ibm-blue transition-all"
+              className="relative group border theme-border theme-bg-card hover:border-brand-blue transition-all"
             >
               <div
                 className="relative w-full aspect-square cursor-pointer"
@@ -117,7 +117,7 @@ export default function ImageManager() {
                     handleDelete(image.name)
                   }}
                   disabled={deleting === image.name}
-                  className="ibm-btn-danger text-xs w-full mt-2 px-2 py-1.5 inline-flex items-center justify-center gap-1"
+                  className="app-btn-danger text-xs w-full mt-2 px-2 py-1.5 inline-flex items-center justify-center gap-1"
                 >
                   <Trash2 size={12} />
                   {deleting === image.name ? 'Deleting...' : 'Delete'}

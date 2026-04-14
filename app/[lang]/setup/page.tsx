@@ -57,13 +57,13 @@ export default function SetupPage({ params: { lang } }: { params: { lang: string
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh]">
-      <div className="w-full max-w-md space-y-8 bg-ibm-gray900 border border-ibm-blue/50 p-8 shadow-2xl relative overflow-hidden">
+      <div className="w-full max-w-md space-y-8 bg-brand-gray900 border border-brand-blue/50 p-8 shadow-2xl relative overflow-hidden">
         {/* Decorative corner */}
-        <div className="absolute top-0 right-0 w-16 h-16 bg-ibm-blue/10 rotate-45 translate-x-8 -translate-y-8 border-b border-ibm-blue/20"></div>
+        <div className="absolute top-0 right-0 w-16 h-16 bg-brand-blue/10 rotate-45 translate-x-8 -translate-y-8 border-b border-brand-blue/20"></div>
         
         <div className="text-center space-y-2">
           <div className="flex justify-center mb-6">
-             <div className="h-12 w-12 bg-ibm-blue flex items-center justify-center text-white ring-8 ring-ibm-blue/10">
+             <div className="h-12 w-12 bg-brand-blue flex items-center justify-center text-white ring-8 ring-brand-blue/10">
                <ShieldCheck size={28} />
              </div>
           </div>
@@ -81,12 +81,12 @@ export default function SetupPage({ params: { lang } }: { params: { lang: string
               Your admin account has been created. Redirecting to login...
             </p>
             <div className="flex justify-center">
-              <Loader2 className="animate-spin text-ibm-blue" size={24} />
+              <Loader2 className="animate-spin text-brand-blue" size={24} />
             </div>
           </div>
         ) : (
           <>
-            <div className="bg-ibm-blue/5 border-l-4 border-ibm-blue p-4 text-xs theme-text-muted leading-relaxed">
+            <div className="bg-brand-blue/5 border-l-4 border-brand-blue p-4 text-xs theme-text-muted leading-relaxed">
               <strong>Note:</strong> Use this page to create your initial administrative account. 
               Once the account is created, you should remove this page or disable new sign-ups in your Supabase dashboard.
             </div>
@@ -101,23 +101,23 @@ export default function SetupPage({ params: { lang } }: { params: { lang: string
             <form onSubmit={handleSetup} className="space-y-6">
               <div className="space-y-4">
                 <div>
-                  <label className="ibm-label">Admin Email</label>
+                  <label className="app-label">Admin Email</label>
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="ibm-input"
+                    className="app-input"
                     required
                     placeholder="e.g. admin@yourshop.com"
                   />
                 </div>
                 <div>
-                  <label className="ibm-label">Admin Password</label>
+                  <label className="app-label">Admin Password</label>
                   <input
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="ibm-input"
+                    className="app-input"
                     required
                     minLength={6}
                     placeholder="••••••••"
@@ -128,7 +128,7 @@ export default function SetupPage({ params: { lang } }: { params: { lang: string
               <button
                 type="submit"
                 disabled={loading}
-                className="ibm-btn w-full flex items-center justify-center gap-2"
+                className="app-btn w-full flex items-center justify-center gap-2"
               >
                 {loading ? (
                   <Loader2 className="animate-spin" size={18} />
@@ -143,7 +143,7 @@ export default function SetupPage({ params: { lang } }: { params: { lang: string
           </>
         )}
 
-        <div className="text-center pt-4 border-t border-ibm-gray800">
+        <div className="text-center pt-4 border-t border-brand-gray800">
            <p className="text-[10px] theme-text-muted uppercase tracking-widest opacity-50">
              Security Initialized
            </p>

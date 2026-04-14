@@ -17,7 +17,7 @@ type ProductCardProps = {
 
 export default function ProductCard({ product, dict, currency }: ProductCardProps) {
   return (
-    <div className="ibm-card rounded-none group hover:shadow-xl duration-300">
+    <div className="app-card rounded-none group hover:shadow-xl duration-300">
       <div className="relative h-64 w-full theme-bg-card border-b theme-border flex items-center justify-center p-4 overflow-hidden">
         {product.image_url ? (
           <Image
@@ -27,7 +27,7 @@ export default function ProductCard({ product, dict, currency }: ProductCardProp
             className="object-contain group-hover:scale-105 transition-transform duration-500"
           />
         ) : (
-          <div className="flex flex-col items-center justify-center theme-text-muted group-hover:text-ibm-blue transition-colors">
+          <div className="flex flex-col items-center justify-center theme-text-muted group-hover:text-brand-blue transition-colors">
             <ImageIcon size={48} className="mb-2" />
             <span className="text-sm font-semibold">{dict.noImage}</span>
           </div>
@@ -36,7 +36,7 @@ export default function ProductCard({ product, dict, currency }: ProductCardProp
       <div className="p-6 flex flex-col flex-1 theme-bg">
         <div className="flex justify-between items-start mb-2 gap-4">
           <h3 className="text-lg font-semibold theme-text line-clamp-1">{product.name}</h3>
-          <span className="text-ibm-blue font-mono font-bold theme-bg-card px-2 py-1 shrink-0 text-sm border theme-border">
+          <span className="text-brand-blue font-mono font-bold theme-bg-card px-2 py-1 shrink-0 text-sm border theme-border">
             {currency}{product.price}
           </span>
         </div>

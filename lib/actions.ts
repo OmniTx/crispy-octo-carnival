@@ -5,6 +5,13 @@ import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import { revalidateCatalogAndAdmin } from './revalidatePaths'
 
+// Action state for React 19 useActionState
+export type ActionState = {
+  success: boolean
+  error: string | null
+  message?: string | null
+}
+
 const productSchema = z.object({
   name: z.string().min(1, "Name is required"),
   name_bn: z.string().optional(),
@@ -17,157 +24,165 @@ const productSchema = z.object({
   pack_size_bn: z.string().optional(),
 })
 
-export async function addProduct(formData: FormData) {
-  const name = formData.get('name') as string
-  const name_bn = formData.get('name_bn') as string
-  const price = formData.get('price')
-  const description = formData.get('description') as string
-  const description_bn = formData.get('description_bn') as string
-  const usage_info = formData.get('usage_info') as string
-  const usage_info_bn = formData.get('usage_info_bn') as string
-  const pack_size = formData.get('pack_size') as string
-  const pack_size_bn = formData.get('pack_size_bn') as string
-  const image = formData.get('image') as File | null
+export async function addProduct(prevState: ActionState, formData: FormData): Promise<ActionState> {
+  try {
+    const name = formData.get('name') as string
+    const name_bn = formData.get('name_bn') as string
+    const price = formData.get('price')
+    const description = formData.get('description') as string
+    const description_bn = formData.get('description_bn') as string
+    const usage_info = formData.get('usage_info') as string
+    const usage_info_bn = formData.get('usage_info_bn') as string
+    const pack_size = formData.get('pack_size') as string
+    const pack_size_bn = formData.get('pack_size_bn') as string
+    const image = formData.get('image') as File | null
 
-  const parsed = productSchema.safeParse({ name, name_bn, price, description, description_bn, usage_info, usage_info_bn, pack_size, pack_size_bn })
-  if (!parsed.success) {
-    throw new Error(parsed.error.errors[0].message)
-  }
-
-  let fileName = null
-
-  if (image && image.size > 0) {
-    const fileExt = image.name.split('.').pop()
-    fileName = `${Math.random().toString(36).substring(2, 15)}.${fileExt}`
-    const db = supabase()
-    const { error: uploadError } = await db.storage
-      .from('product-imgs')
-      .upload(fileName, image, {
-        cacheControl: '3600',
-        upsert: false,
-      })
-
-    if (uploadError) {
-      throw new Error(`Failed to upload image: ${uploadError.message}`)
+    const parsed = productSchema.safeParse({ name, name_bn, price, description, description_bn, usage_info, usage_info_bn, pack_size, pack_size_bn })
+    if (!parsed.success) {
+      return { success: false, error: parsed.error.errors[0].message }
     }
+
+    let fileName = null
+
+    if (image && image.size > 0) {
+      const fileExt = image.name.split('.').pop()
+      fileName = `${Math.random().toString(36).substring(2, 15)}.${fileExt}`
+      const db = supabase()
+      const { error: uploadError } = await db.storage
+        .from('product-imgs')
+        .upload(fileName, image, {
+          cacheControl: '3600',
+          upsert: false,
+        })
+
+      if (uploadError) {
+        return { success: false, error: `Failed to upload image: ${uploadError.message}` }
+      }
+    }
+
+    // Get max sort_order to place new product at end
+    const db = supabase()
+    const { data: maxRow } = await db
+      .from('products')
+      .select('sort_order')
+      .order('sort_order', { ascending: false })
+      .limit(1)
+      .single()
+
+    const nextOrder = (maxRow?.sort_order ?? 0) + 1
+
+    const { error: dbError } = await db
+      .from('products')
+      .insert([
+        {
+          name: parsed.data.name,
+          name_bn: parsed.data.name_bn,
+          price: parsed.data.price,
+          description: parsed.data.description,
+          description_bn: parsed.data.description_bn,
+          usage_info: parsed.data.usage_info,
+          usage_info_bn: parsed.data.usage_info_bn,
+          pack_size: parsed.data.pack_size,
+          pack_size_bn: parsed.data.pack_size_bn,
+          image_url: fileName,
+          sort_order: nextOrder,
+        },
+      ])
+
+    if (dbError) {
+      return { success: false, error: `Failed to insert product: ${dbError.message}` }
+    }
+
+    revalidatePath('/')
+    revalidateCatalogAndAdmin()
+    return { success: true, error: null }
+  } catch (err: any) {
+    return { success: false, error: err.message || 'An unknown error occurred' }
   }
-
-  // Get max sort_order to place new product at end
-  const db = supabase()
-  const { data: maxRow } = await db
-    .from('products')
-    .select('sort_order')
-    .order('sort_order', { ascending: false })
-    .limit(1)
-    .single()
-
-  const nextOrder = (maxRow?.sort_order ?? 0) + 1
-
-  const { error: dbError } = await db
-    .from('products')
-    .insert([
-      {
-        name: parsed.data.name,
-        name_bn: parsed.data.name_bn,
-        price: parsed.data.price,
-        description: parsed.data.description,
-        description_bn: parsed.data.description_bn,
-        usage_info: parsed.data.usage_info,
-        usage_info_bn: parsed.data.usage_info_bn,
-        pack_size: parsed.data.pack_size,
-        pack_size_bn: parsed.data.pack_size_bn,
-        image_url: fileName,
-        sort_order: nextOrder,
-      },
-    ])
-
-  if (dbError) {
-    throw new Error(`Failed to insert product: ${dbError.message}`)
-  }
-
-  revalidatePath('/')
-  revalidateCatalogAndAdmin()
-  return { success: true }
 }
 
-export async function updateProduct(formData: FormData) {
-  const id = formData.get('id') as string
-  if (!id) {
-    throw new Error('Product id is required')
-  }
+export async function updateProduct(prevState: ActionState, formData: FormData): Promise<ActionState> {
+  try {
+    const id = formData.get('id') as string
+    if (!id) {
+      return { success: false, error: 'Product id is required' }
+    }
 
-  const name = formData.get('name') as string
-  const name_bn = formData.get('name_bn') as string
-  const price = formData.get('price')
-  const description = formData.get('description') as string
-  const description_bn = formData.get('description_bn') as string
-  const usage_info = formData.get('usage_info') as string
-  const usage_info_bn = formData.get('usage_info_bn') as string
-  const pack_size = formData.get('pack_size') as string
-  const pack_size_bn = formData.get('pack_size_bn') as string
-  const image = formData.get('image') as File | null
+    const name = formData.get('name') as string
+    const name_bn = formData.get('name_bn') as string
+    const price = formData.get('price')
+    const description = formData.get('description') as string
+    const description_bn = formData.get('description_bn') as string
+    const usage_info = formData.get('usage_info') as string
+    const usage_info_bn = formData.get('usage_info_bn') as string
+    const pack_size = formData.get('pack_size') as string
+    const pack_size_bn = formData.get('pack_size_bn') as string
+    const image = formData.get('image') as File | null
 
-  const parsed = productSchema.safeParse({ name, name_bn, price, description, description_bn, usage_info, usage_info_bn, pack_size, pack_size_bn })
-  if (!parsed.success) {
-    throw new Error(parsed.error.errors[0].message)
-  }
+    const parsed = productSchema.safeParse({ name, name_bn, price, description, description_bn, usage_info, usage_info_bn, pack_size, pack_size_bn })
+    if (!parsed.success) {
+      return { success: false, error: parsed.error.errors[0].message }
+    }
 
-  const db = supabase()
-  const { data: existing, error: fetchError } = await db
-    .from('products')
-    .select('image_url')
-    .eq('id', id)
-    .single()
+    const db = supabase()
+    const { data: existing, error: fetchError } = await db
+      .from('products')
+      .select('image_url')
+      .eq('id', id)
+      .single()
 
-  if (fetchError || !existing) {
-    throw new Error('Product not found')
-  }
+    if (fetchError || !existing) {
+      return { success: false, error: 'Product not found' }
+    }
 
-  let image_url: string | null = existing.image_url
+    let image_url: string | null = existing.image_url
 
-  if (image && image.size > 0) {
-    const fileExt = image.name.split('.').pop()
-    const fileName = `${Math.random().toString(36).substring(2, 15)}.${fileExt}`
-    const { error: uploadError } = await db.storage
-      .from('product-imgs')
-      .upload(fileName, image, {
-        cacheControl: '3600',
-        upsert: false,
+    if (image && image.size > 0) {
+      const fileExt = image.name.split('.').pop()
+      const fileName = `${Math.random().toString(36).substring(2, 15)}.${fileExt}`
+      const { error: uploadError } = await db.storage
+        .from('product-imgs')
+        .upload(fileName, image, {
+          cacheControl: '3600',
+          upsert: false,
+        })
+
+      if (uploadError) {
+        return { success: false, error: `Failed to upload image: ${uploadError.message}` }
+      }
+
+      if (existing.image_url) {
+        await db.storage.from('product-imgs').remove([existing.image_url])
+      }
+      image_url = fileName
+    }
+
+    const { error: dbError } = await db
+      .from('products')
+      .update({
+        name: parsed.data.name,
+        name_bn: parsed.data.name_bn || null,
+        price: parsed.data.price,
+        description: parsed.data.description || null,
+        description_bn: parsed.data.description_bn || null,
+        usage_info: parsed.data.usage_info || null,
+        usage_info_bn: parsed.data.usage_info_bn || null,
+        pack_size: parsed.data.pack_size || null,
+        pack_size_bn: parsed.data.pack_size_bn || null,
+        image_url,
       })
+      .eq('id', id)
 
-    if (uploadError) {
-      throw new Error(`Failed to upload image: ${uploadError.message}`)
+    if (dbError) {
+      return { success: false, error: `Failed to update product: ${dbError.message}` }
     }
 
-    if (existing.image_url) {
-      await db.storage.from('product-imgs').remove([existing.image_url])
-    }
-    image_url = fileName
+    revalidatePath('/')
+    revalidateCatalogAndAdmin()
+    return { success: true, error: null }
+  } catch (err: any) {
+    return { success: false, error: err.message || 'An unknown error occurred' }
   }
-
-  const { error: dbError } = await db
-    .from('products')
-    .update({
-      name: parsed.data.name,
-      name_bn: parsed.data.name_bn || null,
-      price: parsed.data.price,
-      description: parsed.data.description || null,
-      description_bn: parsed.data.description_bn || null,
-      usage_info: parsed.data.usage_info || null,
-      usage_info_bn: parsed.data.usage_info_bn || null,
-      pack_size: parsed.data.pack_size || null,
-      pack_size_bn: parsed.data.pack_size_bn || null,
-      image_url,
-    })
-    .eq('id', id)
-
-  if (dbError) {
-    throw new Error(`Failed to update product: ${dbError.message}`)
-  }
-
-  revalidatePath('/')
-  revalidateCatalogAndAdmin()
-  return { success: true }
 }
 
 export async function deleteProduct(id: string, imageUrl: string) {
@@ -190,31 +205,35 @@ export async function deleteProduct(id: string, imageUrl: string) {
   return { success: true }
 }
 
-export async function updateSiteSettings(formData: FormData) {
-  const site_name_en = formData.get('site_name_en') as string
-  const site_name_bn = formData.get('site_name_bn') as string
-  const theme = formData.get('theme') as string
-  const currency_symbol = formData.get('currency_symbol') as string
+export async function updateSiteSettings(prevState: ActionState, formData: FormData): Promise<ActionState> {
+  try {
+    const site_name_en = formData.get('site_name_en') as string
+    const site_name_bn = formData.get('site_name_bn') as string
+    const theme = formData.get('theme') as string
+    const currency_symbol = formData.get('currency_symbol') as string
 
-  const db = supabase()
-  const { error } = await db
-    .from('site_settings')
-    .update({
-      site_name_en,
-      site_name_bn,
-      theme,
-      currency_symbol,
-      updated_at: new Date().toISOString(),
-    })
-    .eq('id', 1)
+    const db = supabase()
+    const { error } = await db
+      .from('site_settings')
+      .update({
+        site_name_en,
+        site_name_bn,
+        theme,
+        currency_symbol,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', 1)
 
-  if (error) {
-    throw new Error(`Failed to update settings: ${error.message}`)
+    if (error) {
+      return { success: false, error: `Failed to update settings: ${error.message}` }
+    }
+
+    revalidatePath('/')
+    revalidateCatalogAndAdmin()
+    return { success: true, error: null }
+  } catch (err: any) {
+    return { success: false, error: err.message || 'An unknown error occurred' }
   }
-
-  revalidatePath('/')
-  revalidateCatalogAndAdmin()
-  return { success: true }
 }
 
 export async function bulkImportProducts(

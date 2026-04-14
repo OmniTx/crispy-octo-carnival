@@ -4,13 +4,13 @@ A modern, fast, and fully responsive web application built to showcase herbal pr
 
 ## 🚀 Tech Stack
 
-- **Frontend Framework**: Next.js 14 (App Router)
-- **UI Library**: React 18
-- **Styling**: Tailwind CSS + Custom CSS (for dynamic theming)
-- **Language/Type Checker**: TypeScript
+- **Frontend Framework**: Next.js 16 (App Router)
+- **UI Library**: React 19
+- **Styling**: Tailwind CSS 4.2 + Custom CSS (for dynamic theming)
+- **Language/Type Checker**: TypeScript 6.0
 - **Database & Authentication**: Supabase (PostgreSQL, GoTrue Auth, Storage)
-- **Form Handling & Validation**: React Hook Form + Zod
-- **Icons**: Lucide React
+- **Form Handling & Validation**: React Hook Form 7.72 + Zod 4.3
+- **Icons**: Lucide React 1.8
 - **Hosting/Deployment**: Vercel & GitHub Actions (for cPanel builds)
 
 ## ✨ Key Features
@@ -27,7 +27,7 @@ A modern, fast, and fully responsive web application built to showcase herbal pr
 ## 🛠️ Local Development
 
 ### Prerequisites
-- Node.js (v18+)
+- Node.js (v22+)
 - Supabase Account
 
 ### Setup Instructions

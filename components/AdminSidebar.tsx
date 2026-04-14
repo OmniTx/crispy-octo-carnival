@@ -58,11 +58,11 @@ export default function AdminSidebar({ lang, dict }: { lang: string, dict: any }
                   className={`
                     flex items-center gap-3 px-4 py-3 text-base transition-colors border-l-2
                     ${active 
-                      ? 'theme-text font-medium border-ibm-blue bg-ibm-blue/5' 
+                      ? 'theme-text font-medium border-brand-blue bg-brand-blue/5' 
                       : 'theme-text-muted border-transparent hover:theme-bg hover:theme-text'}
                   `}
                 >
-                  <Icon size={20} className={active ? 'text-ibm-blue' : ''} />
+                  <Icon size={20} className={active ? 'text-brand-blue' : ''} />
                   {link.name}
                 </Link>
               )

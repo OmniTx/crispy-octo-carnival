@@ -83,7 +83,7 @@ export default function AdminProductTable({ products: initialProducts, dict, lan
   return (
     <div className="space-y-2">
       {saving && (
-        <div className="text-xs text-ibm-blue font-medium animate-pulse">
+        <div className="text-xs text-brand-blue font-medium animate-pulse">
           {dict.loading || 'Saving order...'}
         </div>
       )}
@@ -118,9 +118,9 @@ export default function AdminProductTable({ products: initialProducts, dict, lan
                   onDragOver={(e) => e.preventDefault()}
                   className={`border-b theme-border transition-all cursor-grab active:cursor-grabbing ${
                     dragIndex === index
-                      ? 'opacity-40 bg-ibm-blue/10'
+                      ? 'opacity-40 bg-brand-blue/10'
                       : overIndex === index && dragIndex !== null
-                      ? 'border-t-2 border-t-ibm-blue'
+                      ? 'border-t-2 border-t-brand-blue'
                       : 'theme-bg-hover'
                   }`}
                 >
@@ -141,12 +141,12 @@ export default function AdminProductTable({ products: initialProducts, dict, lan
                   </td>
                   <td className="px-4 py-4 font-semibold theme-text text-lg">{product.name}</td>
                   <td className="px-4 py-4 theme-text-muted text-base font-number">{lang === 'bn' ? (product.pack_size_bn || product.pack_size || '-') : (product.pack_size || '-')}</td>
-                  <td className="px-4 py-4 font-number text-ibm-blue font-bold text-lg">{currency}{product.price}</td>
+                  <td className="px-4 py-4 font-number text-brand-blue font-bold text-lg">{currency}{product.price}</td>
                   <td className="px-4 py-4 text-right">
                     <div className="inline-flex flex-wrap items-center justify-end gap-3">
                       <Link
                         href={`/${lang}/admin/edit/${product.id}`}
-                        className="ibm-btn text-sm px-4 py-2.5 inline-flex items-center gap-2 bg-ibm-blue text-white hover:brightness-110 border border-ibm-blue"
+                        className="app-btn text-sm px-4 py-2.5 inline-flex items-center gap-2 bg-brand-blue text-white hover:brightness-110 border border-brand-blue"
                       >
                         <Pencil size={16} />
                         {dict.editProduct}
@@ -155,7 +155,7 @@ export default function AdminProductTable({ products: initialProducts, dict, lan
                         type="button"
                         onClick={() => handleDelete(product.id, product.image_url)}
                         disabled={deletingId === product.id}
-                        className="ibm-btn-danger text-sm px-4 py-2.5 inline-flex items-center gap-2"
+                        className="app-btn-danger text-sm px-4 py-2.5 inline-flex items-center gap-2"
                       >
                         <Trash2 size={16} />
                         {deletingId === product.id ? '...' : dict.delete}

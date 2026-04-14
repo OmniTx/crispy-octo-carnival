@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 /* === Self-hosted Noto Serif Bengali (Bangla) === */
 @font-face { font-family: 'Noto Serif Bengali'; font-weight: 300; font-style: normal; font-display: swap; src: url('/fonts/NotoSerifBengali-300.ttf') format('truetype'); }
@@ -16,83 +14,99 @@
 @font-face { font-family: 'Inter'; font-weight: 600; font-style: normal; font-display: swap; src: url('/fonts/Inter-600.ttf') format('truetype'); }
 @font-face { font-family: 'Inter'; font-weight: 700; font-style: normal; font-display: swap; src: url('/fonts/Inter-700.ttf') format('truetype'); }
 
-/* ===== DARK THEME (default) ===== */
+@theme {
+  --color-brand-blue: #0f62fe;
+  --color-brand-black: #161616;
+  --color-brand-gray100: #f4f4f4;
+  --color-brand-gray200: #e0e0e0;
+  --color-brand-gray300: #a8a8a8;
+  --color-brand-gray800: #393939;
+  --color-brand-gray900: #262626;
+  --color-brand-white: #ffffff;
+
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-bangla: "Inter", "Noto Serif Bengali", sans-serif;
+  --font-number: "Inter", "monospace";
+}
+
+/* ===== BASE STYLES ===== */
 @layer base {
-  .dark body {
-    @apply bg-ibm-black text-ibm-white font-sans antialiased min-h-screen flex flex-col;
-  }
-  .light body {
-    @apply bg-white text-ibm-black font-sans antialiased min-h-screen flex flex-col;
-  }
   body {
-    @apply font-sans antialiased min-h-screen flex flex-col text-base;
+    @apply bg-brand-black text-brand-white font-sans antialiased min-h-screen flex flex-col text-base;
   }
+  
+  .light body {
+    @apply bg-white text-brand-black;
+  }
+  
   /* Apply fonts with Inter as priority for English characters, falling back to Noto Serif Bengali */
   html[lang="bn"] body {
-    font-family: 'Inter', 'Noto Serif Bengali', sans-serif;
+    font-family: var(--font-bangla);
   }
 }
 
 @layer utilities {
   .font-bangla {
-    font-family: 'Inter', 'Noto Serif Bengali', sans-serif;
+    font-family: var(--font-bangla);
   }
 
   .font-number {
-    font-family: 'Inter', 'monospace';
+    font-family: var(--font-number);
     font-weight: 600;
     font-feature-settings: "tnum"; /* Tabular figures for alignment */
   }
 
-  /* --- Dark theme --- */
-  .dark .ibm-btn {
-    @apply bg-ibm-blue text-white px-5 py-4 font-semibold text-base leading-none
+  /* --- Button Styles --- */
+  .app-btn {
+    @apply bg-brand-blue text-white px-5 py-4 font-semibold text-base leading-none
            hover:brightness-110 active:brightness-90 transition-all
-           focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-ibm-black focus:ring-ibm-blue
+           focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-blue
            disabled:opacity-50 disabled:cursor-not-allowed;
   }
-  .dark .ibm-btn-danger {
-    @apply bg-red-600 text-white px-5 py-4 font-semibold text-base leading-none
-           hover:bg-red-500 active:bg-red-700 transition-all
-           focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-ibm-black focus:ring-red-600
-           disabled:opacity-50 disabled:cursor-not-allowed;
+  .dark .app-btn {
+    @apply focus:ring-offset-ibm-black;
   }
-  .dark .ibm-input {
-    @apply bg-ibm-gray900 border border-ibm-gray800 text-ibm-white px-4 py-4 text-base
-           focus:outline-none focus:border-ibm-blue focus:ring-1 focus:ring-ibm-blue
-           placeholder-ibm-gray300 transition-all w-full;
-  }
-  .dark .ibm-label {
-    @apply block text-base font-semibold mb-2 text-ibm-gray100;
-  }
-  .dark .ibm-card {
-    @apply bg-ibm-gray900 border border-ibm-gray800 hover:border-ibm-gray300 transition-all overflow-hidden flex flex-col;
+  .light .app-btn {
+    @apply focus:ring-offset-white;
   }
 
-  /* --- Light theme --- */
-  .light .ibm-btn {
-    @apply bg-ibm-blue text-white px-5 py-4 font-semibold text-base leading-none
-           hover:brightness-110 active:brightness-90 transition-all
-           focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-ibm-blue
-           disabled:opacity-50 disabled:cursor-not-allowed;
-  }
-  .light .ibm-btn-danger {
+  .app-btn-danger {
     @apply bg-red-600 text-white px-5 py-4 font-semibold text-base leading-none
            hover:bg-red-500 active:bg-red-700 transition-all
-           focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-red-600
+           focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600
            disabled:opacity-50 disabled:cursor-not-allowed;
   }
-  .light .ibm-input {
-    @apply bg-ibm-gray100 border border-ibm-gray200 text-ibm-black px-4 py-4 text-base
-           focus:outline-none focus:border-ibm-blue focus:ring-1 focus:ring-ibm-blue
-           placeholder-ibm-gray300 transition-all w-full;
+  .dark .app-btn-danger {
+    @apply focus:ring-offset-ibm-black;
   }
-  .light .ibm-label {
-    @apply block text-base font-semibold mb-2 text-ibm-gray800;
+  .light .app-btn-danger {
+    @apply focus:ring-offset-white;
   }
-  .light .ibm-card {
-    @apply bg-white border border-ibm-gray200 hover:border-ibm-gray300 hover:shadow-lg transition-all overflow-hidden flex flex-col;
+
+  /* --- Input Styles --- */
+  .app-input {
+    @apply px-4 py-4 text-base focus:outline-none focus:ring-1 transition-all w-full;
   }
+  .dark .app-input {
+    @apply bg-ibm-gray900 border border-ibm-gray800 text-ibm-white
+           focus:border-brand-blue focus:ring-brand-blue placeholder-ibm-gray300;
+  }
+  .light .app-input {
+    @apply bg-ibm-gray100 border border-ibm-gray200 text-ibm-black
+           focus:border-brand-blue focus:ring-brand-blue placeholder-ibm-gray300;
+  }
+
+  .app-label {
+    @apply block text-base font-semibold mb-2;
+  }
+  .dark .app-label { @apply text-ibm-gray100; }
+  .light .app-label { @apply text-ibm-gray800; }
+
+  .app-card {
+    @apply border transition-all overflow-hidden flex flex-col;
+  }
+  .dark .app-card { @apply bg-ibm-gray900 border-ibm-gray800 hover:border-ibm-gray300; }
+  .light .app-card { @apply bg-white border-ibm-gray200 hover:border-ibm-gray300 hover:shadow-lg; }
 
   /* Theme-aware classes */
   .light .theme-bg { @apply bg-white; }
@@ -111,10 +125,13 @@
   .dark .theme-bg-hover { @apply hover:bg-ibm-gray900; }
 
   /* Table header styling */
-  .light .theme-table-header { @apply bg-ibm-blue text-white; }
-  .dark .theme-table-header { @apply bg-ibm-blue text-white; }
+  .light .theme-table-header { @apply bg-brand-blue text-white; }
+  .dark .theme-table-header { @apply bg-brand-blue text-white; }
   .light .theme-table-row-even { @apply bg-white; }
   .dark .theme-table-row-even { @apply bg-ibm-black; }
   .light .theme-table-row-odd { @apply bg-ibm-gray100; }
   .dark .theme-table-row-odd { @apply bg-ibm-gray900; }
+}
+00; }
+  .dark .theme-table-row-odd { @apply bg-brand-gray900; }
 }

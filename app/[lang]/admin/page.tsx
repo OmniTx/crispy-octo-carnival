@@ -43,21 +43,21 @@ export default async function AdminPage({
         <>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="border theme-border theme-bg-card p-5 flex items-center gap-4">
-              <Package size={24} className="text-ibm-blue" />
+              <Package size={24} className="text-brand-blue" />
               <div>
                 <div className="text-2xl font-bold theme-text">{products?.length || 0}</div>
                 <div className="text-xs theme-text-muted uppercase tracking-wider">{dict.totalProducts}</div>
               </div>
             </div>
             <div className="border theme-border theme-bg-card p-5 flex items-center gap-4">
-              <SettingsIcon size={24} className="text-ibm-blue" />
+              <SettingsIcon size={24} className="text-brand-blue" />
               <div>
                 <div className="text-2xl font-bold theme-text">{settings?.theme || 'dark'}</div>
                 <div className="text-xs theme-text-muted uppercase tracking-wider">{dict.theme}</div>
               </div>
             </div>
             <div className="border theme-border theme-bg-card p-5 flex items-center gap-4">
-              <ArrowUpDown size={24} className="text-ibm-blue" />
+              <ArrowUpDown size={24} className="text-brand-blue" />
               <div>
                 <div className="text-2xl font-bold theme-text">{currency}</div>
                 <div className="text-xs theme-text-muted uppercase tracking-wider">{dict.currency}</div>

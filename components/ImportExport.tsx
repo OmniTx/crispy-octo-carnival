@@ -82,7 +82,7 @@ export default function ImportExport({ products, dict }: { products: Product[]; 
         <div className="border theme-border p-6 space-y-4">
           <h3 className="font-semibold theme-text">{dict.exportCSV}</h3>
           <p className="theme-text-muted text-sm">{dict.totalProducts}: {products.length}</p>
-          <button onClick={handleExport} className="ibm-btn flex items-center gap-2 w-full justify-center">
+          <button onClick={handleExport} className="app-btn flex items-center gap-2 w-full justify-center">
             <Download size={16} />
             {dict.exportCSV}
           </button>
@@ -92,7 +92,7 @@ export default function ImportExport({ products, dict }: { products: Product[]; 
         <div className="border theme-border p-6 space-y-4">
           <h3 className="font-semibold theme-text">{dict.importCSV}</h3>
           <p className="theme-text-muted text-sm">{dict.importHelp}</p>
-          <label className="ibm-btn flex items-center gap-2 w-full justify-center cursor-pointer">
+          <label className="app-btn flex items-center gap-2 w-full justify-center cursor-pointer">
             <Upload size={16} />
             {isImporting ? dict.importing : dict.importCSV}
             <input

@@ -43,7 +43,7 @@ export default function LoginPage({ params: { lang } }: { params: { lang: string
       <div className="w-full max-w-md space-y-8 theme-bg-card border theme-border p-8 shadow-2xl">
         <div className="text-center space-y-2">
           <div className="flex justify-center mb-6">
-             <div className="h-12 w-12 bg-ibm-blue flex items-center justify-center text-white font-bold text-2xl">
+             <div className="h-12 w-12 bg-brand-blue flex items-center justify-center text-white font-bold text-2xl">
                H
              </div>
           </div>
@@ -61,23 +61,23 @@ export default function LoginPage({ params: { lang } }: { params: { lang: string
         <form onSubmit={handleLogin} className="space-y-6">
           <div className="space-y-4">
             <div>
-              <label className="ibm-label">Email Address</label>
+              <label className="app-label">Email Address</label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="ibm-input"
+                className="app-input"
                 required
                 placeholder="admin@example.com"
               />
             </div>
             <div>
-              <label className="ibm-label">Password</label>
+              <label className="app-label">Password</label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="ibm-input"
+                className="app-input"
                 required
                 placeholder="••••••••"
               />
@@ -87,7 +87,7 @@ export default function LoginPage({ params: { lang } }: { params: { lang: string
           <button
             type="submit"
             disabled={loading}
-            className="ibm-btn w-full flex items-center justify-center gap-2"
+            className="app-btn w-full flex items-center justify-center gap-2"
           >
             {loading ? (
               <Loader2 className="animate-spin" size={18} />
