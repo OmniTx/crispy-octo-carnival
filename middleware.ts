@@ -2,32 +2,46 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 export function middleware(req: NextRequest) {
-  // Simple check for Supabase auth cookies
-  // Supabase browser client typically sets cookies starting with 'sb-'
+  const path = req.nextUrl.pathname
   const hasAuthCookie = req.cookies.get('sb-access-token') || req.cookies.get('sb-refresh-token')
 
-  const path = req.nextUrl.pathname
-
-  // Redirect root path to default locale
+  // Redirect root path / to a language-prefixed path
   if (path === '/') {
-    return NextResponse.redirect(new URL('/en', req.url))
+    // Check for language preference in cookie first
+    const cookieLang = req.cookies.get('lang')?.value
+    if (cookieLang === 'bn' || cookieLang === 'en') {
+      return NextResponse.redirect(new URL(`/${cookieLang}`, req.url))
+    }
+
+    // Otherwise, check Accept-Language header
+    const acceptLanguage = req.headers.get('accept-language') || ''
+    const preferredLang = acceptLanguage.toLowerCase().includes('bn') ? 'bn' : 'en'
+    return NextResponse.redirect(new URL(`/${preferredLang}`, req.url))
   }
+
   const isProtectedPath = path.includes('/admin') || path.includes('/add')
   const isLoginPage = path.includes('/login') || path.includes('/setup')
 
-  // Extract lang from path (supports /[lang]/...)
   const segments = path.split('/')
-  const lang = segments[1] || 'en'
+  const lang = segments[1]
+
+  // If visiting a language-prefixed path, ensure we save it to the cookie for future root visits
+  const response = NextResponse.next()
+  if (lang === 'en' || lang === 'bn') {
+    response.cookies.set('lang', lang, { maxAge: 60 * 60 * 24 * 30, path: '/' }) // 30 days
+  }
 
   if (isProtectedPath && !isLoginPage && !hasAuthCookie) {
-    return NextResponse.redirect(new URL(`/${lang}/login`, req.url))
+    const redirectUrl = new URL(`/${lang || 'en'}/login`, req.url)
+    return NextResponse.redirect(redirectUrl)
   }
 
   if (isLoginPage && hasAuthCookie) {
-    return NextResponse.redirect(new URL(`/${lang}/admin`, req.url))
+    const redirectUrl = new URL(`/${lang || 'en'}/admin`, req.url)
+    return NextResponse.redirect(redirectUrl)
   }
 
-  return NextResponse.next()
+  return response
 }
 
 export const config = {
