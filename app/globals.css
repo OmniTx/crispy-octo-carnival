@@ -25,17 +25,17 @@
     @apply bg-white text-ibm-black font-sans antialiased min-h-screen flex flex-col;
   }
   body {
-    @apply font-sans antialiased min-h-screen flex flex-col;
+    @apply font-sans antialiased min-h-screen flex flex-col text-base;
   }
-  /* Apply Bangla font to Bangla text */
+  /* Apply fonts with Inter as priority for English characters, falling back to Noto Serif Bengali */
   html[lang="bn"] body {
-    font-family: 'Noto Serif Bengali', sans-serif;
+    font-family: 'Inter', 'Noto Serif Bengali', sans-serif;
   }
 }
 
 @layer utilities {
   .font-bangla {
-    font-family: 'Noto Serif Bengali', sans-serif;
+    font-family: 'Inter', 'Noto Serif Bengali', sans-serif;
   }
 
   .font-number {
@@ -46,24 +46,24 @@
 
   /* --- Dark theme --- */
   .dark .ibm-btn {
-    @apply bg-ibm-blue text-white px-4 py-3 font-semibold text-sm leading-none
+    @apply bg-ibm-blue text-white px-5 py-4 font-semibold text-base leading-none
            hover:brightness-110 active:brightness-90 transition-all
            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-ibm-black focus:ring-ibm-blue
            disabled:opacity-50 disabled:cursor-not-allowed;
   }
   .dark .ibm-btn-danger {
-    @apply bg-red-600 text-white px-4 py-3 font-semibold text-sm leading-none
+    @apply bg-red-600 text-white px-5 py-4 font-semibold text-base leading-none
            hover:bg-red-500 active:bg-red-700 transition-all
            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-ibm-black focus:ring-red-600
            disabled:opacity-50 disabled:cursor-not-allowed;
   }
   .dark .ibm-input {
-    @apply bg-ibm-gray900 border border-ibm-gray800 text-ibm-white px-4 py-3 text-sm
+    @apply bg-ibm-gray900 border border-ibm-gray800 text-ibm-white px-4 py-4 text-base
            focus:outline-none focus:border-ibm-blue focus:ring-1 focus:ring-ibm-blue
            placeholder-ibm-gray300 transition-all w-full;
   }
   .dark .ibm-label {
-    @apply block text-sm font-semibold mb-2 text-ibm-gray100;
+    @apply block text-base font-semibold mb-2 text-ibm-gray100;
   }
   .dark .ibm-card {
     @apply bg-ibm-gray900 border border-ibm-gray800 hover:border-ibm-gray300 transition-all overflow-hidden flex flex-col;
@@ -71,24 +71,24 @@
 
   /* --- Light theme --- */
   .light .ibm-btn {
-    @apply bg-ibm-blue text-white px-4 py-3 font-semibold text-sm leading-none
+    @apply bg-ibm-blue text-white px-5 py-4 font-semibold text-base leading-none
            hover:brightness-110 active:brightness-90 transition-all
            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-ibm-blue
            disabled:opacity-50 disabled:cursor-not-allowed;
   }
   .light .ibm-btn-danger {
-    @apply bg-red-600 text-white px-4 py-3 font-semibold text-sm leading-none
+    @apply bg-red-600 text-white px-5 py-4 font-semibold text-base leading-none
            hover:bg-red-500 active:bg-red-700 transition-all
            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-red-600
            disabled:opacity-50 disabled:cursor-not-allowed;
   }
   .light .ibm-input {
-    @apply bg-ibm-gray100 border border-ibm-gray200 text-ibm-black px-4 py-3 text-sm
+    @apply bg-ibm-gray100 border border-ibm-gray200 text-ibm-black px-4 py-4 text-base
            focus:outline-none focus:border-ibm-blue focus:ring-1 focus:ring-ibm-blue
            placeholder-ibm-gray300 transition-all w-full;
   }
   .light .ibm-label {
-    @apply block text-sm font-semibold mb-2 text-ibm-gray800;
+    @apply block text-base font-semibold mb-2 text-ibm-gray800;
   }
   .light .ibm-card {
     @apply bg-white border border-ibm-gray200 hover:border-ibm-gray300 hover:shadow-lg transition-all overflow-hidden flex flex-col;

@@ -23,7 +23,7 @@ const config: Config = {
       },
       fontFamily: {
         sans: ['Inter', 'IBM Plex Sans', 'sans-serif'],
-        bangla: ['Noto Serif Bengali', 'sans-serif'],
+        bangla: ['Inter', 'Noto Serif Bengali', 'sans-serif'],
         number: ['Inter', 'monospace'],
       },
     },

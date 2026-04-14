@@ -14,8 +14,8 @@ export default function AdminSidebar({ lang, dict }: { lang: string, dict: any }
   const links = [
     { name: dict.dashboard || 'Dashboard', href: `/${lang}/admin?tab=dashboard`, icon: LayoutDashboard, tab: 'dashboard', exact: true },
     { name: dict.addProduct || 'Add Product', href: `/${lang}/admin/add`, icon: PlusCircle, tab: 'add' },
-    { name: dict.theme || 'Settings', href: `/${lang}/admin?tab=settings`, icon: Settings, tab: 'settings' },
-    { name: 'Image Library', href: `/${lang}/admin?tab=images`, icon: ImageIcon, tab: 'images' },
+    { name: dict.siteSettings || 'Site Settings', href: `/${lang}/admin?tab=settings`, icon: Settings, tab: 'settings' },
+    { name: dict.imageLibrary || 'Image Library', href: `/${lang}/admin?tab=images`, icon: ImageIcon, tab: 'images' },
     { name: dict.importExport || 'Import/Export', href: `/${lang}/admin?tab=import`, icon: FileUp, tab: 'import' },
   ]
 
@@ -56,13 +56,13 @@ export default function AdminSidebar({ lang, dict }: { lang: string, dict: any }
                   href={link.href}
                   onClick={() => setIsOpen(false)}
                   className={`
-                    flex items-center gap-3 px-4 py-3 text-sm transition-colors border-l-2
+                    flex items-center gap-3 px-4 py-3 text-base transition-colors border-l-2
                     ${active 
                       ? 'theme-text font-medium border-ibm-blue bg-ibm-blue/5' 
                       : 'theme-text-muted border-transparent hover:theme-bg hover:theme-text'}
                   `}
                 >
-                  <Icon size={18} className={active ? 'text-ibm-blue' : ''} />
+                  <Icon size={20} className={active ? 'text-ibm-blue' : ''} />
                   {link.name}
                 </Link>
               )
@@ -70,8 +70,8 @@ export default function AdminSidebar({ lang, dict }: { lang: string, dict: any }
           </nav>
 
           <div className="pt-8 mt-8 border-t theme-border">
-            <Link href={`/${lang}`} className="flex items-center gap-3 px-4 py-3 text-sm theme-text-muted hover:theme-text hover:theme-bg transition-colors">
-              <ArrowLeft size={18} />
+            <Link href={`/${lang}`} className="flex items-center gap-3 px-4 py-3 text-base theme-text-muted hover:theme-text hover:theme-bg transition-colors">
+              <ArrowLeft size={20} />
               {dict.backToSite || 'Back to Site'}
             </Link>
           </div>

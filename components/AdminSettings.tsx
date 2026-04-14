@@ -37,7 +37,7 @@ export default function AdminSettings({ settings, dict }: { settings: Settings; 
 
   return (
     <form onSubmit={handleSubmit} className="border theme-border theme-bg-card p-6 space-y-6">
-      <h2 className="text-xl font-semibold theme-text">{dict.settings}</h2>
+      <h2 className="text-xl font-semibold theme-text">{dict.siteSettings}</h2>
 
       {error && <div className="p-3 border border-red-600 text-red-500 bg-red-950/50 text-sm font-mono">{error}</div>}
       {saved && <div className="p-3 border border-green-600 text-green-400 bg-green-950/50 text-sm font-semibold flex items-center gap-2"><Check size={16} /> {dict.saved}</div>}

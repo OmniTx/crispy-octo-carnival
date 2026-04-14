@@ -47,7 +47,7 @@ export default async function RootLayout({
     <html lang={lang} className={theme}>
       <body>
         <header className="border-b theme-border theme-bg-header p-4 flex justify-between items-center">
-          <Link href={`/${lang}`} className="font-semibold text-lg tracking-tight theme-text hover:text-ibm-blue transition-colors">
+          <Link href={`/${lang}`} className={`font-semibold text-lg tracking-tight theme-text hover:text-ibm-blue transition-colors ${lang === 'bn' ? 'font-bangla' : ''}`}>
             <span className="text-ibm-blue mr-2">█</span>{siteName}
           </Link>
           <div className="flex items-center gap-4">

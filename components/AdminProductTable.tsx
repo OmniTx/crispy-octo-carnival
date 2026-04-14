@@ -88,22 +88,22 @@ export default function AdminProductTable({ products: initialProducts, dict, lan
         </div>
       )}
       <div className="overflow-x-auto border theme-border theme-bg shadow-2xl">
-        <table className="w-full text-left text-sm theme-text">
-          <thead className="theme-bg-card text-xs uppercase border-b theme-border">
+        <table className="w-full text-left text-base theme-text">
+          <thead className="theme-bg-card text-sm uppercase border-b theme-border">
             <tr>
-              <th className="px-2 py-4 w-10"></th>
-              <th className="px-4 py-4 w-16">#</th>
-              <th className="px-4 py-4 w-16">{dict.image}</th>
-              <th className="px-4 py-4">{dict.name}</th>
-              <th className="px-4 py-4">{dict.packSize}</th>
-              <th className="px-4 py-4">{dict.price}</th>
-              <th className="px-4 py-4 w-40 text-right">{dict.actions}</th>
+              <th className="px-3 py-5 w-12 text-center"></th>
+              <th className="px-4 py-5 w-20">#</th>
+              <th className="px-4 py-5 w-24">{dict.image}</th>
+              <th className="px-4 py-5">{dict.name}</th>
+              <th className="px-4 py-5">{dict.packSize}</th>
+              <th className="px-4 py-5">{dict.price}</th>
+              <th className="px-4 py-5 w-56 text-right">{dict.actions}</th>
             </tr>
           </thead>
           <tbody>
             {products.length === 0 ? (
               <tr>
-                <td colSpan={7} className="px-6 py-8 text-center theme-text-muted border-t theme-border">
+                <td colSpan={7} className="px-6 py-10 text-center theme-text-muted border-t theme-border text-lg">
                   {dict.noProducts}
                 </td>
               </tr>
@@ -124,40 +124,40 @@ export default function AdminProductTable({ products: initialProducts, dict, lan
                       : 'theme-bg-hover'
                   }`}
                 >
-                  <td className="px-2 py-3 text-center">
-                    <GripVertical size={16} className="theme-text-muted inline-block" />
+                  <td className="px-3 py-4 text-center">
+                    <GripVertical size={20} className="theme-text-muted inline-block" />
                   </td>
-                  <td className="px-4 py-3 theme-text-muted text-xs font-number">{index + 1}</td>
-                  <td className="px-4 py-3">
+                  <td className="px-4 py-4 theme-text-muted text-sm font-number font-bold">{index + 1}</td>
+                  <td className="px-4 py-4">
                     {product.image_url ? (
-                      <div className="relative w-10 h-10 theme-bg-card border theme-border flex items-center justify-center">
+                      <div className="relative w-12 h-12 theme-bg-card border theme-border flex items-center justify-center">
                         <Image src={product.image_url} alt={product.name} fill className="object-contain" />
                       </div>
                     ) : (
-                      <div className="w-10 h-10 theme-bg-card flex items-center justify-center theme-text-muted border theme-border">
-                        <ImageIcon size={14} />
+                      <div className="w-12 h-12 theme-bg-card flex items-center justify-center theme-text-muted border theme-border">
+                        <ImageIcon size={20} />
                       </div>
                     )}
                   </td>
-                  <td className="px-4 py-3 font-semibold theme-text">{product.name}</td>
-                  <td className="px-4 py-3 theme-text-muted text-xs font-number">{lang === 'bn' ? (product.pack_size_bn || product.pack_size || '-') : (product.pack_size || '-')}</td>
-                  <td className="px-4 py-3 font-number text-ibm-blue">{currency}{product.price}</td>
-                  <td className="px-4 py-3 text-right">
-                    <div className="inline-flex flex-wrap items-center justify-end gap-2">
+                  <td className="px-4 py-4 font-semibold theme-text text-lg">{product.name}</td>
+                  <td className="px-4 py-4 theme-text-muted text-base font-number">{lang === 'bn' ? (product.pack_size_bn || product.pack_size || '-') : (product.pack_size || '-')}</td>
+                  <td className="px-4 py-4 font-number text-ibm-blue font-bold text-lg">{currency}{product.price}</td>
+                  <td className="px-4 py-4 text-right">
+                    <div className="inline-flex flex-wrap items-center justify-end gap-3">
                       <Link
                         href={`/${lang}/admin/edit/${product.id}`}
-                        className="ibm-btn text-xs px-3 py-2 inline-flex items-center gap-1 bg-ibm-blue text-white hover:brightness-110 border border-ibm-blue"
+                        className="ibm-btn text-sm px-4 py-2.5 inline-flex items-center gap-2 bg-ibm-blue text-white hover:brightness-110 border border-ibm-blue"
                       >
-                        <Pencil size={12} />
+                        <Pencil size={16} />
                         {dict.editProduct}
                       </Link>
                       <button
                         type="button"
                         onClick={() => handleDelete(product.id, product.image_url)}
                         disabled={deletingId === product.id}
-                        className="ibm-btn-danger text-xs px-3 py-2 inline-flex items-center gap-1"
+                        className="ibm-btn-danger text-sm px-4 py-2.5 inline-flex items-center gap-2"
                       >
-                        <Trash2 size={12} />
+                        <Trash2 size={16} />
                         {deletingId === product.id ? '...' : dict.delete}
                       </button>
                     </div>

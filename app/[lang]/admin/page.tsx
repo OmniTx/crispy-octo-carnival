@@ -96,7 +96,7 @@ export default async function AdminPage({
       {currentTab === 'images' && (
         <div className="border theme-border theme-bg-card p-6 space-y-4">
           <h2 className="text-xl font-semibold theme-text flex items-center gap-2">
-            <ImageIcon size={20} /> Image Library
+            <ImageIcon size={20} /> {dict.imageLibrary}
           </h2>
           <ImageManager />
         </div>

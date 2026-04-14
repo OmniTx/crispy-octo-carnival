@@ -33,7 +33,7 @@ export default async function HomePage({ params: { lang } }: { params: { lang: s
     <div>
       {/* Page Title */}
       <div className="text-center mb-8">
-        <h1 className="text-3xl md:text-4xl font-bold theme-text font-bangla">
+        <h1 className={`text-3xl md:text-4xl font-bold theme-text ${isBn ? 'font-bangla' : ''}`}>
           {isBn ? 'হার্বস পণ্যের সংক্ষিপ্ত বিবরণী ও মূল্য তালিকা' : 'Herbs Product Details & Price List'}
         </h1>
         <p className="theme-text-muted text-sm mt-2">{products?.length || 0} {dict.totalProducts}</p>
