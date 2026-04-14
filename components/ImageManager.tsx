@@ -7,8 +7,8 @@ import Image from 'next/image'
 
 type ImageFile = {
   name: string
-  created_at?: string
-  updated_at?: string
+  created_at?: string | null
+  updated_at?: string | null
 }
 
 export default function ImageManager() {
