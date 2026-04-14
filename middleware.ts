@@ -5,17 +5,13 @@ export function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname
   const hasAuthCookie = req.cookies.get('sb-access-token') || req.cookies.get('sb-refresh-token')
 
-  // Redirect root path / to a language-prefixed path
+  // Redirect root path / to a language-prefixed path based on country
   if (path === '/') {
-    // Check for language preference in cookie first
-    const cookieLang = req.cookies.get('lang')?.value
-    if (cookieLang === 'bn' || cookieLang === 'en') {
-      return NextResponse.redirect(new URL(`/${cookieLang}`, req.url))
-    }
-
-    // Otherwise, check Accept-Language header
-    const acceptLanguage = req.headers.get('accept-language') || ''
-    const preferredLang = acceptLanguage.toLowerCase().includes('bn') ? 'bn' : 'en'
+    // Check for country header (Vercel or Cloudflare)
+    const country = req.geo?.country || req.headers.get('x-vercel-ip-country') || req.headers.get('cf-ipcountry') || ''
+    
+    // If from Bangladesh, default to Bengali, otherwise English
+    const preferredLang = country === 'BD' ? 'bn' : 'en'
     return NextResponse.redirect(new URL(`/${preferredLang}`, req.url))
   }
 
@@ -24,12 +20,6 @@ export function middleware(req: NextRequest) {
 
   const segments = path.split('/')
   const lang = segments[1]
-
-  // If visiting a language-prefixed path, ensure we save it to the cookie for future root visits
-  const response = NextResponse.next()
-  if (lang === 'en' || lang === 'bn') {
-    response.cookies.set('lang', lang, { maxAge: 60 * 60 * 24 * 30, path: '/' }) // 30 days
-  }
 
   if (isProtectedPath && !isLoginPage && !hasAuthCookie) {
     const redirectUrl = new URL(`/${lang || 'en'}/login`, req.url)
@@ -41,7 +31,7 @@ export function middleware(req: NextRequest) {
     return NextResponse.redirect(redirectUrl)
   }
 
-  return response
+  return NextResponse.next()
 }
 
 export const config = {

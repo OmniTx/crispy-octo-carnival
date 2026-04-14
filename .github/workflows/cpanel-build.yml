@@ -1,0 +1,44 @@
+name: Build for cPanel
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Next.js app
+        run: npm run build
+        env:
+          # Define empty/dummy vars for build time if actual secrets are not provided,
+          # or populate via GitHub Secrets if your Next.js pages statically evaluate them.
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://dummy.supabase.co' }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'dummy_key' }}
+
+      - name: Prepare Standalone output
+        run: |
+          # The standalone directory doesn't include public/ or .next/static/ by default
+          cp -r public .next/standalone/
+          cp -r .next/static .next/standalone/.next/
+          
+      - name: Zip build artifact
+        run: |
+          cd .next/standalone
+          zip -r ../../cpanel-build.zip .
+          
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cpanel-build
+          path: cpanel-build.zip

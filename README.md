@@ -1,126 +1,76 @@
-# Herbs Showcase
+# Herbs Showcase (Full-Stack E-Commerce / Catalog)
 
-A minimal, dual-language (English/Bangla) Next.js 14 Web Application styled with a custom aesthetic using Tailwind CSS. Uses Supabase for Database and Storage, built purely on Edge functions and Next.js App Router Server Actions.
+A modern, fast, and fully responsive web application built to showcase herbal products, featuring an integrated admin panel, bilingual support (English and Bengali), and an automated deployment pipeline.
 
-## Requirements
-- Node.js installed
+## 🚀 Tech Stack
 
-## 1. Local Setup
+- **Frontend Framework**: Next.js 14 (App Router)
+- **UI Library**: React 18
+- **Styling**: Tailwind CSS + Custom CSS (for dynamic theming)
+- **Language/Type Checker**: TypeScript
+- **Database & Authentication**: Supabase (PostgreSQL, GoTrue Auth, Storage)
+- **Form Handling & Validation**: React Hook Form + Zod
+- **Icons**: Lucide React
+- **Hosting/Deployment**: Vercel & GitHub Actions (for cPanel builds)
 
-First, install all of the dependencies:
-```bash
-npm install
-```
+## ✨ Key Features
 
-Copy your environment variables:
-```bash
-cp .env.local.example .env.local
-```
-*(You will fill these out after completing "Supabase Setup" below)*.
+- **Bilingual Interface (i18n)**: Seamlessly switch between English and Bengali. Includes automatic language detection based on the user's geographic location (defaults to the Bengali version for visitors from Bangladesh).
+- **Advanced Font Rendering**: Intelligent typography that prioritizes the Inter font for English characters while flawlessly falling back to self-hosted Noto Serif Bengali for native text, even within the same sentence.
+- **Admin Dashboard**: A secure, password-protected area to manage the catalog.
+  - **Product Management**: Add, edit, delete, and reorder products with drag-and-drop.
+  - **Image Library**: Centralized asset manager.
+  - **Site Settings**: Customize the site name, currency symbol, and default theme (Dark/Light).
+  - **Bulk Import/Export**: Easily manage catalog data using CSV files.
+- **Modern Aesthetics**: A premium, "alive" design featuring soft hover states, tabular numbers for pricing, and distinct light/dark modes.
 
-Start the development server:
-```bash
-npm run dev
-```
+## 🛠️ Local Development
 
----
+### Prerequisites
+- Node.js (v18+)
+- Supabase Account
 
-## 2. Supabase Setup (Detailed)
+### Setup Instructions
 
-Supabase handles our Postgres database and our image storage.
-
-1. **Create an Account / Project**:
-   - Go to [Supabase](https://supabase.com/) and sign up.
-   - Click "New Project", give it a name like "showcase-db", set a strong database password, and choose a region close to you.
-   - Wait for the database to finish provisioning (~1-2 minutes).
-
-2. **Run the Database Setup (seed.sql)**:
-   - On the left sidebar of your Supabase dashboard, click on **SQL Editor**.
-   - Click "New Query" and paste the *entire* contents of the `seed.sql` file provided in this repository.
-   - Click the "Run" button. This will automatically create your `products` table, disable row level security (for simplicity), create the `product-imgs` storage bucket, and make it publicly accessible!
-
-3. **Get Your Environment Variables**:
-   - On the left sidebar, click on **Project Settings** (the gear icon at the very bottom).
-   - Click on **API** under Configuration.
-   - Under "Project URL", copy the URL and paste it into your `.env.local` file as `NEXT_PUBLIC_SUPABASE_URL`.
-   - Under "Project API keys", copy the `anon` `public` key and paste it into your `.env.local` file as `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
-
-*(The app should now work fully on your local machine)*
-
----
-
-## 3. Vercel Deployment (Detailed)
-
-You have a zero-config, edge-ready app here. Deploying to Vercel is extremely simple.
-
-1. **Push to GitHub**:
-   - Commit all your code and push it to a new repository on your GitHub account.
-
-2. **Deploy to Vercel**:
-   - Go to [Vercel](https://vercel.com) and log in with your GitHub account.
-   - Click **Add New...** and select **Project**.
-   - Import the GitHub repository you just created.
-
-3. **Add Environment Variables to Vercel**:
-   - Before clicking "Deploy", open the **Environment Variables** section on the Vercel setup page.
-   - Add `NEXT_PUBLIC_SUPABASE_URL` and paste the value.
-   - Add `NEXT_PUBLIC_SUPABASE_ANON_KEY` and paste the value.
-   
-4. **Deploy**:
-   - Click **Deploy**. Vercel will automatically detect Next.js 14, run `npm run build`, and serve your pages using the Edge Network.
-   - Once deployment finishes, you can visit the URL Vercel gives you. Ensure everything is working by adding and deleting a product!
-
-## Note on Architecture
-- **No separate server:** Adds and Deletes are handled entirely via Next.js Edge Server Actions (`lib/actions.ts`).
-- **Images:** Supabase image loader is pre-configured in `next.config.js`. Next.js handles size variations efficiently.
-
----
-
-## 4. cPanel Deployment (Advanced)
-
-If you chose to host this application on a traditional cPanel server rather than Vercel, follow these customized Next.js deployment steps:
-
-1. **Build Locally:**
-   Next.js applications need to be built into a production bundle before running on cPanel. Since you do not have `npm` installed locally, you can use GitHub Actions to build the project for you, or build it on any machine with `npm` installed.
-   To build it locally:
+1. **Clone the repository:**
    ```bash
-   npm install
-   npm run build
+   git clone <repository-url>
+   cd crispy-octo-carnival
    ```
 
-2. **Prepare Files for cPanel:**
-   After building, only specific folders are needed for production:
-   - `.next` folder
-   - `public` folder
-   - `package.json`
-   - `next.config.js`
-   
-   Zip these folders up to upload them.
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-3. **cPanel Node.js Application Setup:**
-   - Log into your cPanel dashboard.
-   - Go to **Setup Node.js App** (available on modern cPanel hosting).
-   - Click **Create Application**.
-   - **Node.js version:** Select `20` (or the highest available version 18+).
-   - **Application mode:** `Production`
-   - **Application root:** Entering a directory name, e.g., `showcase-app`
-   - **Application URL:** Pick your domain/subdomain.
-   - **Startup file:** Leave blank (or use `server.js` if you are using a custom express server).
+3. **Environment Variables:**
+   Rename `.env.local.example` to `.env.local` and add your Supabase credentials:
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+   ```
 
-4. **Upload Files:**
-   - Go to **File Manager** in cPanel.
-   - Navigate to the `Application root` directory you just specified (`showcase-app`).
-   - Upload the zip file containing your production bundle and Extract it.
+4. **Run the development server:**
+   ```bash
+   npm run dev
+   ```
 
-5. **Install Production Dependencies:**
-   - Go back to the **Setup Node.js App** page.
-   - Select your application and click **Run NPM Install** to install dependencies based on `package.json`. 
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-6. **Add Environment Variables:**
-   - Still in the Node.js App page, slowly add your environment variables manually under the **Environment variables** section:
-     - `NEXT_PUBLIC_SUPABASE_URL`
-     - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+## 📦 Deployment
 
-7. **Start Application:**
-   - For a standard Next.js build running on cPanel without a custom server file, you often need to set the Startup file or command to `node_modules/next/dist/bin/next start`. 
-   - Alternatively, edit your `package.json` setup and configure the app to run `npm start`, then restart your Node application.
+### Vercel (Recommended)
+This project is configured out-of-the-box for Vercel. Simply connect your GitHub repository to Vercel and ensure you add the required `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` environment variables in your Vercel project settings.
+
+### cPanel / Node.js Server
+You can manually trigger a GitHub Action to generate a production-ready `.zip` file optimized for cPanel's Node.js App environment. This uses Next.js's "standalone" output mode.
+
+1. Go to the **Actions** tab in this GitHub repository.
+2. Select **Build for cPanel** from the left sidebar.
+3. Click the **Run workflow** dropdown and select the `main` branch.
+4. Once the workflow completes successfully, scroll to the bottom of the summary page and download the `cpanel-build` artifact.
+5. Upload and extract the `.zip` file to your cPanel server.
+6. In your cPanel **Setup Node.js App** settings, set the Application startup file to `server.js`.
+7. Define the required Supabase environment variables in the cPanel UI.
+
+*Note: The GitHub Action uses dummy Supabase keys during the build process, which is generally fine for this app. However, if your specific pages strictly require real keys to be evaluated during static generation at build-time, you should add `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` to your repository's **GitHub Secrets**.*
