@@ -39,7 +39,7 @@ export async function addProduct(prevState: ActionState, formData: FormData): Pr
 
     const parsed = productSchema.safeParse({ name, name_bn, price, description, description_bn, usage_info, usage_info_bn, pack_size, pack_size_bn })
     if (!parsed.success) {
-      return { success: false, error: parsed.error.errors[0].message }
+      return { success: false, error: parsed.error.issues[0].message }
     }
 
     let fileName = null
@@ -121,7 +121,7 @@ export async function updateProduct(prevState: ActionState, formData: FormData):
 
     const parsed = productSchema.safeParse({ name, name_bn, price, description, description_bn, usage_info, usage_info_bn, pack_size, pack_size_bn })
     if (!parsed.success) {
-      return { success: false, error: parsed.error.errors[0].message }
+      return { success: false, error: parsed.error.issues[0].message }
     }
 
     const db = supabase()

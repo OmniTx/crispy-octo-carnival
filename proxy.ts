@@ -8,7 +8,7 @@ export function proxy(req: NextRequest) {
   // Redirect root path / to a language-prefixed path based on country
   if (path === '/') {
     // Check for country header (Vercel or Cloudflare)
-    const country = req.geo?.country || req.headers.get('x-vercel-ip-country') || req.headers.get('cf-ipcountry') || ''
+    const country = (req as any).geo?.country || req.headers.get('x-vercel-ip-country') || req.headers.get('cf-ipcountry') || ''
     
     // If from Bangladesh, default to Bengali, otherwise English
     const preferredLang = country === 'BD' ? 'bn' : 'en'

@@ -40,7 +40,7 @@ export default async function RootLayout({
     : (settings?.site_name_en || dict.brandName)
 
   // Check for admin session via cookies (Supabase default)
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
   const hasSession = cookieStore.get('sb-access-token') || cookieStore.get('sb-refresh-token')
 
   return (
