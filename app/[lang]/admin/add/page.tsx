@@ -1,7 +1,5 @@
 import AddProductForm from '@/components/AddProductForm'
 import { dictionaries, Locale } from '@/i18n/dictionaries'
-import Link from 'next/link'
-import { ArrowLeft } from 'lucide-react'
 
 export const runtime = 'edge'
 
@@ -11,10 +9,6 @@ export default function AddPage({ params: { lang } }: { params: { lang: string }
   return (
     <div className="max-w-4xl mx-auto">
       <div className="mb-8">
-        <Link href={`/${lang}/admin`} className="text-ibm-blue hover:theme-text flex items-center gap-2 w-fit mb-6 transition-colors">
-          <ArrowLeft size={16} />
-          {dict.adminPanel}
-        </Link>
         <h1 className="text-3xl font-light theme-text">{dict.addProduct}</h1>
       </div>
 
@@ -22,3 +16,4 @@ export default function AddPage({ params: { lang } }: { params: { lang: string }
     </div>
   )
 }
+
