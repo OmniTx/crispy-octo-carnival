@@ -1,12 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, use } from 'react'
 import { supabaseClient as supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { dictionaries, Locale } from '@/i18n/dictionaries'
 import { LogIn, Loader2, AlertCircle } from 'lucide-react'
 
-export default function LoginPage({ params: { lang } }: { params: { lang: string } }) {
+export default function LoginPage({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = use(params)
   const dict = dictionaries[lang as Locale] || dictionaries.en
   const router = useRouter()
   const [email, setEmail] = useState('')

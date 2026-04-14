@@ -7,10 +7,11 @@ export const runtime = 'edge'
 export const revalidate = 60
 
 export default async function EditProductPage({
-  params: { lang, id },
+  params,
 }: {
-  params: { lang: string; id: string }
+  params: Promise<{ lang: string; id: string }>
 }) {
+  const { lang, id } = await params
   const dict = dictionaries[lang as Locale] || dictionaries.en
 
   const db = supabase()

@@ -20,7 +20,8 @@ async function fetchProductsAndSettings() {
   }
 }
 
-export default async function HomePage({ params: { lang } }: { params: { lang: string } }) {
+export default async function HomePage({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = await params
   const dict = dictionaries[lang as Locale] || dictionaries.en
   const isBn = lang === 'bn'
 

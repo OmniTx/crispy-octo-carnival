@@ -3,13 +3,14 @@ import AdminSidebar from '@/components/AdminSidebar'
 
 export const runtime = 'edge'
 
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
-  params: { lang },
+  params,
 }: {
   children: React.ReactNode
-  params: { lang: string }
+  params: Promise<{ lang: string }>
 }) {
+  const { lang } = await params
   const dict = dictionaries[lang as Locale] || dictionaries.en
 
   return (

@@ -3,7 +3,8 @@ import { dictionaries, Locale } from '@/i18n/dictionaries'
 
 export const runtime = 'edge'
 
-export default function AddPage({ params: { lang } }: { params: { lang: string } }) {
+export default async function AddPage({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = await params
   const dict = dictionaries[lang as Locale] || dictionaries.en
 
   return (

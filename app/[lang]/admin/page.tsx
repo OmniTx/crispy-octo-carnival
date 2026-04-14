@@ -24,14 +24,16 @@ async function fetchAdminData() {
 }
 
 export default async function AdminPage({ 
-  params: { lang },
+  params,
   searchParams,
 }: { 
-  params: { lang: string }
-  searchParams: { tab?: string }
+  params: Promise<{ lang: string }>
+  searchParams: Promise<{ tab?: string }>
 }) {
+  const { lang } = await params
+  const { tab } = await searchParams
   const dict = dictionaries[lang as Locale] || dictionaries.en
-  const currentTab = searchParams.tab || 'dashboard'
+  const currentTab = tab || 'dashboard'
 
   const { products, settings } = await fetchAdminData()
   const currency = settings?.currency_symbol || '৳'
