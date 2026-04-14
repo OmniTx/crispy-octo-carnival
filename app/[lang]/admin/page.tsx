@@ -1,10 +1,11 @@
 import { supabase } from '@/lib/supabase'
 import { dictionaries, Locale } from '@/i18n/dictionaries'
 import Link from 'next/link'
-import { Plus, ArrowLeft, Package, Settings as SettingsIcon, ArrowUpDown } from 'lucide-react'
+import { Plus, ArrowLeft, Package, Settings as SettingsIcon, ArrowUpDown, Image as ImageIcon } from 'lucide-react'
 import AdminProductTable from '@/components/AdminProductTable'
 import AdminSettings from '@/components/AdminSettings'
 import ImportExport from '@/components/ImportExport'
+import ImageManager from '@/components/ImageManager'
 
 export const runtime = 'edge'
 export const revalidate = 60
@@ -86,6 +87,14 @@ export default async function AdminPage({ params: { lang } }: { params: { lang: 
 
       {/* Import / Export */}
       <ImportExport products={products || []} dict={dict} />
+
+      {/* Image Manager */}
+      <div className="border theme-border theme-bg-card p-6 space-y-4">
+        <h2 className="text-xl font-semibold theme-text flex items-center gap-2">
+          <ImageIcon size={20} /> Image Library
+        </h2>
+        <ImageManager />
+      </div>
 
       {/* Products Table */}
       <div className="space-y-4">

@@ -3,11 +3,11 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { updateProduct } from '@/lib/actions'
+import { updateProduct, deleteImage } from '@/lib/actions'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Dictionary } from '@/i18n/dictionaries'
-import { Save } from 'lucide-react'
+import { Save, Trash2 } from 'lucide-react'
 import Image from 'next/image'
 
 const productSchema = z.object({
@@ -51,6 +51,28 @@ export default function EditProductForm({
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
+  const [isDeletingImage, setIsDeletingImage] = useState(false)
+
+  const handleDeleteImage = async () => {
+    if (!product.image_url) return
+    
+    if (!confirm('Are you sure you want to delete this image? This action cannot be undone.')) {
+      return
+    }
+
+    setIsDeletingImage(true)
+    setErrorMsg('')
+    try {
+      await deleteImage(product.image_url)
+      // Refresh the page to show updated state
+      window.location.reload()
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Failed to delete image'
+      setErrorMsg(message)
+    } finally {
+      setIsDeletingImage(false)
+    }
+  }
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormValues>({
     resolver: zodResolver(productSchema),
@@ -160,8 +182,19 @@ export default function EditProductForm({
             {dict.image} <span className="theme-text-muted font-normal ml-2">({dict.optional})</span>
           </label>
           {product.image_url && !imageFile ? (
-            <div className="mb-3 relative h-32 w-32 border theme-border theme-bg-card">
-              <Image src={product.image_url} alt={product.name} fill className="object-contain p-2" />
+            <div className="mb-3 space-y-3">
+              <div className="relative h-32 w-32 border theme-border theme-bg-card">
+                <Image src={product.image_url} alt={product.name} fill className="object-contain p-2" />
+              </div>
+              <button
+                type="button"
+                onClick={handleDeleteImage}
+                disabled={isDeletingImage}
+                className="ibm-btn-danger text-xs px-3 py-2 inline-flex items-center gap-1"
+              >
+                <Trash2 size={12} />
+                {isDeletingImage ? 'Deleting...' : 'Delete Current Image'}
+              </button>
             </div>
           ) : null}
           <div className="border border-dashed theme-border theme-bg-card p-4 transition-colors hover:border-ibm-blue">

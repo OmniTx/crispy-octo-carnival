@@ -40,7 +40,7 @@ export default function LoginPage({ params: { lang } }: { params: { lang: string
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh]">
-      <div className="w-full max-w-md space-y-8 bg-ibm-gray900 dark:bg-ibm-gray900 border border-ibm-gray800 p-8 shadow-2xl">
+      <div className="w-full max-w-md space-y-8 theme-bg-card border theme-border p-8 shadow-2xl">
         <div className="text-center space-y-2">
           <div className="flex justify-center mb-6">
              <div className="h-12 w-12 bg-ibm-blue flex items-center justify-center text-white font-bold text-2xl">
@@ -52,7 +52,7 @@ export default function LoginPage({ params: { lang } }: { params: { lang: string
         </div>
 
         {error && (
-          <div className="bg-red-900/20 border border-red-500/50 p-4 flex items-start gap-3 text-red-400 text-sm">
+          <div className="bg-red-900/20 dark:bg-red-900/20 border border-red-500/50 p-4 flex items-start gap-3 text-red-600 dark:text-red-400 text-sm">
             <AlertCircle className="shrink-0 mt-0.5" size={16} />
             <p>{error}</p>
           </div>
@@ -100,7 +100,7 @@ export default function LoginPage({ params: { lang } }: { params: { lang: string
           </button>
         </form>
 
-        <div className="text-center pt-4 border-t border-ibm-gray800">
+        <div className="text-center pt-4 border-t theme-border">
            <p className="text-xs theme-text-muted">
              Herbs Catalog Management v1.0
            </p>

@@ -281,3 +281,25 @@ export async function reorderProducts(orderedIds: string[]) {
   revalidateCatalogAndAdmin()
   return { success: true }
 }
+
+export async function deleteImage(imageUrl: string) {
+  const db = supabase()
+  const { error } = await db.storage.from('product-imgs').remove([imageUrl])
+
+  if (error) {
+    throw new Error(`Failed to delete image: ${error.message}`)
+  }
+
+  return { success: true }
+}
+
+export async function listImages() {
+  const db = supabase()
+  const { data, error } = await db.storage.from('product-imgs').list()
+
+  if (error) {
+    throw new Error(`Failed to list images: ${error.message}`)
+  }
+
+  return data
+}

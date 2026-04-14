@@ -146,7 +146,7 @@ export default function AdminProductTable({ products: initialProducts, dict, lan
                     <div className="inline-flex flex-wrap items-center justify-end gap-2">
                       <Link
                         href={`/${lang}/admin/edit/${product.id}`}
-                        className="ibm-btn text-xs px-3 py-2 inline-flex items-center gap-1 theme-bg-card border theme-border"
+                        className="ibm-btn text-xs px-3 py-2 inline-flex items-center gap-1 bg-ibm-blue text-white hover:brightness-110 border border-ibm-blue"
                       >
                         <Pencil size={12} />
                         {dict.editProduct}
