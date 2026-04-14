@@ -23,7 +23,7 @@ export default function LanguageToggle({ currentLang }: { currentLang: Locale })
   return (
     <Link 
       href={href} 
-      className="text-ibm-gray300 hover:text-ibm-white text-sm font-semibold transition-colors"
+      className="text-brand-gray300 hover:text-brand-white text-sm font-semibold transition-colors"
     >
       {label}
     </Link>

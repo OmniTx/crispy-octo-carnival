@@ -64,7 +64,7 @@
            disabled:opacity-50 disabled:cursor-not-allowed;
   }
   .dark .app-btn {
-    @apply focus:ring-offset-ibm-black;
+    @apply focus:ring-offset-brand-black;
   }
   .light .app-btn {
     @apply focus:ring-offset-white;
@@ -77,7 +77,7 @@
            disabled:opacity-50 disabled:cursor-not-allowed;
   }
   .dark .app-btn-danger {
-    @apply focus:ring-offset-ibm-black;
+    @apply focus:ring-offset-brand-black;
   }
   .light .app-btn-danger {
     @apply focus:ring-offset-white;
@@ -88,50 +88,47 @@
     @apply px-4 py-4 text-base focus:outline-none focus:ring-1 transition-all w-full;
   }
   .dark .app-input {
-    @apply bg-ibm-gray900 border border-ibm-gray800 text-ibm-white
-           focus:border-brand-blue focus:ring-brand-blue placeholder-ibm-gray300;
+    @apply bg-brand-gray900 border border-brand-gray800 text-brand-white
+           focus:border-brand-blue focus:ring-brand-blue placeholder-brand-gray300;
   }
   .light .app-input {
-    @apply bg-ibm-gray100 border border-ibm-gray200 text-ibm-black
-           focus:border-brand-blue focus:ring-brand-blue placeholder-ibm-gray300;
+    @apply bg-brand-gray100 border border-brand-gray200 text-brand-black
+           focus:border-brand-blue focus:ring-brand-blue placeholder-brand-gray300;
   }
 
   .app-label {
     @apply block text-base font-semibold mb-2;
   }
-  .dark .app-label { @apply text-ibm-gray100; }
-  .light .app-label { @apply text-ibm-gray800; }
+  .dark .app-label { @apply text-brand-gray100; }
+  .light .app-label { @apply text-brand-gray800; }
 
   .app-card {
     @apply border transition-all overflow-hidden flex flex-col;
   }
-  .dark .app-card { @apply bg-ibm-gray900 border-ibm-gray800 hover:border-ibm-gray300; }
-  .light .app-card { @apply bg-white border-ibm-gray200 hover:border-ibm-gray300 hover:shadow-lg; }
+  .dark .app-card { @apply bg-brand-gray900 border-brand-gray800 hover:border-brand-gray300; }
+  .light .app-card { @apply bg-white border-brand-gray200 hover:border-brand-gray300 hover:shadow-lg; }
 
   /* Theme-aware classes */
   .light .theme-bg { @apply bg-white; }
-  .dark .theme-bg { @apply bg-ibm-black; }
-  .light .theme-bg-card { @apply bg-ibm-gray100; }
-  .dark .theme-bg-card { @apply bg-ibm-gray900; }
-  .light .theme-text { @apply text-ibm-black; }
-  .dark .theme-text { @apply text-ibm-white; }
-  .light .theme-text-muted { @apply text-ibm-gray800; }
-  .dark .theme-text-muted { @apply text-ibm-gray300; }
-  .light .theme-border { @apply border-ibm-gray200; }
-  .dark .theme-border { @apply border-ibm-gray800; }
-  .light .theme-bg-header { @apply bg-ibm-gray100; }
-  .dark .theme-bg-header { @apply bg-ibm-black; }
-  .light .theme-bg-hover { @apply hover:bg-ibm-gray100; }
-  .dark .theme-bg-hover { @apply hover:bg-ibm-gray900; }
+  .dark .theme-bg { @apply bg-brand-black; }
+  .light .theme-bg-card { @apply bg-brand-gray100; }
+  .dark .theme-bg-card { @apply bg-brand-gray900; }
+  .light .theme-text { @apply text-brand-black; }
+  .dark .theme-text { @apply text-brand-white; }
+  .light .theme-text-muted { @apply text-brand-gray800; }
+  .dark .theme-text-muted { @apply text-brand-gray300; }
+  .light .theme-border { @apply border-brand-gray200; }
+  .dark .theme-border { @apply border-brand-gray800; }
+  .light .theme-bg-header { @apply bg-brand-gray100; }
+  .dark .theme-bg-header { @apply bg-brand-black; }
+  .light .theme-bg-hover { @apply hover:bg-brand-gray100; }
+  .dark .theme-bg-hover { @apply hover:bg-brand-gray900; }
 
   /* Table header styling */
   .light .theme-table-header { @apply bg-brand-blue text-white; }
   .dark .theme-table-header { @apply bg-brand-blue text-white; }
   .light .theme-table-row-even { @apply bg-white; }
-  .dark .theme-table-row-even { @apply bg-ibm-black; }
-  .light .theme-table-row-odd { @apply bg-ibm-gray100; }
-  .dark .theme-table-row-odd { @apply bg-ibm-gray900; }
-}
-00; }
+  .dark .theme-table-row-even { @apply bg-brand-black; }
+  .light .theme-table-row-odd { @apply bg-brand-gray100; }
   .dark .theme-table-row-odd { @apply bg-brand-gray900; }
 }
