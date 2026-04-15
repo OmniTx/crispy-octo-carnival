@@ -1,6 +1,6 @@
-# CONTEXT.md - Herbs Showcase (Full-Stack E-Commerce / Catalog)
+# GEMINI.md - Herbs Showcase (Full-Stack E-Commerce / Catalog)
 
-**Paste this file into every AI session to provide full project context.**
+**This file is automatically loaded by Gemini CLI to provide full project context.**
 
 ---
 
