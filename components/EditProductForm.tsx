@@ -51,11 +51,15 @@ export default function EditProductForm({
     if (state.success) {
       router.push(`/${lang}/admin`)
     }
-  }, [state.success, lang, router])
+    if (state.error) {
+      setErrorMsg(state.error)
+      console.error('Update product error:', state.error)
+    }
+  }, [state, lang, router])
 
   const handleDeleteImage = async () => {
     if (!product.image_url) return
-    
+
     if (!confirm('Are you sure you want to delete this image? This action cannot be undone.')) {
       return
     }
@@ -81,7 +85,7 @@ export default function EditProductForm({
 
       <div className="space-y-6">
         <input type="hidden" name="id" value={product.id} />
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="app-label">{dict.name} (English)</label>

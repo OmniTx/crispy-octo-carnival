@@ -1,6 +1,6 @@
-# GEMINI.md - Herbs Showcase (Full-Stack E-Commerce / Catalog)
+# context.md - Herbs Showcase (Full-Stack E-Commerce / Catalog)
 
-**This file is automatically loaded by Gemini CLI to provide full project context.**
+**This file provides full project context for AI assistants (Qwen, Gemini, etc.).**
 
 ---
 
@@ -81,9 +81,9 @@ CREATE TABLE public.site_settings (
 - `id`: Always 1 (single-row table)
 - `site_name_en`: Site name in English
 - `site_name_bn`: Site name in Bengali
--- `theme`: 'light' or 'dark'
--- `currency_symbol`: Currency symbol (default: '৳')
--- `updated_at`: Last update timestamp
+- `theme`: 'light' or 'dark'
+- `currency_symbol`: Currency symbol (default: '৳')
+- `updated_at`: Last update timestamp
 
 **Note:** RLS (Row Level Security) is **enabled** on both tables with proper access policies.
 
@@ -154,6 +154,20 @@ All mutations go through **Server Actions** in `lib/actions.ts`:
 - Uses Zod schema for product data validation
 - Server-side verification of user session for all mutations
 
+### IMPORTANT: Supabase Client Usage
+**All mutation actions use `supabaseAdmin()` (service role key)** to bypass RLS policies, since sessions are manually verified via `verifySession()` before any database operation.
+
+- `supabase()` (anon key) - Used ONLY for:
+  - `loginAction` (needs anon auth for user login)
+  - Read operations in cached fetchers (`getProducts()`, `getSettings()`)
+
+- `supabaseAdmin()` (service role key) - Used for ALL mutations:
+  - `addProduct`, `updateProduct`, `deleteProduct`
+  - `updateSiteSettings`, `bulkImportProducts`, `reorderProducts`
+  - `deleteImage`, `listImages`
+
+This ensures RLS doesn't block admin operations while maintaining security through manual session verification.
+
 ### Cache Invalidation
 All mutations trigger cache invalidation:
 ```typescript
@@ -183,6 +197,7 @@ crispy-octo-carnival/
 │   ├── ProductCard.tsx        # Product display card
 │   ├── AdminSidebar.tsx       # Admin navigation
 │   ├── AdminProductTable.tsx  # Product management table
+│   ├── EditProductForm.tsx    # Product edit form with error logging
 │   └── ImageManager.tsx       # Image upload/delete UI
 ├── lib/
 │   ├── supabase.ts            # Server-side Supabase client + cached fetchers
@@ -213,30 +228,30 @@ crispy-octo-carnival/
 
 ### Data Fetching
 - Server components use cached fetchers: `getSettings()`, `getProducts()`
--- Uses `unstable_cache` with tags for Vercel Data Cache
--- Cache duration: 3600 seconds (1 hour)
--- Manual invalidation via `revalidateTag`
+- Uses `unstable_cache` with tags for Vercel Data Cache
+- Cache duration: 3600 seconds (1 hour)
+- Manual invalidation via `revalidateTag`
 
 ### Form Handling
--- React Hook Form with Zod resolver
--- Server actions use `FormData` for input
--- Form state managed by React 19 `useActionState`
+- React Hook Form with Zod resolver
+- Server actions use `FormData` for input
+- Form state managed by React 19 `useActionState`
 
 ### Image Handling
--- Custom Supabase image loader (`supabase-image-loader.js`)
--- Images stored in `product-imgs` bucket
--- Random filenames generated on upload
--- Old images deleted when replaced
--- Secure validations implemented for file type and sizes (< 5MB)
+- Custom Supabase image loader (`supabase-image-loader.js`)
+- Images stored in `product-imgs` bucket
+- Random filenames generated on upload
+- Old images deleted when replaced
+- Secure validations implemented for file type and sizes (< 5MB)
 
 ### Caching Strategy
--- **Settings**: Cached with tag `'settings'`
--- **Products**: Cached with tag `'products'`
--- **Paths**: Both `/en` and `/bn` revalidated on changes
--- **Admin paths**: `/en/admin` and `/bn/admin` revalidated on changes
+- **Settings**: Cached with tag `'settings'`
+- **Products**: Cached with tag `'products'`
+- **Paths**: Both `/en` and `/bn` revalidated on changes
+- **Admin paths**: `/en/admin` and `/bn/admin` revalidated on changes
 
 ### Error Handling
--- Server actions return `ActionState` type:
+- Server actions return `ActionState` type:
   ```typescript
   type ActionState = {
     success: boolean
@@ -244,13 +259,15 @@ crispy-octo-carnival/
     message?: string | null
   }
   ```
--- All actions check for user authentication
--- Database errors caught and returned as strings
+- All actions check for user authentication
+- Database errors caught and returned as strings
+- EditProductForm includes console.error logging for debugging
 
 ### Database Constraints
--- `name` and `price` are required for products
--- `site_settings` is constrained to single row (id = 1)
--- RLS enabled and proper authentication checks in place
+- `name` and `price` are required for products
+- `site_settings` is constrained to single row (id = 1)
+- RLS enabled with policies for authenticated users
+- Admin mutations bypass RLS via service role key (after manual session verification)
 
 ---
 
@@ -295,9 +312,11 @@ SUPABASE_SERVICE_ROLE_KEY=ey... # Required for secure admin operations
 - **All database mutations** must go through server actions in `lib/actions.ts`
 - **Cache invalidation** is manual - always call `revalidateTag` and `revalidatePath` after mutations
 - **Authentication** is required for all admin operations
-- **RLS is enabled** - the database is protected from direct unauthorized changes.
+- **RLS is enabled** - the database is protected from direct unauthorized changes
+- **Admin mutations use `supabaseAdmin()`** to bypass RLS (sessions verified manually)
 - **Images** are stored in Supabase storage, not in the filesystem
+- **Never build on user's PC** - user prefers to avoid local builds
 
 ---
 
-**Last Updated**: April 15, 2026, 2:10 PM
+**Last Updated**: April 15, 2026, 2:20 PM

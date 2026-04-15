@@ -171,7 +171,7 @@ export async function addProduct(prevState: ActionState, formData: FormData): Pr
     if (image && image.size > 0) {
       const fileExt = image.name.split('.').pop()?.toLowerCase() || 'jpg'
       fileName = `${crypto.randomUUID()}.${fileExt}`
-      const db = supabase()
+      const db = supabaseAdmin()
       const { error: uploadError } = await db.storage
         .from('product-imgs')
         .upload(fileName, image, {
@@ -185,7 +185,7 @@ export async function addProduct(prevState: ActionState, formData: FormData): Pr
     }
 
     // Get max sort_order to place new product at end
-    const db = supabase()
+    const db = supabaseAdmin()
     const { data: maxRow } = await db
       .from('products')
       .select('sort_order')
@@ -252,7 +252,7 @@ export async function updateProduct(prevState: ActionState, formData: FormData):
       return { success: false, error: parsed.error.issues[0].message }
     }
 
-    const db = supabase()
+    const db = supabaseAdmin()
     const { data: existing, error: fetchError } = await db
       .from('products')
       .select('image_url')
@@ -323,7 +323,7 @@ export async function deleteProduct(id: string, imageUrl: string) {
   const user = await verifySession()
   if (!user) throw new Error('Unauthorized')
 
-  const db = supabase()
+  const db = supabaseAdmin()
   const { error: dbError } = await db
     .from('products')
     .delete()
@@ -353,7 +353,7 @@ export async function updateSiteSettings(prevState: ActionState, formData: FormD
     const theme = formData.get('theme') as string
     const currency_symbol = formData.get('currency_symbol') as string
 
-    const db = supabase()
+    const db = supabaseAdmin()
     const { error } = await db
       .from('site_settings')
       .update({
@@ -411,7 +411,7 @@ export async function bulkImportProducts(
     image_url: null,
   }))
 
-  const db = supabase()
+  const db = supabaseAdmin()
   const { error } = await db
     .from('products')
     .insert(rows)
@@ -431,7 +431,7 @@ export async function reorderProducts(orderedIds: string[]) {
   if (!user) throw new Error('Unauthorized')
 
   // Update sort_order for each product based on array position
-  const db = supabase()
+  const db = supabaseAdmin()
   const updates = orderedIds.map((id, index) =>
     db
       .from('products')
@@ -452,7 +452,7 @@ export async function reorderProducts(orderedIds: string[]) {
 }
 
 export async function deleteImage(imageUrl: string) {
-  const db = supabase()
+  const db = supabaseAdmin()
   const { error } = await db.storage.from('product-imgs').remove([imageUrl])
 
   if (error) {
@@ -463,7 +463,7 @@ export async function deleteImage(imageUrl: string) {
 }
 
 export async function listImages() {
-  const db = supabase()
+  const db = supabaseAdmin()
   const { data, error } = await db.storage.from('product-imgs').list()
 
   if (error) {
