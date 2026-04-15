@@ -35,15 +35,36 @@ CREATE TABLE public.site_settings (
   CONSTRAINT single_row CHECK (id = 1)
 );
 
--- 4. Disable RLS for simplicity
-ALTER TABLE public.products DISABLE ROW LEVEL SECURITY;
-ALTER TABLE public.site_settings DISABLE ROW LEVEL SECURITY;
+-- 4. Enable RLS and set policies
+ALTER TABLE public.products ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.site_settings ENABLE ROW LEVEL SECURITY;
 
--- 5. Insert default site settings
+-- 5. Policies for Products
+CREATE POLICY "Allow public read access" ON public.products
+  FOR SELECT USING (true);
+
+CREATE POLICY "Allow authenticated users to insert" ON public.products
+  FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+
+CREATE POLICY "Allow authenticated users to update" ON public.products
+  FOR UPDATE USING (auth.role() = 'authenticated');
+
+CREATE POLICY "Allow authenticated users to delete" ON public.products
+  FOR DELETE USING (auth.role() = 'authenticated');
+
+-- 6. Policies for Site Settings
+CREATE POLICY "Allow public read access" ON public.site_settings
+  FOR SELECT USING (true);
+
+CREATE POLICY "Allow authenticated users to update" ON public.site_settings
+  FOR UPDATE USING (auth.role() = 'authenticated');
+
+-- 7. Insert default site settings
 INSERT INTO public.site_settings (id, site_name_en, site_name_bn, theme, currency_symbol)
-VALUES (1, 'Herbs Showcase', 'হার্বস শোকেস', 'light', '৳');
+VALUES (1, 'Herbs Showcase', 'হার্বস শোকেস', 'light', '৳')
+ON CONFLICT (id) DO NOTHING;
 
--- 6. Insert all products (WITH EXACT BANGLA TRANSLATIONS FROM CATALOG)
+-- 8. Insert all products (WITH EXACT BANGLA TRANSLATIONS FROM CATALOG)
 -- ===== Products 01-11 =====
 
 INSERT INTO public.products (name, name_bn, price, description, description_bn, usage_info, usage_info_bn, pack_size, pack_size_bn) VALUES
@@ -367,13 +388,21 @@ INSERT INTO public.products (name, name_bn, price, description, description_bn, 
  '1-2 tsp 2 times daily or mix with 1 glass warm water.',
  '১ থেকে ২ চা চামচ দিনে ২ বার চেটে বা ১ গ্লাস কুসুম গরম পানিতে মিশিয়ে সেব্য।', '175 gm/500 gm', '১৭৫ গ্রাম/৫০০ গ্রাম');
 
--- 7. Storage bucket
+-- 9. Storage bucket
 INSERT INTO storage.buckets (id, name, public)
 VALUES ('product-imgs', 'product-imgs', true)
 ON CONFLICT (id) DO NOTHING;
 
--- 8. Storage access policies
-CREATE POLICY "Public Access" ON storage.objects FOR SELECT USING (bucket_id = 'product-imgs');
-CREATE POLICY "Public Uploads" ON storage.objects FOR INSERT WITH CHECK (bucket_id = 'product-imgs');
-CREATE POLICY "Public Deletes" ON storage.objects FOR DELETE USING (bucket_id = 'product-imgs');
+-- 10. Storage access policies
+CREATE POLICY "Public Read Access" ON storage.objects
+  FOR SELECT USING (bucket_id = 'product-imgs');
+
+CREATE POLICY "Authenticated Upload Access" ON storage.objects
+  FOR INSERT WITH CHECK (bucket_id = 'product-imgs' AND auth.role() = 'authenticated');
+
+CREATE POLICY "Authenticated Update Access" ON storage.objects
+  FOR UPDATE USING (bucket_id = 'product-imgs' AND auth.role() = 'authenticated');
+
+CREATE POLICY "Authenticated Delete Access" ON storage.objects
+  FOR DELETE USING (bucket_id = 'product-imgs' AND auth.role() = 'authenticated');
 

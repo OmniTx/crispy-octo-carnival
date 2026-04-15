@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, use } from 'react'
-import { supabaseClient as supabase } from '@/lib/supabase-client'
+import { use, useActionState, useEffect } from 'react'
+import { loginAction } from '@/lib/actions'
 import { useRouter } from 'next/navigation'
 import { dictionaries, Locale } from '@/i18n/dictionaries'
 import { LogIn, Loader2, AlertCircle } from 'lucide-react'
@@ -10,34 +10,18 @@ export default function LoginPage({ params }: { params: Promise<{ lang: string }
   const { lang } = use(params)
   const dict = dictionaries[lang as Locale] || dictionaries.en
   const router = useRouter()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setError(null)
+  const [state, formAction, isPending] = useActionState(loginAction, {
+    success: false,
+    error: null,
+  })
 
-    const { data, error: loginError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
-
-    if (loginError) {
-      setError(loginError.message)
-      setLoading(false)
-    } else if (data.session) {
-      // Manual cookie sync since we aren't using the Supabase SSR helpers
-      const expires = new Date(Date.now() + data.session.expires_in * 1000).toUTCString()
-      document.cookie = `sb-access-token=${data.session.access_token}; path=/; expires=${expires}; SameSite=Lax;`
-      document.cookie = `sb-refresh-token=${data.session.refresh_token}; path=/; expires=${expires}; SameSite=Lax;`
-      
+  useEffect(() => {
+    if (state.success) {
       router.push(`/${lang}/admin`)
       router.refresh()
     }
-  }
+  }, [state.success, lang, router])
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh]">
@@ -52,21 +36,20 @@ export default function LoginPage({ params }: { params: Promise<{ lang: string }
           <p className="theme-text-muted text-sm tracking-wide uppercase">{dict.loginDescription || 'Sign in to manage catalog'}</p>
         </div>
 
-        {error && (
+        {state.error && (
           <div className="bg-red-900/20 dark:bg-red-900/20 border border-red-500/50 p-4 flex items-start gap-3 text-red-600 dark:text-red-400 text-sm">
             <AlertCircle className="shrink-0 mt-0.5" size={16} />
-            <p>{error}</p>
+            <p>{state.error}</p>
           </div>
         )}
 
-        <form onSubmit={handleLogin} className="space-y-6">
+        <form action={formAction} className="space-y-6">
           <div className="space-y-4">
             <div>
               <label className="app-label">Email Address</label>
               <input
+                name="email"
                 type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
                 className="app-input"
                 required
                 placeholder="admin@example.com"
@@ -75,9 +58,8 @@ export default function LoginPage({ params }: { params: Promise<{ lang: string }
             <div>
               <label className="app-label">Password</label>
               <input
+                name="password"
                 type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
                 className="app-input"
                 required
                 placeholder="••••••••"
@@ -87,10 +69,10 @@ export default function LoginPage({ params }: { params: Promise<{ lang: string }
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={isPending}
             className="app-btn w-full flex items-center justify-center gap-2"
           >
-            {loading ? (
+            {isPending ? (
               <Loader2 className="animate-spin" size={18} />
             ) : (
               <>

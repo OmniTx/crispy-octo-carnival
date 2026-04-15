@@ -6,11 +6,25 @@ import { cookies } from 'next/headers'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseKey = (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY) as string
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
 const createSupabaseClient = () => createClient(supabaseUrl, supabaseKey)
+const createSupabaseAdminClient = () => {
+  if (!supabaseServiceKey) {
+    console.warn('SUPABASE_SERVICE_ROLE_KEY is not set. Admin operations will fail.')
+    return createClient(supabaseUrl, supabaseKey)
+  }
+  return createClient(supabaseUrl, supabaseServiceKey, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false
+    }
+  })
+}
 
-// Cached version for server components (deduplicates requests within the same render)
+// Cached version for server components
 export const supabase = cache(createSupabaseClient)
+export const supabaseAdmin = cache(createSupabaseAdminClient)
 
 /** 
  * Fetch site settings using Vercel's Data Cache (unstable_cache).

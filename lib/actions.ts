@@ -1,15 +1,119 @@
 'use server'
 
-import { supabase, verifySession } from './supabase'
+import { supabase, supabaseAdmin, verifySession } from './supabase'
 import { revalidatePath, revalidateTag } from 'next/cache'
 import { z } from 'zod'
 import { revalidateCatalogAndAdmin } from './revalidatePaths'
+import { cookies } from 'next/headers'
 
 // Action state for React 19 useActionState
 export type ActionState = {
   success: boolean
   error: string | null
   message?: string | null
+}
+
+export async function isSetupNeeded(): Promise<boolean> {
+  const adminClient = supabaseAdmin()
+  const { data: { users }, error } = await adminClient.auth.admin.listUsers()
+  if (error) return false
+  return users.length === 0
+}
+
+export async function setupAdmin(prevState: ActionState, formData: FormData): Promise<ActionState> {
+  try {
+    const isNeeded = await isSetupNeeded()
+    if (!isNeeded) {
+      return { success: false, error: 'Setup is already completed.' }
+    }
+
+    const email = formData.get('email') as string
+    const password = formData.get('password') as string
+
+    if (!email || !password) {
+      return { success: false, error: 'Email and password are required' }
+    }
+
+    const adminClient = supabaseAdmin()
+    const { data, error: signupError } = await adminClient.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          role: 'admin'
+        }
+      }
+    })
+
+    if (signupError) {
+      return { success: false, error: signupError.message }
+    }
+
+    if (data.session) {
+      const cookieStore = await cookies()
+      cookieStore.set('sb-access-token', data.session.access_token, {
+        path: '/',
+        maxAge: data.session.expires_in,
+        secure: process.env.NODE_ENV === 'production',
+        httpOnly: true,
+        sameSite: 'lax',
+      })
+      cookieStore.set('sb-refresh-token', data.session.refresh_token, {
+        path: '/',
+        maxAge: data.session.expires_in,
+        secure: process.env.NODE_ENV === 'production',
+        httpOnly: true,
+        sameSite: 'lax',
+      })
+    }
+
+    return { success: true, error: null }
+  } catch (err: any) {
+    return { success: false, error: err.message || 'An unknown error occurred' }
+  }
+}
+
+export async function loginAction(prevState: ActionState, formData: FormData): Promise<ActionState> {
+  try {
+    const email = formData.get('email') as string
+    const password = formData.get('password') as string
+
+    if (!email || !password) {
+      return { success: false, error: 'Email and password are required' }
+    }
+
+    const db = supabase()
+    const { data, error: loginError } = await db.auth.signInWithPassword({
+      email,
+      password,
+    })
+
+    if (loginError) {
+      return { success: false, error: loginError.message }
+    }
+
+    if (data.session) {
+      const cookieStore = await cookies()
+      cookieStore.set('sb-access-token', data.session.access_token, {
+        path: '/',
+        maxAge: data.session.expires_in,
+        secure: process.env.NODE_ENV === 'production',
+        httpOnly: true,
+        sameSite: 'lax',
+      })
+      cookieStore.set('sb-refresh-token', data.session.refresh_token, {
+        path: '/',
+        maxAge: data.session.expires_in,
+        secure: process.env.NODE_ENV === 'production',
+        httpOnly: true,
+        sameSite: 'lax',
+      })
+    }
+
+    return { success: true, error: null }
+  } catch (err: any) {
+    return { success: false, error: err.message || 'An unknown error occurred' }
+  }
 }
 
 const productSchema = z.object({
@@ -23,6 +127,18 @@ const productSchema = z.object({
   pack_size: z.string().optional(),
   pack_size_bn: z.string().optional(),
 })
+
+const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
+const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
+
+function validateImage(image: File | null): { error: string | null } {
+  if (!image || image.size === 0) return { error: null }
+  if (image.size > MAX_FILE_SIZE) return { error: 'Image size must be less than 5MB' }
+  if (!ALLOWED_MIME_TYPES.includes(image.type)) {
+    return { error: 'Invalid file type. Only JPG, PNG, WEBP, and GIF are allowed.' }
+  }
+  return { error: null }
+}
 
 export async function addProduct(prevState: ActionState, formData: FormData): Promise<ActionState> {
   try {
@@ -45,11 +161,16 @@ export async function addProduct(prevState: ActionState, formData: FormData): Pr
       return { success: false, error: parsed.error.issues[0].message }
     }
 
+    const imageValidation = validateImage(image)
+    if (imageValidation.error) {
+      return { success: false, error: imageValidation.error }
+    }
+
     let fileName = null
 
     if (image && image.size > 0) {
-      const fileExt = image.name.split('.').pop()
-      fileName = `${Math.random().toString(36).substring(2, 15)}.${fileExt}`
+      const fileExt = image.name.split('.').pop()?.toLowerCase() || 'jpg'
+      fileName = `${crypto.randomUUID()}.${fileExt}`
       const db = supabase()
       const { error: uploadError } = await db.storage
         .from('product-imgs')
@@ -142,11 +263,16 @@ export async function updateProduct(prevState: ActionState, formData: FormData):
       return { success: false, error: 'Product not found' }
     }
 
+    const imageValidation = validateImage(image)
+    if (imageValidation.error) {
+      return { success: false, error: imageValidation.error }
+    }
+
     let image_url: string | null = existing.image_url
 
     if (image && image.size > 0) {
-      const fileExt = image.name.split('.').pop()
-      const fileName = `${Math.random().toString(36).substring(2, 15)}.${fileExt}`
+      const fileExt = image.name.split('.').pop()?.toLowerCase() || 'jpg'
+      const fileName = `${crypto.randomUUID()}.${fileExt}`
       const { error: uploadError } = await db.storage
         .from('product-imgs')
         .upload(fileName, image, {
