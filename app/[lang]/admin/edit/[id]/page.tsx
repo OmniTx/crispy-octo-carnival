@@ -1,10 +1,7 @@
-import { supabase } from '@/lib/supabase'
+import { supabase, verifySession } from '@/lib/supabase'
 import { dictionaries, Locale } from '@/i18n/dictionaries'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import EditProductForm from '@/components/EditProductForm'
-
-export const runtime = 'edge'
-export const revalidate = 60
 
 export default async function EditProductPage({
   params,
@@ -12,6 +9,12 @@ export default async function EditProductPage({
   params: Promise<{ lang: string; id: string }>
 }) {
   const { lang, id } = await params
+  
+  const user = await verifySession()
+  if (!user) {
+    redirect(`/${lang}/login`)
+  }
+
   const dict = dictionaries[lang as Locale] || dictionaries.en
 
   const db = supabase()

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, use } from 'react'
-import { supabaseClient as supabase } from '@/lib/supabase'
+import { supabaseClient as supabase } from '@/lib/supabase-client'
 import { useRouter } from 'next/navigation'
 import { dictionaries, Locale } from '@/i18n/dictionaries'
 import { UserPlus, Loader2, AlertCircle, ShieldCheck } from 'lucide-react'

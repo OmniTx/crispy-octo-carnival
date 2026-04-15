@@ -1,3 +1,4 @@
+import 'server-only'
 import { createClient } from '@supabase/supabase-js'
 import { cache } from 'react'
 import { unstable_cache } from 'next/cache'
@@ -68,7 +69,3 @@ export async function verifySession() {
   if (error || !user) return null
   return user
 }
-
-// Direct client instance for client components ('use client' files)
-// Client components cannot use React cache() from 'react', so they get a fresh instance
-export const supabaseClient = createClient(supabaseUrl, supabaseKey)
