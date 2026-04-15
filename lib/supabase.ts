@@ -69,7 +69,6 @@ export async function verifySession() {
   return user
 }
 
-// Direct client instance for client components
- ('use client' files)
+// Direct client instance for client components ('use client' files)
 // Client components cannot use React cache() from 'react', so they get a fresh instance
 export const supabaseClient = createClient(supabaseUrl, supabaseKey)
