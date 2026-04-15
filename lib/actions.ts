@@ -1,7 +1,7 @@
 'use server'
 
-import { supabase } from './supabase'
-import { revalidatePath } from 'next/cache'
+import { supabase, verifySession } from './supabase'
+import { revalidatePath, revalidateTag } from 'next/cache'
 import { z } from 'zod'
 import { revalidateCatalogAndAdmin } from './revalidatePaths'
 
@@ -26,6 +26,9 @@ const productSchema = z.object({
 
 export async function addProduct(prevState: ActionState, formData: FormData): Promise<ActionState> {
   try {
+    const user = await verifySession()
+    if (!user) return { success: false, error: 'Unauthorized' }
+
     const name = formData.get('name') as string
     const name_bn = formData.get('name_bn') as string
     const price = formData.get('price')
@@ -93,6 +96,7 @@ export async function addProduct(prevState: ActionState, formData: FormData): Pr
       return { success: false, error: `Failed to insert product: ${dbError.message}` }
     }
 
+    revalidateTag('products')
     revalidatePath('/')
     revalidateCatalogAndAdmin()
     return { success: true, error: null }
@@ -103,6 +107,9 @@ export async function addProduct(prevState: ActionState, formData: FormData): Pr
 
 export async function updateProduct(prevState: ActionState, formData: FormData): Promise<ActionState> {
   try {
+    const user = await verifySession()
+    if (!user) return { success: false, error: 'Unauthorized' }
+
     const id = formData.get('id') as string
     if (!id) {
       return { success: false, error: 'Product id is required' }
@@ -177,6 +184,7 @@ export async function updateProduct(prevState: ActionState, formData: FormData):
       return { success: false, error: `Failed to update product: ${dbError.message}` }
     }
 
+    revalidateTag('products')
     revalidatePath('/')
     revalidateCatalogAndAdmin()
     return { success: true, error: null }
@@ -186,6 +194,9 @@ export async function updateProduct(prevState: ActionState, formData: FormData):
 }
 
 export async function deleteProduct(id: string, imageUrl: string) {
+  const user = await verifySession()
+  if (!user) throw new Error('Unauthorized')
+
   const db = supabase()
   const { error: dbError } = await db
     .from('products')
@@ -200,6 +211,7 @@ export async function deleteProduct(id: string, imageUrl: string) {
     await db.storage.from('product-imgs').remove([imageUrl])
   }
 
+  revalidateTag('products')
   revalidatePath('/')
   revalidateCatalogAndAdmin()
   return { success: true }
@@ -207,6 +219,9 @@ export async function deleteProduct(id: string, imageUrl: string) {
 
 export async function updateSiteSettings(prevState: ActionState, formData: FormData): Promise<ActionState> {
   try {
+    const user = await verifySession()
+    if (!user) return { success: false, error: 'Unauthorized' }
+
     const site_name_en = formData.get('site_name_en') as string
     const site_name_bn = formData.get('site_name_bn') as string
     const theme = formData.get('theme') as string
@@ -228,6 +243,7 @@ export async function updateSiteSettings(prevState: ActionState, formData: FormD
       return { success: false, error: `Failed to update settings: ${error.message}` }
     }
 
+    revalidateTag('settings')
     revalidatePath('/')
     revalidateCatalogAndAdmin()
     return { success: true, error: null }
@@ -249,6 +265,9 @@ export async function bulkImportProducts(
     usage_info_bn?: string | null
   }>
 ) {
+  const user = await verifySession()
+  if (!user) throw new Error('Unauthorized')
+
   if (!products.length) {
     throw new Error('No products to import')
   }
@@ -275,12 +294,16 @@ export async function bulkImportProducts(
     throw new Error(`Failed to import products: ${error.message}`)
   }
 
+  revalidateTag('products')
   revalidatePath('/')
   revalidateCatalogAndAdmin()
   return { success: true, count: rows.length }
 }
 
 export async function reorderProducts(orderedIds: string[]) {
+  const user = await verifySession()
+  if (!user) throw new Error('Unauthorized')
+
   // Update sort_order for each product based on array position
   const db = supabase()
   const updates = orderedIds.map((id, index) =>
@@ -296,6 +319,7 @@ export async function reorderProducts(orderedIds: string[]) {
     throw new Error(`Failed to reorder: ${failed.error.message}`)
   }
 
+  revalidateTag('products')
   revalidatePath('/')
   revalidateCatalogAndAdmin()
   return { success: true }

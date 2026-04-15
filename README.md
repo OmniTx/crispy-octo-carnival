@@ -74,3 +74,35 @@ You can manually trigger a GitHub Action to generate a production-ready `.zip` f
 7. Define the required Supabase environment variables in the cPanel UI.
 
 *Note: The GitHub Action uses dummy Supabase keys during the build process, which is generally fine for this app. However, if your specific pages strictly require real keys to be evaluated during static generation at build-time, you should add `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` to your repository's **GitHub Secrets**.*
+
+## 📂 Project Structure & File Overview
+
+### 🌐 Core Routing (`app/`)
+The application uses the **Next.js App Router** with internationalization (`[lang]`) at its core.
+- `app/[lang]/layout.tsx`: The **Root Layout**. It handles site-wide settings, themes (including a flash-prevention script), and the common header/navigation. It uses cached site settings for maximum performance.
+- `app/[lang]/page.tsx`: The **Home Page**. Displays the product catalog. Optimized with Vercel Data Cache for near-instant loads.
+- `app/[lang]/admin/`: The **Admin Dashboard**. A protected area for managing products, settings, and assets.
+- `app/[lang]/login/`: The **Login Page**. Handles admin authentication.
+- `app/globals.css`: Global styles, Tailwind CSS configuration, and custom theme variables.
+
+### 🧩 Reusable Components (`components/`)
+- `ThemeToggle.tsx`: Client-side component for switching between Light and Dark modes (saved to `localStorage`).
+- `HeaderAdminLink.tsx`: A session-aware link that only shows the "Admin" gear icon if the user is logged in.
+- `ProductCard.tsx`: Standardized card for displaying product details (image, name, price, description).
+- `AdminSidebar.tsx`: Navigation for the admin dashboard.
+- `AdminProductTable.tsx`: Interactive table for managing and reordering products.
+- `ImageManager.tsx`: Interface for uploading and deleting product images.
+
+### ⚙️ Logic & Utilities (`lib/`)
+- `lib/supabase.ts`: **Supabase Configuration**. Includes:
+    - `getSettings()`: Cached fetcher for site-wide settings (name, currency, default theme).
+    - `getProducts()`: Cached fetcher for the entire product list.
+    - `verifySession()`: **Security Layer** that validates the user's JWT on the server for admin pages and actions.
+- `lib/actions.ts`: **Server Actions**. Handles all database mutations (Add/Edit/Delete/Reorder/Import). Includes automatic **Cache Invalidation** (`revalidateTag`) to keep the site updated after changes.
+- `lib/revalidatePaths.ts`: Helper to trigger revalidation across multiple language paths simultaneously.
+
+### 🛡️ Middleware & Config
+- `middleware.ts`: Handles root path redirection (`/` -> `/en`) and provides basic route protection for the admin area.
+- `i18n/dictionaries.ts`: Centralized English and Bengali translations used throughout the app.
+- `next.config.js`: Next.js specific settings, including "standalone" output and custom Supabase image loading.
+- `seed.sql`: The complete database schema (PostgreSQL) and initial product data for setting up the Supabase backend.

@@ -1,11 +1,11 @@
 import '../globals.css'
 import type { Metadata } from 'next'
 import { dictionaries, Locale } from '@/i18n/dictionaries'
-import { supabase } from '@/lib/supabase'
+import { getSettings } from '@/lib/supabase'
 import LanguageToggle from '@/components/LanguageToggle'
+import HeaderAdminLink from '@/components/HeaderAdminLink'
+import ThemeToggle from '@/components/ThemeToggle'
 import Link from 'next/link'
-import { Settings } from 'lucide-react'
-import { cookies } from 'next/headers'
 
 export const metadata: Metadata = {
   title: 'Herbs Showcase',
@@ -27,40 +27,41 @@ export default async function RootLayout({
   const { lang } = await params
   const dict = dictionaries[lang as Locale] || dictionaries.en
 
-  // Fetch site settings
-  const db = supabase()
-  const { data: settings } = await db
-    .from('site_settings')
-    .select('*')
-    .eq('id', 1)
-    .single()
+  // Fetch site settings (cached)
+  const { data: settings } = await getSettings()
 
-  const theme = settings?.theme || 'dark'
+  const defaultTheme = settings?.theme || 'dark'
   const siteName = lang === 'bn'
     ? (settings?.site_name_bn || dict.brandName)
     : (settings?.site_name_en || dict.brandName)
 
-  // Check for admin session via cookies (Supabase default)
-  const cookieStore = await cookies()
-  const hasSession = cookieStore.get('sb-access-token') || cookieStore.get('sb-refresh-token')
-
   return (
-    <html lang={lang} className={theme}>
+    <html lang={lang} className={defaultTheme}>
+      <head>
+        {/* Prevent FOUC: immediately apply theme from localStorage if present */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var theme = localStorage.getItem('theme');
+                  if (theme) {
+                    document.documentElement.className = theme;
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
       <body>
         <header className="border-b theme-border theme-bg-header p-4 flex justify-between items-center">
           <Link href={`/${lang}`} className={`font-semibold text-lg tracking-tight theme-text hover:text-brand-blue transition-colors ${lang === 'bn' ? 'font-bangla' : ''}`}>
             <span className="text-brand-blue mr-2">█</span>{siteName}
           </Link>
           <div className="flex items-center gap-4">
-            {hasSession && (
-              <Link
-                href={`/${lang}/admin`}
-                className="theme-text-muted hover:text-brand-blue transition-colors"
-                title={dict.adminPanel}
-              >
-                <Settings size={18} />
-              </Link>
-            )}
+            <ThemeToggle defaultTheme={defaultTheme} />
+            <HeaderAdminLink lang={lang} dict={dict} />
             <LanguageToggle currentLang={lang as Locale} />
           </div>
         </header>

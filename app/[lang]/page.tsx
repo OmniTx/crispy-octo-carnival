@@ -1,17 +1,14 @@
-import { supabase } from '@/lib/supabase'
+import { getProducts, getSettings } from '@/lib/supabase'
 import { dictionaries, Locale } from '@/i18n/dictionaries'
 import { PackageX } from 'lucide-react'
 import Image from 'next/image'
 
-export const runtime = 'edge'
 export const revalidate = 60
 
 async function fetchProductsAndSettings() {
-  const db = supabase()
-  
   const [productsResult, settingsResult] = await Promise.all([
-    db.from('products').select('*').order('sort_order', { ascending: true }),
-    db.from('site_settings').select('*').eq('id', 1).single(),
+    getProducts(),
+    getSettings(),
   ])
 
   return {

@@ -1,18 +1,14 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-export function proxy(req: NextRequest) {
+export function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname
   const hasAuthCookie = req.cookies.get('sb-access-token') || req.cookies.get('sb-refresh-token')
 
-  // Redirect root path / to a language-prefixed path based on country
+  // Redirect root path / to a language-prefixed path
+  // (Simplified: default to English)
   if (path === '/') {
-    // Check for country header (Vercel or Cloudflare)
-    const country = (req as any).geo?.country || req.headers.get('x-vercel-ip-country') || req.headers.get('cf-ipcountry') || ''
-    
-    // If from Bangladesh, default to Bengali, otherwise English
-    const preferredLang = country === 'BD' ? 'bn' : 'en'
-    return NextResponse.redirect(new URL(`/${preferredLang}`, req.url))
+    return NextResponse.redirect(new URL('/en', req.url))
   }
 
   const isProtectedPath = path.includes('/admin') || path.includes('/add')

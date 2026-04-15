@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
-import { LayoutDashboard, PlusCircle, Settings, Image as ImageIcon, FileUp, Menu, X, ArrowLeft } from 'lucide-react'
+import { LayoutDashboard, PlusCircle, Settings, Image as ImageIcon, FileUp, Menu, X, ArrowLeft, Users } from 'lucide-react'
 
 export default function AdminSidebar({ lang, dict }: { lang: string, dict: any }) {
   const [isOpen, setIsOpen] = useState(false)

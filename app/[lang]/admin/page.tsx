@@ -1,22 +1,18 @@
-import { supabase } from '@/lib/supabase'
+import { getProducts, getSettings, verifySession } from '@/lib/supabase'
 import { dictionaries, Locale } from '@/i18n/dictionaries'
 import { Package, Settings as SettingsIcon, ArrowUpDown, Image as ImageIcon } from 'lucide-react'
 import AdminProductTable from '@/components/AdminProductTable'
 import AdminSettings from '@/components/AdminSettings'
 import ImportExport from '@/components/ImportExport'
 import ImageManager from '@/components/ImageManager'
+import { redirect } from 'next/navigation'
 
-export const runtime = 'edge'
-export const revalidate = 60
+export const revalidate = 0 // Admin pages should not be cached in Data Cache
 
 async function fetchAdminData() {
-  const db = supabase()
+  const productsResult = await getProducts()
+  const settingsResult = await getSettings()
   
-  const [productsResult, settingsResult] = await Promise.all([
-    db.from('products').select('*').order('sort_order', { ascending: true }),
-    db.from('site_settings').select('*').eq('id', 1).single(),
-  ])
-
   return {
     products: productsResult.data,
     settings: settingsResult.data,
@@ -31,6 +27,13 @@ export default async function AdminPage({
   searchParams: Promise<{ tab?: string }>
 }) {
   const { lang } = await params
+  
+  // Security: Verify session on server
+  const user = await verifySession()
+  if (!user) {
+    redirect(`/${lang}/login`)
+  }
+
   const { tab } = await searchParams
   const dict = dictionaries[lang as Locale] || dictionaries.en
   const currentTab = tab || 'dashboard'

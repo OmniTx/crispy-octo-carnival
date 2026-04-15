@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "node -e \"try{require('fs').rmSync('.next',{recursive:true,force:true})}catch(e){}\" && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint app components lib"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
