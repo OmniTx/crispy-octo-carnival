@@ -96,7 +96,7 @@ export async function addProduct(prevState: ActionState, formData: FormData): Pr
       return { success: false, error: `Failed to insert product: ${dbError.message}` }
     }
 
-    revalidateTag('products')
+    revalidateTag('products', 'max')
     revalidatePath('/')
     revalidateCatalogAndAdmin()
     return { success: true, error: null }
@@ -184,7 +184,7 @@ export async function updateProduct(prevState: ActionState, formData: FormData):
       return { success: false, error: `Failed to update product: ${dbError.message}` }
     }
 
-    revalidateTag('products')
+    revalidateTag('products', 'max')
     revalidatePath('/')
     revalidateCatalogAndAdmin()
     return { success: true, error: null }
@@ -211,7 +211,7 @@ export async function deleteProduct(id: string, imageUrl: string) {
     await db.storage.from('product-imgs').remove([imageUrl])
   }
 
-  revalidateTag('products')
+  revalidateTag('products', 'max')
   revalidatePath('/')
   revalidateCatalogAndAdmin()
   return { success: true }
@@ -243,7 +243,7 @@ export async function updateSiteSettings(prevState: ActionState, formData: FormD
       return { success: false, error: `Failed to update settings: ${error.message}` }
     }
 
-    revalidateTag('settings')
+    revalidateTag('settings', 'max')
     revalidatePath('/')
     revalidateCatalogAndAdmin()
     return { success: true, error: null }
@@ -294,7 +294,7 @@ export async function bulkImportProducts(
     throw new Error(`Failed to import products: ${error.message}`)
   }
 
-  revalidateTag('products')
+  revalidateTag('products', 'max')
   revalidatePath('/')
   revalidateCatalogAndAdmin()
   return { success: true, count: rows.length }
@@ -319,7 +319,7 @@ export async function reorderProducts(orderedIds: string[]) {
     throw new Error(`Failed to reorder: ${failed.error.message}`)
   }
 
-  revalidateTag('products')
+  revalidateTag('products', 'max')
   revalidatePath('/')
   revalidateCatalogAndAdmin()
   return { success: true }
