@@ -1,14 +1,14 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-export function proxy(req: NextRequest) {
+export function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname
   const hasAuthCookie = req.cookies.get('sb-access-token') || req.cookies.get('sb-refresh-token')
 
   // Redirect root path / to a language-prefixed path
-  // (Simplified: default to English)
+  // (Simplified: default to Bengali)
   if (path === '/') {
-    return NextResponse.redirect(new URL('/en', req.url))
+    return NextResponse.redirect(new URL('/bn', req.url))
   }
 
   const isProtectedPath = path.includes('/admin') || path.includes('/add')
@@ -18,12 +18,12 @@ export function proxy(req: NextRequest) {
   const lang = segments[1]
 
   if (isProtectedPath && !isLoginPage && !hasAuthCookie) {
-    const redirectUrl = new URL(`/${lang || 'en'}/login`, req.url)
+    const redirectUrl = new URL(`/${lang || 'bn'}/login`, req.url)
     return NextResponse.redirect(redirectUrl)
   }
 
   if (isLoginPage && hasAuthCookie) {
-    const redirectUrl = new URL(`/${lang || 'en'}/admin`, req.url)
+    const redirectUrl = new URL(`/${lang || 'bn'}/admin`, req.url)
     return NextResponse.redirect(redirectUrl)
   }
 

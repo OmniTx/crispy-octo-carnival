@@ -8,7 +8,7 @@ import { UserPlus, Loader2, AlertCircle, ShieldCheck, Lock } from 'lucide-react'
 
 export default function SetupPage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = use(params)
-  const dict = dictionaries[lang as Locale] || dictionaries.en
+  const dict = dictionaries[lang as Locale] || dictionaries.bn
 
   // Server-side check
   const needed = use(isSetupNeeded())

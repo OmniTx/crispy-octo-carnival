@@ -35,7 +35,7 @@ export default async function AdminPage({
   }
 
   const { tab } = await searchParams
-  const dict = dictionaries[lang as Locale] || dictionaries.en
+  const dict = dictionaries[lang as Locale] || dictionaries.bn
   const currentTab = tab || 'dashboard'
 
   const { products, settings } = await fetchAdminData()

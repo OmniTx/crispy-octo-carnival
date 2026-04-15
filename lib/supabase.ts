@@ -30,8 +30,8 @@ export const supabaseAdmin = cache(createSupabaseAdminClient)
  * Fetch site settings using Vercel's Data Cache (unstable_cache).
  * This persists across requests and is shared globally on Vercel.
  */
-export const getSettings = cache(async () => {
-  return unstable_cache(
+export const getSettings = cache(
+  unstable_cache(
     async () => {
       const db = createClient(supabaseUrl, supabaseKey)
       const { data, error } = await db
@@ -45,14 +45,14 @@ export const getSettings = cache(async () => {
     },
     ['site-settings'],
     { revalidate: 3600, tags: ['settings'] }
-  )()
-})
+  )
+)
 
 /**
  * Fetch products using Vercel's Data Cache (unstable_cache).
  */
-export const getProducts = cache(async () => {
-  return unstable_cache(
+export const getProducts = cache(
+  unstable_cache(
     async () => {
       const db = createClient(supabaseUrl, supabaseKey)
       const { data, error } = await db
@@ -65,8 +65,8 @@ export const getProducts = cache(async () => {
     },
     ['products-list'],
     { revalidate: 3600, tags: ['products'] }
-  )()
-})
+  )
+)
 
 /**
  * Verify session on the server side for sensitive operations.

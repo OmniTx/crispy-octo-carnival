@@ -15,7 +15,7 @@ export default async function EditProductPage({
     redirect(`/${lang}/login`)
   }
 
-  const dict = dictionaries[lang as Locale] || dictionaries.en
+  const dict = dictionaries[lang as Locale] || dictionaries.bn
 
   const db = supabase()
   const { data: product, error } = await db.from('products').select('*').eq('id', id).single()

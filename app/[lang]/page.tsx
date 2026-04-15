@@ -19,7 +19,7 @@ async function fetchProductsAndSettings() {
 
 export default async function HomePage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params
-  const dict = dictionaries[lang as Locale] || dictionaries.en
+  const dict = dictionaries[lang as Locale] || dictionaries.bn
   const isBn = lang === 'bn'
 
   const { products, settings } = await fetchProductsAndSettings()

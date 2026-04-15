@@ -11,7 +11,7 @@ export default async function AddPage({ params }: { params: Promise<{ lang: stri
     redirect(`/${lang}/login`)
   }
 
-  const dict = dictionaries[lang as Locale] || dictionaries.en
+  const dict = dictionaries[lang as Locale] || dictionaries.bn
 
   return (
     <div className="max-w-4xl mx-auto">

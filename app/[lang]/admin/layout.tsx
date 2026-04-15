@@ -17,7 +17,7 @@ export default async function AdminLayout({
     redirect(`/${lang}/login`)
   }
 
-  const dict = dictionaries[lang as Locale] || dictionaries.en
+  const dict = dictionaries[lang as Locale] || dictionaries.bn
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen theme-bg">

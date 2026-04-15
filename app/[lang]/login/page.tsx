@@ -8,7 +8,7 @@ import { LogIn, Loader2, AlertCircle } from 'lucide-react'
 
 export default function LoginPage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = use(params)
-  const dict = dictionaries[lang as Locale] || dictionaries.en
+  const dict = dictionaries[lang as Locale] || dictionaries.bn
   const router = useRouter()
 
   const [state, formAction, isPending] = useActionState(loginAction, {
