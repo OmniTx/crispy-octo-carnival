@@ -81,9 +81,9 @@ CREATE TABLE public.site_settings (
 - `id`: Always 1 (single-row table)
 - `site_name_en`: Site name in English
 - `site_name_bn`: Site name in Bengali
-- `theme`: 'light' or 'dark'
-- `currency_symbol`: Currency symbol (default: '৳')
-- `updated_at`: Last update timestamp
+-- `theme`: 'light' or 'dark'
+-- `currency_symbol`: Currency symbol (default: '৳')
+-- `updated_at`: Last update timestamp
 
 **Note:** RLS (Row Level Security) is **disabled** on both tables.
 
@@ -208,29 +208,29 @@ crispy-octo-carnival/
 
 ### Data Fetching
 - Server components use cached fetchers: `getSettings()`, `getProducts()`
-- Uses `unstable_cache` with tags for Vercel Data Cache
-- Cache duration: 3600 seconds (1 hour)
-- Manual invalidation via `revalidateTag`
+-- Uses `unstable_cache` with tags for Vercel Data Cache
+-- Cache duration: 3600 seconds (1 hour)
+-- Manual invalidation via `revalidateTag`
 
 ### Form Handling
-- React Hook Form with Zod resolver
-- Server actions use `FormData` for input
-- Form state managed by React 19 `useActionState`
+-- React Hook Form with Zod resolver
+-- Server actions use `FormData` for input
+-- Form state managed by React 19 `useActionState`
 
 ### Image Handling
-- Custom Supabase image loader (`supabase-image-loader.js`)
-- Images stored in `product-imgs` bucket
-- Random filenames generated on upload
-- Old images deleted when replaced
+-- Custom Supabase image loader (`supabase-image-loader.js`)
+-- Images stored in `product-imgs` bucket
+-- Random filenames generated on upload
+-- Old images deleted when replaced
 
 ### Caching Strategy
-- **Settings**: Cached with tag `'settings'`
-- **Products**: Cached with tag `'products'`
-- **Paths**: Both `/en` and `/bn` revalidated on changes
-- **Admin paths**: `/en/admin` and `/bn/admin` revalidated on changes
+-- **Settings**: Cached with tag `'settings'`
+-- **Products**: Cached with tag `'products'`
+-- **Paths**: Both `/en` and `/bn` revalidated on changes
+-- **Admin paths**: `/en/admin` and `/bn/admin` revalidated on changes
 
 ### Error Handling
-- Server actions return `ActionState` type:
+-- Server actions return `ActionState` type:
   ```typescript
   type ActionState = {
     success: boolean
@@ -238,13 +238,13 @@ crispy-octo-carnival/
     message?: string | null
   }
   ```
-- All actions check for user authentication
-- Database errors caught and returned as strings
+-- All actions check for user authentication
+-- Database errors caught and returned as strings
 
 ### Database Constraints
-- `name` and `price` are required for products
-- `site_settings` is constrained to single row (id = 1)
-- RLS disabled for simplicity
+-- `name` and `price` are required for products
+-- `site_settings` is constrained to single row (id = 1)
+-- RLS disabled for simplicity
 
 ---
 
@@ -283,6 +283,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=ey...
 
 ## ⚠️ Important Notes
 
+- **DO NOT PUSH** changes to the remote repository unless the user explicitly gives a directive like "push" or "ok push".
 - **Build one feature at a time**: Provide the AI with a single component or API route to build
 - **All database mutations** must go through server actions in `lib/actions.ts`
 - **Cache invalidation** is manual - always call `revalidateTag` and `revalidatePath` after mutations
@@ -292,4 +293,4 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=ey...
 
 ---
 
-**Last Updated**: April 15, 2026
+**Last Updated**: April 15, 2026, 1:52 PM
