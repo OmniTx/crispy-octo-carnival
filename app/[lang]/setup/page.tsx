@@ -1,3 +1,5 @@
+'use client'
+
 import { use, useActionState } from 'react'
 import { setupAdmin, isSetupNeeded } from '@/lib/actions'
 import { redirect } from 'next/navigation'
