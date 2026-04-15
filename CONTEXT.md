@@ -85,7 +85,7 @@ CREATE TABLE public.site_settings (
 -- `currency_symbol`: Currency symbol (default: '৳')
 -- `updated_at`: Last update timestamp
 
-**Note:** RLS (Row Level Security) is **disabled** on both tables.
+**Note:** RLS (Row Level Security) is **enabled** on both tables with proper access policies.
 
 ---
 
@@ -93,9 +93,9 @@ CREATE TABLE public.site_settings (
 
 ### Supabase Storage Bucket: `product-imgs`
 - Stores product images
-- Files are uploaded with random filenames
+- Files are uploaded with random filenames with image size (<5MB) and type validation.
 - Images are deleted when products are deleted or updated
-- Public access (no RLS)
+- Uploads and deletes are restricted to authenticated users. Public read access.
 
 ---
 
@@ -103,11 +103,11 @@ CREATE TABLE public.site_settings (
 
 ### Supported Languages
 - **en**: English
-- **bn**: Bengali (বাংলা)
+- **bn**: Bengali (বাংলা) - **Default fallback**
 
 ### Routing
 - All routes are under `app/[lang]/`
-- Root `/` redirects to `/en`
+- Root `/` redirects to `/bn`
 - Language is part of the URL structure
 
 ### Dictionary System
@@ -119,8 +119,9 @@ Located in `i18n/dictionaries.ts`, provides translations for UI strings in both 
 
 ### Admin Authentication
 - Uses Supabase Auth (GoTrue)
-- Session stored in cookie: `sb-access-token`
+- Session stored in `HttpOnly`, `Secure`, and `SameSite` cookies
 - Server-side verification via `verifySession()` in `lib/supabase.ts`
+- Initial setup disabled once first admin is created using Service Role Key
 - Protected routes: `/[lang]/admin/**`
 
 ### Session Verification
@@ -145,6 +146,9 @@ All mutations go through **Server Actions** in `lib/actions.ts`:
 6. **`reorderProducts`** - Update product sort order
 7. **`deleteImage`** - Delete image from storage
 8. **`listImages`** - List all images in storage
+9. **`setupAdmin`** - Registers the first admin user securely
+10. **`loginAction`** - Handles login and manages secure session cookies
+11. **`isSetupNeeded`** - Server-side check if an admin user already exists
 
 ### Validation
 - Uses Zod schema for product data validation
@@ -190,6 +194,7 @@ crispy-octo-carnival/
 │   └── dictionaries.ts        # English and Bengali translations
 ├── public/                    # Static assets
 ├── seed.sql                   # Database schema + seed data
+├── proxy.ts                   # Handles root path redirection (`/` -> `/bn`) and basic route protection
 ├── next.config.js             # Next.js config (standalone, images)
 ├── tsconfig.json              # TypeScript config (strict mode)
 └── package.json               # Dependencies and scripts
@@ -222,6 +227,7 @@ crispy-octo-carnival/
 -- Images stored in `product-imgs` bucket
 -- Random filenames generated on upload
 -- Old images deleted when replaced
+-- Secure validations implemented for file type and sizes (< 5MB)
 
 ### Caching Strategy
 -- **Settings**: Cached with tag `'settings'`
@@ -244,7 +250,7 @@ crispy-octo-carnival/
 ### Database Constraints
 -- `name` and `price` are required for products
 -- `site_settings` is constrained to single row (id = 1)
--- RLS disabled for simplicity
+-- RLS enabled and proper authentication checks in place
 
 ---
 
@@ -264,6 +270,7 @@ npm run lint     # Lint app, components, and lib directories
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://<your-project-id>.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=ey...
+SUPABASE_SERVICE_ROLE_KEY=ey... # Required for secure admin operations
 ```
 
 ---
@@ -288,9 +295,9 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=ey...
 - **All database mutations** must go through server actions in `lib/actions.ts`
 - **Cache invalidation** is manual - always call `revalidateTag` and `revalidatePath` after mutations
 - **Authentication** is required for all admin operations
-- **RLS is disabled** - be cautious with direct database access
+- **RLS is enabled** - the database is protected from direct unauthorized changes.
 - **Images** are stored in Supabase storage, not in the filesystem
 
 ---
 
-**Last Updated**: April 15, 2026, 1:52 PM
+**Last Updated**: April 15, 2026, 2:10 PM
